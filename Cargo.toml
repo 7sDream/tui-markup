@@ -1,0 +1,24 @@
+[package]
+name = "tui-markup"
+version = "0.1.0"
+authors = ["7sDream <i@7sdre.am>"]
+edition = "2021"
+description = "markup langauge for terminal styled text of tui-rs"
+documentation = "https://docs.rs/tui-markup"
+readme = "README.md"
+homepage = "https://github.com/7sDream/tui-markup"
+repository = "https://github.com/7sDream/tui-markup"
+license = "BSD-3-Clause-Clear"
+keywords = ["terminal", "tui", "markup", "text", "parser"]
+categories = ["command-line-interface", "parser-implementations", "text-processing"]
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nom = "7"
+nom_locate = {version = "4.0.0", features = ["runtime-dispatch-simd"] }
+tui = "0.18"
+
+[dev-dependencies]
+crossterm = "0.25.0"
