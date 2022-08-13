@@ -36,3 +36,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal.show_cursor()?;
     Ok(())
 }
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn test_help_text() {
+        assert!(tui_markup::parse(super::HELP_TEXTS).is_ok());
+    }
+}

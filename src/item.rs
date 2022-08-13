@@ -58,32 +58,38 @@ impl<'a> Item<'a> {
 }
 
 #[cfg(test)]
-mod test {
+mod item_test {
     use tui::text::Span;
 
     use super::Item;
 
+    macro_rules! test_plain_text {
+        ($s:literal $(, $result:literal)*) => {
+            assert_eq!(
+                Item::PlainText($s).into_spans(None).0,
+                vec![$(Span::raw($result),)*],
+            );
+        };
+    }
+
     #[test]
     fn test_escaped_string() {
-        let item = Item::PlainText("a\\<b");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw("<b")]);
+        test_plain_text!("a\\<b", "a", "<b");
+        test_plain_text!("a\\>b", "a", ">b");
+        test_plain_text!("a\\\\b", "a", "\\b");
+    }
 
-        let item = Item::PlainText("a\\>b");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw(">b")]);
-
-        let item = Item::PlainText("a\\\\b");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw("\\b")]);
+    #[test]
+    fn test_escaped_string_at_begin() {
+        test_plain_text!("\\<b", "<b");
+        test_plain_text!("\\>b", ">b");
+        test_plain_text!("\\\\b", "\\b");
     }
 
     #[test]
     fn test_escaped_string_at_end() {
-        let item = Item::PlainText("a\\<");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw("<")]);
-
-        let item = Item::PlainText("a\\>");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw(">")]);
-
-        let item = Item::PlainText("a\\\\");
-        assert_eq!(item.into_spans(None).0, vec![Span::raw("a"), Span::raw("\\")]);
+        test_plain_text!("a\\<", "a", "<");
+        test_plain_text!("a\\>", "a", ">");
+        test_plain_text!("a\\\\", "a", "\\");
     }
 }

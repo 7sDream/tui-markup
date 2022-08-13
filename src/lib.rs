@@ -161,12 +161,12 @@ pub fn parse(s: &str) -> Result<Text, (&str, (usize, usize))> {
 }
 
 #[cfg(test)]
-mod test {
+mod lib_test {
     use super::parse;
     use tui::text::Text;
 
     #[test]
-    fn test_ok_with_empty_input() {
+    fn test_empty_input() {
         assert_eq!(parse(""), Ok(Text { lines: vec![] }));
     }
 }

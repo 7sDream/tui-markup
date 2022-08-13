@@ -62,58 +62,142 @@ pub fn parse(s: &str) -> Result<Spans, (&str, usize)> {
 }
 
 #[cfg(test)]
-mod test {
+mod parser_test {
     use nom::InputTake;
-    use tui::style::{Color, Style};
+    use tui::style::{Color, Modifier, Style};
 
     use crate::{item::Item, tag::Tag};
 
-    use super::{items, parse, LSpan};
+    macro_rules! test_ok {
+        ($s:literal $(, $item:expr)*) => {
+            let source = $s;
+            let s = crate::parser::LSpan::new(source);
+            let (remainder, _) = s.take_split(source.len());
+
+            assert_eq!(crate::parser::items(s), Ok((remainder, vec![$($item,)*])));
+        };
+    }
+
+    macro_rules! test_fail {
+        ($s:literal, $at:literal) => {
+            assert_eq!(crate::parser::parse($s), Err((&$s[$at - 1..], $at)));
+        };
+    }
 
     #[test]
     fn test_escaped_string() {
-        let s = LSpan::new("\\<");
-
-        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\<")]);
-
-        let s = LSpan::new("\\>");
-
-        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\>")]);
-
-        let s = LSpan::new("\\\\");
-
-        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\\\")]);
+        test_ok!("\\<", Item::PlainText("\\<"));
+        test_ok!("\\>", Item::PlainText("\\>"));
+        test_ok!("\\\\", Item::PlainText("\\\\"));
     }
 
     #[test]
     fn test_invalid_escaped_string() {
-        assert!(parse("\\x").is_err());
+        test_fail!("\\x", 1);
     }
 
     #[test]
-    fn test_ok_with_empty_input() {
-        let s = LSpan::new("");
-
-        assert_eq!(items(s), Ok((s, vec![])));
+    fn test_empty_input() {
+        test_ok!("");
     }
 
     #[test]
-    fn test_error_with_no_space_element() {
-        assert!(parse("<green>").is_err());
+    fn test_no_space_element() {
+        test_fail!("<green>", 1);
     }
 
     #[test]
-    fn test_ok_with_no_content_element() {
-        let source = "<green >";
-        let s = LSpan::new(source);
-        let (remainder, _) = s.take_split(8);
+    fn test_no_content_element() {
+        test_ok!(
+            "<green >",
+            Item::Element(Tag(Style::default().fg(Color::Green)), vec![])
+        );
+    }
 
-        assert_eq!(
-            items(s),
-            Ok((
-                remainder,
-                vec![Item::Element(Tag(Style::default().fg(Color::Green)), vec![])]
-            )),
+    #[test]
+    fn test_foreground_element() {
+        test_ok!(
+            "<fg:green text>",
+            Item::Element(Tag(Style::default().fg(Color::Green)), vec![Item::PlainText("text")])
+        );
+    }
+
+    #[test]
+    fn test_foreground_element_without_mode() {
+        test_ok!(
+            "<blue text>",
+            Item::Element(Tag(Style::default().fg(Color::Blue)), vec![Item::PlainText("text")])
+        );
+    }
+
+    #[test]
+    fn test_background_element() {
+        test_ok!(
+            "<bg:red text>",
+            Item::Element(Tag(Style::default().bg(Color::Red)), vec![Item::PlainText("text")])
+        );
+    }
+
+    #[test]
+    fn test_modifier_element() {
+        test_ok!(
+            "<mod:b text>",
+            Item::Element(
+                Tag(Style::default().add_modifier(Modifier::BOLD)),
+                vec![Item::PlainText("text")]
+            )
+        );
+    }
+
+    #[test]
+    fn test_modifier_element_without_mode() {
+        test_ok!(
+            "<i text>",
+            Item::Element(
+                Tag(Style::default().add_modifier(Modifier::ITALIC)),
+                vec![Item::PlainText("text")]
+            )
+        );
+    }
+
+    #[test]
+    fn test_nested_element() {
+        test_ok!(
+            "<bg:cyan <yellow one> two>",
+            Item::Element(
+                Tag(Style::default().bg(Color::Cyan)),
+                vec![
+                    Item::Element(Tag(Style::default().fg(Color::Yellow)), vec![Item::PlainText("one")]),
+                    Item::PlainText(" two"),
+                ]
+            )
+        );
+    }
+
+    #[test]
+    fn test_multi_style_element() {
+        test_ok!(
+            "<bg:magenta,gray,mod:u,x text>",
+            Item::Element(
+                Tag(Style::default()
+                    .bg(Color::Magenta)
+                    .fg(Color::Gray)
+                    .add_modifier(Modifier::UNDERLINED | Modifier::CROSSED_OUT)),
+                vec![Item::PlainText("text"),]
+            )
+        );
+    }
+
+    #[test]
+    fn test_custom_color() {
+        test_ok!(
+            "<bg:ff8000,66ccff text>",
+            Item::Element(
+                Tag(Style::default()
+                    .bg(Color::Rgb(0xff, 0x80, 0x00))
+                    .fg(Color::Rgb(0x66, 0xcc, 0xff))),
+                vec![Item::PlainText("text")]
+            )
         );
     }
 }
