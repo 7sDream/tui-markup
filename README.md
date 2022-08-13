@@ -1,4 +1,4 @@
-# TUI Markup
+# tui markup
 
 This crate provided a markup language to quickly convert plain text into colorful terminal text of [tui] crate.
 
@@ -18,7 +18,13 @@ Only one syntax `<tag content>` to add style to content.
 
 `tag` is a `style` list sep by `,`.
 
-`style` has format of `mode:value`, available `mode` are: `fg:` for foreground color, `bg:` for background color, `mod:` for modifiers. Mode prefix is optional except `bg:`.
+`style` has format of `mode:value`, available `mode` are:
+
+- `fg:` for foreground color.
+- `bg:` for background color.
+- `mod:` for modifiers.
+
+Mode prefix is optional except `bg:`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
 
 Some examples:
 

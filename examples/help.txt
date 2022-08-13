@@ -7,7 +7,7 @@ You can:
 - \<bg:blue <bg:blue combine \<magenta <magenta them \<b<b \<i<i  all>\>>\>>\>>\> or
 - set them \<bg:blue,magenta,b,i,u,x <bg:blue,magenta,b,i,u,x at once>\>
 
-Note: not all color/style is supported in all system.
+Note: not all color/style is supported in all system/terminal.
 
 ---------------------------------------------
 
