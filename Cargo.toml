@@ -1,6 +1,6 @@
 [package]
 name = "tui-markup"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
 description = "markup langauge for terminal styled text of tui-rs"
@@ -17,8 +17,8 @@ exclude = ["examples/*.png"]
 
 [dependencies]
 nom = "7"
-nom_locate = {version = "4.0.0", features = ["runtime-dispatch-simd"] }
+nom_locate = {version = "4", features = ["runtime-dispatch-simd"] }
 tui = "0.18"
 
 [dev-dependencies]
-crossterm = "0.25.0"
+crossterm = "0.25"
