@@ -6,7 +6,7 @@ You can:
   \<s <s slow blink>\> \<r <r rapid blink>\> \<h <h hide>\> \<x <x delete>\>
 - \<bg:blue <bg:blue combine \<magenta <magenta them \<b<b \<i<i  all>\>>\>>\>>\> or
 - set them \<bg:blue,magenta,b,i,u,x <bg:blue,magenta,b,i,u,x at once>\>
-- escape \<, \>, \\ with <green \\\<, \\\>, \\\\>
+- escape \<, \>, \\ with <green \\\<>, <green \\\>>, <green \\\\>
 
 Note: not all color/style is supported in all system/terminal.
 
