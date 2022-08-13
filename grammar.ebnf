@@ -8,13 +8,13 @@ item
 text = char, { char };
 
 char
-= normal_char
-| escaped_char
+= normal char
+| escaped char
 ;
 
-normal_char = ? any unicode character ? - '\' - '<' - '>';
+normal char = ? any unicode character ? - '\' - '<' - '>';
 
-escaped_char
+escaped char
 = "\\"
 | "\<"
 | "\>"
@@ -32,12 +32,12 @@ style
 color
 = "black"
 | "white"
-| light_variant_colors, [ '-' ]
-| dark_variant_colors, [ '+' ]
-| custom_color
+| light variant colors, [ '-' ]
+| dark variant colors, [ '+' ]
+| custom color
 ;
 
-light_variant_colors
+light variant colors
 = "red"
 | "green"
 | "yellow"
@@ -46,9 +46,9 @@ light_variant_colors
 | "cyan"
 ;
 
-dark_variant_colors = "gray";
+dark variant colors = "gray";
 
-custom_color = 6 * hex_digit;
+custom color = 6 * hex_digit;
 
 hex_digit
 = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
