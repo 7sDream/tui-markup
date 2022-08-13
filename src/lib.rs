@@ -8,11 +8,12 @@
 //! This crate provides a markup language to
 //! quickly write colorful and styled terminal text(of [tui] crate) in plain text.
 //!
-//! The example and syntax section bellow is just for formal specifications,
-//! for normal usage and learning purpose,
-//! I suggest to see [help.txt] in examples folder, which generate this output:
+//! I suggest to check [help.txt] in examples folder,
+//! which generated this self-describing syntax help document:
 //!
 //! ![][help-text-screenshot]
+//!
+//! For formal syntax specification, see [syntax.ebnf].
 //!
 //! ## Examples
 //!
@@ -80,64 +81,10 @@
 //! );
 //! ```
 //!
-//! ## Syntax
-//!
-//! Each line is parsed independently,
-//! so there is no newline character in the input set of following grammar rules.
-//!
-//! ```none
-//! items = item*
-//!
-//! item = text
-//!      | element
-//!
-//! text = char+
-//!
-//! char = normal-char
-//!      | escaped-char
-//!
-//! normal-char = all character except '\', '<', '>'
-//!
-//! escaped-char = "\\"
-//!              | "\>"
-//!              | "\>"
-//!
-//! element = '<' tag ' ' items '>'
-//!
-//! tag = style (',' style)*
-//!
-//! style = ("fg:" | "bg:")? color
-//!       | "mod:"? modifier
-//!
-//! color = "black" | "white"
-//!       | light-variant-colors '-'?
-//!       | dark-variant-colors '+'?
-//!       | custom-color
-//!
-//! light-variant-colors = "red" | "green" | "yellow" | "blue" | "magenta" | "cyan"
-//!
-//! dark-variant-colors = "gray"
-//!
-//! custom-color = hex-digit{6}
-//!
-//! hex-digit = '0' | '1' | ... | '9' | 'a' | 'b' | ... | 'f' | 'A' | 'B' | ... | 'F'
-//!
-//! modifier = 'b'            # bold
-//!          | 'd'            # dim
-//!          | 'i'            # italic
-//!          | 'u'            # underline
-//!          | 's'            # slow blink
-//!          | 'r'            # rapid blink
-//!          | 'h'            # hide
-//!          | 'x'            # cross/delete line
-//! ```
-//!
-//! PS: `-` after color means light color, `+` means dark,
-//! e.g., `green-` = light green, `gray+` = dark gray.
-//!
 //! [tui]: https://docs.rs/tui/latest/tui
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
 //! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
+//! [syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/syntax.ebnf
 
 mod item;
 mod parser;

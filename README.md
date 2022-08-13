@@ -34,7 +34,7 @@ Some examples:
 - `<bg:blue one<green two>>`, is a blue background one followed by a blue background and green foreground two.
 - `<bg:blue,green,b,i text>` is a blue background, green foreground, bold, italic text.
 
-The forma syntax spec can be found in [crate document][doc-syntax], with complete list of available color and modifiers.
+The forma syntax spec can be found in [syntax.ebnf], with complete list of available color and modifiers.
 
 ## LICENSE
 
@@ -43,7 +43,7 @@ BSD-3-Clause-Clear, See [LICENSE].
 [tui]: https://docs.rs/tui/latest
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
-[doc-syntax]: https://docs.rs/tui-markup/latest#syntax
 [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
 [examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
+[syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/syntax.ebnf
 [LICENSE]: https://github.com/7sDream/tui-markup/blob/master/LICENSE
