@@ -3,7 +3,7 @@
 #![deny(warnings)]
 #![forbid(unsafe_code)]
 
-//! # TUI Markup
+//! # tui markup
 //!
 //! This crate provided a markup language to quickly convert plain text into colorful terminal text of [tui] crate.
 //!
@@ -78,8 +78,8 @@
 //!
 //! ## Syntax
 //!
-//! Each line is deal with separately,
-//! so there is no newline character in the domain of following grammar rules.
+//! Each line is parsed independently,
+//! so there is no newline character in the input set of following grammar rules.
 //!
 //! ```none
 //! items = item*

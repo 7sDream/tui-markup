@@ -43,6 +43,6 @@ BSD-3-Clause-Clear, See [LICENSE].
 [tui]: https://docs.rs/tui/latest
 [doc]: https://docs.rs/tui-markup/latest
 [doc-syntax]: https://docs.rs/tui-markup/latest#Syntax
-[help-text-screenshot]: empty
+[help-text-screenshot]: https://raw.githubusercontent.com/7sDream/tui-markup/master/examples/help-screenshot.png
 [examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 [LICENSE]: https://github.com/7sDream/tui-markup/blob/master/LICENSE
