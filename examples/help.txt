@@ -1,6 +1,6 @@
 You can:
-- use \<green <green text>\> to <blue change> <red text> <yellow color>.
-- use \<bg:green <bg:green text>\> to <bg:blue change> <bg:red background> <bg:yellow color>.
+- use \<green <green text>\> to <blue change> <red text> <yellow color>
+- use \<bg:green <bg:green text>\> to <bg:blue change> <bg:red background> <bg:yellow color>
 - custom color can be provided in hex format: \<66ccff <66ccff text>\>
 - style modifiers: \<b <b bold>\> \<d <d dim>\> \<i <i italic>\> \<u <u underline>\>
   \<s <s slow blink>\> \<r <r rapid blink>\> \<h <h hide>\> \<x <x delete>\>
@@ -8,7 +8,7 @@ You can:
 - set them \<bg:blue,magenta,b,i,u,x <bg:blue,magenta,b,i,u,x at once>\>
 - escape \<, \>, \\ with <green \\\<>, <green \\\>>, <green \\\\>
 
-Note: not all color/style is supported in all system/terminal.
+Note: not all colors/styles are supported in all systems/terminals.
 
 ---------------------------------------------
 
