@@ -91,7 +91,7 @@
 //! item = text
 //!      | element
 //!
-//! text = char*
+//! text = char+
 //!
 //! char = normal-char
 //!      | escaped-char
