@@ -1,17 +1,18 @@
-use std::str::FromStr;
-
 use nom::{bytes::complete::take_while_m_n, combinator::map_res, sequence::tuple, IResult};
 
 use tui::style::{Color, Modifier, Style};
 
+use crate::{error::Error, parser::LSpan};
+
 #[derive(Debug, Copy, Clone, PartialEq)]
-enum OneStyle {
+enum Tag {
     Fg(Color),
     Bg(Color),
     Modifier(Modifier),
+    Extra(Style),
 }
 
-impl OneStyle {
+impl Tag {
     fn parse_hex_color_part(s: &str) -> IResult<&str, u8> {
         map_res(take_while_m_n(2, 2, |c: char| c.is_ascii_hexdigit()), |x| {
             u8::from_str_radix(x, 16)
@@ -24,9 +25,11 @@ impl OneStyle {
             Self::parse_hex_color_part,
         ))(s)
         .ok()?;
+
         if !s.is_empty() {
             return None;
         }
+
         Some(Color::Rgb(r, g, b))
     }
 
@@ -65,13 +68,31 @@ impl OneStyle {
             _ => return None,
         })
     }
-}
 
-impl FromStr for OneStyle {
-    type Err = ();
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    pub fn parse_built_in(ty: &str, value: &str) -> Option<Self> {
+        Some(match ty {
+            "fg" => Self::Fg(Self::parse_color(value)?),
+            "bg" => Self::Bg(Self::parse_color(value)?),
+            "mod" => Self::Modifier(Self::parse_modifier(value)?),
+            "" => {
+                if let Some(color) = Self::parse_color(value) {
+                    Self::Fg(color)
+                } else if let Some(modifier) = Self::parse_modifier(value) {
+                    Self::Modifier(modifier)
+                } else {
+                    return None;
+                }
+            }
+            _ => return None,
+        })
+    }
+
+    pub fn parse<F>(s: &str, mut extra: F) -> Option<Self>
+    where
+        F: FnMut(&str) -> Option<Style>,
+    {
         let mut ty_value = s.split(':');
-        let mut ty = ty_value.next().ok_or(())?;
+        let mut ty = ty_value.next()?;
         let value = ty_value.next().unwrap_or_else(|| {
             let value = ty;
             ty = "";
@@ -79,41 +100,43 @@ impl FromStr for OneStyle {
         });
 
         if ty_value.next().is_some() {
-            return Err(());
+            return extra(s).map(Self::Extra);
         }
 
-        Ok(match ty {
-            "fg" => Self::Fg(Self::parse_color(value).ok_or(())?),
-            "bg" => Self::Bg(Self::parse_color(value).ok_or(())?),
-            "mod" => Self::Modifier(Self::parse_modifier(value).ok_or(())?),
-            "" => {
-                if let Some(color) = Self::parse_color(value) {
-                    Self::Fg(color)
-                } else if let Some(modifier) = Self::parse_modifier(value) {
-                    Self::Modifier(modifier)
-                } else {
-                    return Err(());
-                }
-            }
-            _ => return Err(()),
-        })
+        Self::parse_built_in(ty, value).or_else(|| extra(s).map(Self::Extra))
+    }
+
+    fn into_style(self) -> Style {
+        match self {
+            Tag::Fg(color) => Style::default().fg(color),
+            Tag::Bg(color) => Style::default().bg(color),
+            Tag::Modifier(m) => Style::default().add_modifier(m),
+            Tag::Extra(style) => style,
+        }
     }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub(crate) struct Tag(pub Style);
+pub(crate) struct Tags(pub Style);
 
-impl FromStr for Tag {
-    type Err = ();
+impl Tags {
+    fn parse_one<F>(s: LSpan, extra: F) -> Result<Style, Error>
+    where
+        F: FnMut(&str) -> Option<Style>,
+    {
+        Tag::parse(s.fragment(), extra)
+            .map(Tag::into_style)
+            .ok_or_else(|| Error::InvalidTag(s.fragment(), s.extra, s.get_column()))
+    }
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    pub fn parse<F>(s: Vec<LSpan>, mut extra: F) -> Result<Self, Error>
+    where
+        F: FnMut(&str) -> Option<Style>,
+    {
         let mut style = Style::default();
-        for patch in s.split(',').map(|s| s.parse::<OneStyle>()) {
-            style = match patch? {
-                OneStyle::Fg(color) => style.fg(color),
-                OneStyle::Bg(color) => style.bg(color),
-                OneStyle::Modifier(m) => style.add_modifier(m),
-            }
+
+        for patch in s.into_iter().map(|t| Self::parse_one(t, &mut extra)) {
+            style = style.patch(patch?);
         }
 
         Ok(Self(style))

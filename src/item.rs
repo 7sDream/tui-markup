@@ -1,18 +1,15 @@
-use tui::{
-    style::Style,
-    text::{Span, Spans},
-};
+use tui::{style::Style, text::Span};
 
-use crate::tag::Tag;
+use crate::{parser::LSpan, tag::Tags, Error};
 
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) enum Item<'a> {
     PlainText(&'a str),
-    Element(Tag, Vec<Item<'a>>),
+    Element(Vec<LSpan<'a>>, Vec<Item<'a>>),
 }
 
 impl<'a> Item<'a> {
-    fn plain_text_to_spans(escaped: &str, style: Option<Style>) -> Spans<'_> {
+    fn plain_text_to_spans(escaped: &str, style: Option<Style>) -> Vec<Span> {
         let mut spans = vec![];
 
         let mut push_span = |start: usize, end: usize| {
@@ -39,24 +36,41 @@ impl<'a> Item<'a> {
         }
         push_span(start, escaped.len());
 
-        Spans(spans)
+        spans
     }
 
-    pub fn into_spans(self, style: Option<Style>) -> Spans<'a> {
+    fn element_to_spans<F>(
+        tags: Vec<LSpan<'a>>, children: Vec<Item<'a>>, mut extra: F, style: Option<Style>,
+    ) -> Result<Vec<Span<'a>>, Error<'a>>
+    where
+        F: FnMut(&str) -> Option<Style>,
+    {
+        let style = style.unwrap_or_default().patch(Tags::parse(tags, &mut extra)?.0);
+
+        let mut result = vec![];
+        for child_spans in children
+            .into_iter()
+            .map(|item| item.into_spans(&mut extra, Some(style)))
+        {
+            result.extend(child_spans?);
+        }
+
+        Ok(result)
+    }
+
+    pub fn into_spans<F>(self, extra: F, style: Option<Style>) -> Result<Vec<Span<'a>>, Error<'a>>
+    where
+        F: FnMut(&str) -> Option<Style>,
+    {
+        // TODO: remove the recursion
         match self {
-            Item::PlainText(t) => Self::plain_text_to_spans(t, style),
-            Item::Element(tag, children) => {
-                let style = style.unwrap_or_default().patch(tag.0);
-                children
-                    .into_iter()
-                    .flat_map(|part| part.into_spans(Some(style)).0)
-                    .collect::<Vec<_>>()
-                    .into()
-            }
+            Item::PlainText(t) => Ok(Self::plain_text_to_spans(t, style)),
+            Item::Element(tags, children) => Self::element_to_spans(tags, children, extra, style),
         }
     }
 }
 
+/*
 #[cfg(test)]
 mod item_test {
     use tui::text::Span;
@@ -93,3 +107,5 @@ mod item_test {
         test_plain_text!("a\\\\", "a", "\\");
     }
 }
+
+*/

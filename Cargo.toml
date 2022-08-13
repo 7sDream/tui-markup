@@ -18,6 +18,7 @@ exclude = ["examples/*.png"]
 [dependencies]
 nom = "7"
 nom_locate = {version = "4", features = ["runtime-dispatch-simd"] }
+thiserror = "1.0.32"
 tui = "0.18"
 
 [dev-dependencies]

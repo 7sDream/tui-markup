@@ -2,24 +2,28 @@ use nom::{
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take_while1},
     character::complete::{char, one_of},
-    combinator::{map, map_res, verify},
-    multi::many0,
+    combinator::{map, verify},
+    multi::{many0, separated_list1},
     sequence::{preceded, tuple},
     IResult,
 };
 use nom_locate::LocatedSpan;
-use tui::text::Spans;
+use tui::{style::Style, text::Span};
 
-use crate::{item::Item, tag::Tag};
+use crate::{item::Item, Error};
 
-type LSpan<'a> = LocatedSpan<&'a str>;
+pub type LSpan<'a> = LocatedSpan<&'a str, usize>;
 
-fn tag_name(s: LSpan) -> IResult<LSpan, LSpan> {
-    take_while1(|c: char| c.is_alphanumeric() || c == ':' || c == '+' || c == '-' || c == ',')(s)
+fn one_tag(s: LSpan) -> IResult<LSpan, LSpan> {
+    take_while1(|c: char| c.is_alphanumeric() || c == ':' || c == '+' || c == '-')(s)
 }
 
-fn element_start(s: LSpan) -> IResult<LSpan, Tag> {
-    let (s, tag) = preceded(char('<'), map_res(tag_name, |s| s.parse()))(s)?;
+fn tag_list(s: LSpan) -> IResult<LSpan, Vec<LSpan>> {
+    separated_list1(char(','), one_tag)(s)
+}
+
+fn element_start(s: LSpan) -> IResult<LSpan, Vec<LSpan>> {
+    let (s, tag) = preceded(char('<'), tag_list)(s)?;
     let (s, _) = char(' ')(s)?;
     Ok((s, tag))
 }
@@ -33,54 +37,75 @@ fn element(s: LSpan) -> IResult<LSpan, Item> {
     Ok((s, Item::Element(tag, parts)))
 }
 
-fn plain_text(s: LSpan) -> IResult<LSpan, LSpan> {
-    escaped(is_not("<>\\"), '\\', one_of("<>\\"))(s)
+fn plain_text(s: LSpan) -> IResult<LSpan, Item> {
+    map(
+        verify(escaped(is_not("<>\\"), '\\', one_of("<>\\")), |t: &LSpan| !t.is_empty()),
+        |ls: LSpan| Item::PlainText(ls.fragment()),
+    )(s)
 }
 
 fn item(s: LSpan) -> IResult<LSpan, Item> {
-    alt((map(plain_text, |s| Item::PlainText(s.fragment())), element))(s)
+    alt((plain_text, element))(s)
 }
 
 fn items(s: LSpan) -> IResult<LSpan, Vec<Item>> {
-    many0(verify(item, |p| !matches!(p, Item::PlainText(""))))(s)
+    many0(item)(s)
 }
 
-pub fn parse(s: &str) -> Result<Spans, (&str, usize)> {
-    let located = LSpan::new(s);
+pub fn parse<F>(s: &str, line: usize, mut extra: F) -> Result<Vec<Span<'_>>, Error>
+where
+    F: FnMut(&str) -> Option<Style>,
+{
+    let located = LSpan::new_extra(s, line);
 
     let (remain, items) = items(located).unwrap();
     if !remain.fragment().is_empty() {
-        return Err((remain.fragment(), remain.get_column()));
+        let first_char_len = remain.chars().next().unwrap().len_utf8();
+        return Err(Error::InvalidSyntax(
+            &remain[0..first_char_len],
+            line,
+            remain.get_column(),
+        ));
     }
 
-    let x = items
-        .into_iter()
-        .flat_map(|item| item.into_spans(None).0)
-        .collect::<Vec<_>>();
+    let mut result = vec![];
+    for spans in items.into_iter().map(|item| item.into_spans(&mut extra, None)) {
+        result.extend(spans?)
+    }
 
-    Ok(x.into())
+    Ok(result)
 }
 
 #[cfg(test)]
 mod parser_test {
-    use nom::InputTake;
-    use tui::style::{Color, Modifier, Style};
 
-    use crate::{item::Item, tag::Tag};
+    use crate::item::Item;
 
     macro_rules! test_ok {
-        ($s:literal $(, $item:expr)*) => {
+        ($s:expr $(, $item:expr)*) => {
             let source = $s;
-            let s = crate::parser::LSpan::new(source);
-            let (remainder, _) = s.take_split(source.len());
+            let s = crate::parser::LSpan::new_extra(source, 1);
+            let (remainder, _) = ::nom::InputTake::take_split(&s, source.len());
 
             assert_eq!(crate::parser::items(s), Ok((remainder, vec![$($item,)*])));
         };
     }
 
     macro_rules! test_fail {
-        ($s:literal, $at:literal) => {
-            assert_eq!(crate::parser::parse($s), Err((&$s[$at - 1..], $at)));
+        ($s:expr, $at:expr) => {
+            assert_eq!(
+                crate::parser::parse($s, 1, |_| None).unwrap_err().position().1,
+                $at
+            );
+        };
+    }
+
+    macro_rules! lspan {
+        ($s:expr, $offset:expr) => {
+            unsafe { crate::parser::LSpan::new_from_raw_offset($offset, 1, $s, 1) }
+        };
+        ($s:expr) => {
+            unsafe { crate::parser::LSpan::new_from_raw_offset(0, 1, $s, 1) }
         };
     }
 
@@ -108,17 +133,14 @@ mod parser_test {
 
     #[test]
     fn test_no_content_element() {
-        test_ok!(
-            "<green >",
-            Item::Element(Tag(Style::default().fg(Color::Green)), vec![])
-        );
+        test_ok!("<green >", Item::Element(vec![lspan!("<green >")], vec![]));
     }
 
     #[test]
     fn test_foreground_element() {
         test_ok!(
             "<fg:green text>",
-            Item::Element(Tag(Style::default().fg(Color::Green)), vec![Item::PlainText("text")])
+            Item::Element(vec![lspan!("fg:green", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -126,7 +148,7 @@ mod parser_test {
     fn test_foreground_element_without_mode() {
         test_ok!(
             "<blue text>",
-            Item::Element(Tag(Style::default().fg(Color::Blue)), vec![Item::PlainText("text")])
+            Item::Element(vec![lspan!("blue", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -134,7 +156,7 @@ mod parser_test {
     fn test_foreground_element_with_only_colon() {
         test_ok!(
             "<:white text>",
-            Item::Element(Tag(Style::default().fg(Color::White)), vec![Item::PlainText("text")])
+            Item::Element(vec![lspan!(":white", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -142,7 +164,7 @@ mod parser_test {
     fn test_background_element() {
         test_ok!(
             "<bg:red text>",
-            Item::Element(Tag(Style::default().bg(Color::Red)), vec![Item::PlainText("text")])
+            Item::Element(vec![lspan!("bg:red", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -150,10 +172,7 @@ mod parser_test {
     fn test_modifier_element() {
         test_ok!(
             "<mod:b text>",
-            Item::Element(
-                Tag(Style::default().add_modifier(Modifier::BOLD)),
-                vec![Item::PlainText("text")]
-            )
+            Item::Element(vec![lspan!("mod:b", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -161,10 +180,7 @@ mod parser_test {
     fn test_modifier_element_without_mode() {
         test_ok!(
             "<i text>",
-            Item::Element(
-                Tag(Style::default().add_modifier(Modifier::ITALIC)),
-                vec![Item::PlainText("text")]
-            )
+            Item::Element(vec![lspan!("i", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -172,10 +188,7 @@ mod parser_test {
     fn test_modifier_element_with_only_colon() {
         test_ok!(
             "<:d text>",
-            Item::Element(
-                Tag(Style::default().add_modifier(Modifier::DIM)),
-                vec![Item::PlainText("text")]
-            )
+            Item::Element(vec![lspan!(":d", 1)], vec![Item::PlainText("text")])
         );
     }
 
@@ -184,9 +197,9 @@ mod parser_test {
         test_ok!(
             "<bg:cyan <yellow one> two>",
             Item::Element(
-                Tag(Style::default().bg(Color::Cyan)),
+                vec![lspan!("bg:cyan", 1)],
                 vec![
-                    Item::Element(Tag(Style::default().fg(Color::Yellow)), vec![Item::PlainText("one")]),
+                    Item::Element(vec![lspan!("yellow", 10)], vec![Item::PlainText("one")]),
                     Item::PlainText(" two"),
                 ]
             )
@@ -198,10 +211,12 @@ mod parser_test {
         test_ok!(
             "<bg:magenta,gray,mod:u,x text>",
             Item::Element(
-                Tag(Style::default()
-                    .bg(Color::Magenta)
-                    .fg(Color::Gray)
-                    .add_modifier(Modifier::UNDERLINED | Modifier::CROSSED_OUT)),
+                vec![
+                    lspan!("bg:magenta", 1),
+                    lspan!("gray", 12),
+                    lspan!("mod:u", 17),
+                    lspan!("x", 23)
+                ],
                 vec![Item::PlainText("text"),]
             )
         );
@@ -212,9 +227,7 @@ mod parser_test {
         test_ok!(
             "<bg:ff8000,66ccff text>",
             Item::Element(
-                Tag(Style::default()
-                    .bg(Color::Rgb(0xff, 0x80, 0x00))
-                    .fg(Color::Rgb(0x66, 0xcc, 0xff))),
+                vec![lspan!("bg:ff8000", 1), lspan!("66ccff", 11)],
                 vec![Item::PlainText("text")]
             )
         );
