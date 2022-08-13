@@ -24,7 +24,7 @@ Only one syntax `<tag content>` to add style to content.
 - `bg:` for background color.
 - `mod:` for modifiers.
 
-Mode prefix is optional except `bg:`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
+Mode and `:` is optional except `bg`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
 
 Some examples:
 

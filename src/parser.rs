@@ -131,6 +131,14 @@ mod parser_test {
     }
 
     #[test]
+    fn test_foreground_element_with_only_colon() {
+        test_ok!(
+            "<:white text>",
+            Item::Element(Tag(Style::default().fg(Color::White)), vec![Item::PlainText("text")])
+        );
+    }
+
+    #[test]
     fn test_background_element() {
         test_ok!(
             "<bg:red text>",
@@ -155,6 +163,17 @@ mod parser_test {
             "<i text>",
             Item::Element(
                 Tag(Style::default().add_modifier(Modifier::ITALIC)),
+                vec![Item::PlainText("text")]
+            )
+        );
+    }
+
+    #[test]
+    fn test_modifier_element_with_only_colon() {
+        test_ok!(
+            "<:d text>",
+            Item::Element(
+                Tag(Style::default().add_modifier(Modifier::DIM)),
                 vec![Item::PlainText("text")]
             )
         );

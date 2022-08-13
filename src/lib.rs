@@ -18,7 +18,7 @@
 //! ## Examples
 //!
 //! ```
-//! use tui::{style::{Style, Color, Modifier}, text::{Text, Spans, Span}};
+//! # use tui::{style::{Style, Color, Modifier}, text::{Text, Spans, Span}};
 //! use tui_markup::parse;
 //!
 //! assert_eq!(
