@@ -136,7 +136,7 @@
 //! e.g., `green-` = light green, `gray+` = dark gray.
 //!
 //! [tui]: https://docs.rs/tui/latest/tui
-//! [help-text-screenshot]: https://raw.githubusercontent.com/7sDream/tui-markup/master/examples/help-screenshot.png
+//! [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
 //! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 
 mod item;
