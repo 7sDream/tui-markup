@@ -6,6 +6,7 @@ You can:
   \<s <s slow blink>\> \<r <r rapid blink>\> \<h <h hide>\> \<x <x delete>\>
 - \<bg:blue <bg:blue combine \<magenta <magenta them \<b<b \<i<i  all>\>>\>>\>>\> or
 - set them \<bg:blue,magenta,b,i,u,x <bg:blue,magenta,b,i,u,x at once>\>
+- escape \<, \>, \\ with <green \\\<, \\\>, \\\\>
 
 Note: not all color/style is supported in all system/terminal.
 
@@ -15,7 +16,7 @@ Color preview
 
 Terminal palette
 <bg:black,white  black ><bg:red  red  ><bg:green  green  ><bg:yellow  yellow  ><bg:blue  blue  ><bg:magenta  magenta  ><bg:cyan  cyan  ><bg:gray+  gray+ >
-<bg:white,black  white ><bg:red-  red- ><bg:green-  green- ><bg:yellow-  yellow- ><bg:blue-  blue- ><bg:magenta-  magenta- ><bg:cyan-  cyan- ><bg:gray  gray  >
+<bg:white,black  white ><bg:red-  red- ><bg:green-  green- ><bg:yellow-  yellow- ><bg:blue-  blue- ><bg:magenta-  magenta- ><bg:cyan-  cyan- ><bg:gray  <black gray>  >
 
 Grayscale
 <bg:ffffff    ><bg:eeeeee    ><bg:dddddd    ><bg:cccccc    ><bg:bbbbbb    ><bg:aaaaaa    ><bg:999999    ><bg:888888    ><bg:777777    ><bg:666666    ><bg:555555    ><bg:444444    ><bg:333333    ><bg:222222    ><bg:111111    ><bg:000000    >

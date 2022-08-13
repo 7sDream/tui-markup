@@ -4,7 +4,7 @@ use nom::{bytes::complete::take_while_m_n, combinator::map_res, sequence::tuple,
 
 use tui::style::{Color, Modifier, Style};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 enum OneStyle {
     Fg(Color),
     Bg(Color),
@@ -100,7 +100,7 @@ impl FromStr for OneStyle {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub(crate) struct Tag(pub Style);
 
 impl FromStr for Tag {

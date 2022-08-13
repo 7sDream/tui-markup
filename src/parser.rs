@@ -46,11 +46,7 @@ fn items(s: LSpan) -> IResult<LSpan, Vec<Item>> {
 }
 
 pub fn parse(s: &str) -> Result<Spans, (&str, usize)> {
-    // if s.is_empty() {
-    //     return Ok(Spans::default());
-    // }
-
-    let located = nom_locate::LocatedSpan::from(s);
+    let located = LSpan::new(s);
 
     let (remain, items) = items(located).unwrap();
     if !remain.fragment().is_empty() {
@@ -63,4 +59,61 @@ pub fn parse(s: &str) -> Result<Spans, (&str, usize)> {
         .collect::<Vec<_>>();
 
     Ok(x.into())
+}
+
+#[cfg(test)]
+mod test {
+    use nom::InputTake;
+    use tui::style::{Color, Style};
+
+    use crate::{item::Item, tag::Tag};
+
+    use super::{items, parse, LSpan};
+
+    #[test]
+    fn test_escaped_string() {
+        let s = LSpan::new("\\<");
+
+        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\<")]);
+
+        let s = LSpan::new("\\>");
+
+        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\>")]);
+
+        let s = LSpan::new("\\\\");
+
+        assert_eq!(items(s).unwrap().1, vec![Item::PlainText("\\\\")]);
+    }
+
+    #[test]
+    fn test_invalid_escaped_string() {
+        assert!(parse("\\x").is_err());
+    }
+
+    #[test]
+    fn test_ok_with_empty_input() {
+        let s = LSpan::new("");
+
+        assert_eq!(items(s), Ok((s, vec![])));
+    }
+
+    #[test]
+    fn test_error_with_no_space_element() {
+        assert!(parse("<green>").is_err());
+    }
+
+    #[test]
+    fn test_ok_with_no_content_element() {
+        let source = "<green >";
+        let s = LSpan::new(source);
+        let (remainder, _) = s.take_split(8);
+
+        assert_eq!(
+            items(s),
+            Ok((
+                remainder,
+                vec![Item::Element(Tag(Style::default().fg(Color::Green)), vec![])]
+            )),
+        );
+    }
 }

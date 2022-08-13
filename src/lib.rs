@@ -8,8 +8,11 @@
 //! This crate provides a markup language to
 //! quickly write colorful and styled terminal text(of [tui] crate) in plain text.
 //!
-//! The example and syntax bellow is just for formal specifications, for normal usage and learning purpose,
-//! I suggest to see [help.txt] in examples folder.
+//! The example and syntax section bellow is just for formal specifications,
+//! for normal usage and learning purpose,
+//! I suggest to see [help.txt] in examples folder, which generate this output:
+//!
+//! ![][help-text-screenshot]
 //!
 //! ## Examples
 //!
@@ -133,6 +136,7 @@
 //! e.g., `green-` = light green, `gray+` = dark gray.
 //!
 //! [tui]: https://docs.rs/tui/latest/tui
+//! [help-text-screenshot]: https://raw.githubusercontent.com/7sDream/tui-markup/master/examples/help-screenshot.png
 //! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 
 mod item;
@@ -158,22 +162,11 @@ pub fn parse(s: &str) -> Result<Text, (&str, (usize, usize))> {
 
 #[cfg(test)]
 mod test {
-    use tui::text::{Spans, Text};
+    use super::parse;
+    use tui::text::Text;
 
     #[test]
     fn test_ok_with_empty_input() {
-        assert_eq!(super::parse(""), Ok(Text { lines: vec![] }));
-
-        assert_eq!(
-            super::parse("\n"),
-            Ok(Text {
-                lines: vec![Spans(vec![])]
-            })
-        );
-    }
-
-    #[test]
-    fn test_error_with_no_content_element() {
-        assert_eq!(super::parse("<green>"), Err(("<green>", (1, 1))));
+        assert_eq!(parse(""), Ok(Text { lines: vec![] }));
     }
 }
