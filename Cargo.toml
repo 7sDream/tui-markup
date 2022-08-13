@@ -1,6 +1,6 @@
 [package]
 name = "tui-markup"
-version = "0.1.2.alpha"
+version = "0.1.2-alpha"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
 description = "markup langauge for terminal styled text of tui-rs"

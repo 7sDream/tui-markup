@@ -1,0 +1,68 @@
+items = { item };
+
+item
+= text
+| element
+;
+
+text = char, { char };
+
+char
+= normal_char
+| escaped_char
+;
+
+normal_char = ? any unicode character ? - '\' - '<' - '>';
+
+escaped_char
+= "\\"
+| "\<"
+| "\>"
+;
+
+element = '<', tag, ' ', items, '>';
+
+tag = style, { ',', style };
+
+style
+= [ [ "fg" | "bg" ], ':' ], color
+| [ [ "mod" ], ':' ], modifier
+;
+
+color
+= "black"
+| "white"
+| light_variant_colors, [ '-' ]
+| dark_variant_colors, [ '+' ]
+| custom_color
+;
+
+light_variant_colors
+= "red"
+| "green"
+| "yellow"
+| "blue"
+| "magenta"
+| "cyan"
+;
+
+dark_variant_colors = "gray";
+
+custom_color = 6 * hex_digit;
+
+hex_digit
+= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+| 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
+| 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+;
+
+modifier
+= 'b' (* bold *)
+| 'd' (* dim *)
+| 'i' (* italic *)
+| 'u' (* underline *)
+| 's' (* slow blink *)
+| 'r' (* rapid blink *)
+| 'h' (* hide *)
+| 'x' (* cross/delete line *)
+;
