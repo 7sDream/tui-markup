@@ -10,7 +10,7 @@ This is the output of `cargo run --example help`:
 
 ![help-text][help-text-screenshot]
 
-The source markup text generated this can be found in [examples/help.txt].
+The source markup text of this article can be found in [examples/help.txt].
 
 ## Syntax
 
