@@ -5,7 +5,8 @@
 
 //! # tui markup
 //!
-//! This crate provided a markup language to quickly convert plain text into colorful terminal text of [tui] crate.
+//! This crate provides a markup language to
+//! quickly write colorful and styled terminal text(of [tui] crate) in plain text.
 //!
 //! The example and syntax bellow is just for formal specifications, for normal usage and learning purpose,
 //! I suggest to see [help.txt] in examples folder.

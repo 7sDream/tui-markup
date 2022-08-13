@@ -1,6 +1,6 @@
 # tui markup
 
-This crate provided a markup language to quickly convert plain text into colorful terminal text of [tui] crate.
+This crate provides a markup language to quickly write colorful and styled terminal text(of [tui] crate) in plain text.
 
 [Document][doc]
 
