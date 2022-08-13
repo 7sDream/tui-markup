@@ -12,7 +12,6 @@ license = "BSD-3-Clause-Clear"
 keywords = ["terminal", "tui", "markup", "text", "parser"]
 categories = ["command-line-interface", "parser-implementations", "text-processing"]
 exclude = ["examples/*.png"]
-publish = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
