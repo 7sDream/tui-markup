@@ -1,30 +1,5 @@
-items = { item };
 
-item
-= text
-| element
-;
-
-text = char, { char };
-
-char
-= normal char
-| escaped char
-;
-
-normal char = ? any unicode character ? - '\' - '<' - '>';
-
-escaped char
-= "\\"
-| "\<"
-| "\>"
-;
-
-element = '<', tag, ' ', items, '>';
-
-tag = style, { ',', style };
-
-style
+tag
 = [ [ "fg" | "bg" ], ':' ], color
 | [ [ "mod" ], ':' ], modifier
 ;
@@ -56,13 +31,21 @@ hex digit
 | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
 ;
 
+(* bold *)
+(* dim *)
+(* italic *)
+(* underline *)
+(* slow blink *)
+(* rapid blink *)
+(* hide *)
+(* cross/delete line *)
 modifier
-= 'b' (* bold *)
-| 'd' (* dim *)
-| 'i' (* italic *)
-| 'u' (* underline *)
-| 's' (* slow blink *)
-| 'r' (* rapid blink *)
-| 'h' (* hide *)
-| 'x' (* cross/delete line *)
+= 'b' 
+| 'd' 
+| 'i' 
+| 'u' 
+| 's' 
+| 'r' 
+| 'h' 
+| 'x' 
 ;

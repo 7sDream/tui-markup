@@ -1,0 +1,37 @@
+items = { item };
+
+item
+= text
+| element
+;
+
+text = char, { char };
+
+char
+= normal char
+| escaped char
+;
+
+normal char = ? any unicode character ? - '\' - '<' - '>';
+
+escaped char
+= "\\"
+| "\<"
+| "\>"
+;
+
+element = '<', tags, ' ', items, '>';
+
+tag = tag, { ',', tag };
+
+tag = tag char, {tag char};
+
+tag char
+= ? ascii alphabetic character ?
+| ? ascii numberic character ?
+| ':'
+| '-'
+| '+'
+;
+
+(* Please read generator's document for tags they support *)

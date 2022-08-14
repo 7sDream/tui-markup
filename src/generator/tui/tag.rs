@@ -1,11 +1,38 @@
 use nom::{bytes::complete::take_while_m_n, combinator::map_res, sequence::tuple, IResult};
-
 use tui::style::{Color, Modifier, Style};
 
-use crate::{error::Error, parser::LSpan};
+use crate::parser::LSpan;
+
+use super::{error::ErrorKind, Error};
+
+pub trait CustomTagProvider {
+    fn provide(&mut self, s: &str) -> Option<Style>;
+}
+
+impl<F> CustomTagProvider for F
+where
+    F: FnMut(&str) -> Option<Style>,
+{
+    fn provide(&mut self, s: &str) -> Option<Style> {
+        self(s)
+    }
+}
+
+impl CustomTagProvider for () {
+    fn provide(&mut self, _s: &str) -> Option<Style> {
+        None
+    }
+}
+
+fn try_custom_tag<F>(s: &str, f: &mut Option<F>) -> Option<Style>
+where
+    F: CustomTagProvider,
+{
+    f.as_mut().and_then(|f| f.provide(s))
+}
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-enum Tag {
+pub enum Tag {
     Fg(Color),
     Bg(Color),
     Modifier(Modifier),
@@ -18,6 +45,7 @@ impl Tag {
             u8::from_str_radix(x, 16)
         })(s)
     }
+
     fn parse_hex_color(s: &str) -> Option<Color> {
         let (s, (r, g, b)) = tuple((
             Self::parse_hex_color_part,
@@ -87,10 +115,7 @@ impl Tag {
         })
     }
 
-    pub fn parse<F>(s: &str, mut extra: F) -> Option<Self>
-    where
-        F: FnMut(&str) -> Option<Style>,
-    {
+    pub fn parse<P: CustomTagProvider>(s: &str, custom: &mut Option<P>) -> Option<Self> {
         let mut ty_value = s.split(':');
         let mut ty = ty_value.next()?;
         let value = ty_value.next().unwrap_or_else(|| {
@@ -100,13 +125,15 @@ impl Tag {
         });
 
         if ty_value.next().is_some() {
-            return extra(s).map(Self::Extra);
+            return try_custom_tag(s, custom).map(Self::Extra);
         }
 
-        Self::parse_built_in(ty, value).or_else(|| extra(s).map(Self::Extra))
+        try_custom_tag(s, custom)
+            .map(Self::Extra)
+            .or_else(|| Self::parse_built_in(ty, value))
     }
 
-    fn into_style(self) -> Style {
+    pub fn into_style(self) -> Style {
         match self {
             Tag::Fg(color) => Style::default().fg(color),
             Tag::Bg(color) => Style::default().bg(color),
@@ -117,28 +144,28 @@ impl Tag {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub(crate) struct Tags(pub Style);
+pub struct Tags(Style);
 
 impl Tags {
-    fn parse_one<F>(s: LSpan, extra: F) -> Result<Style, Error>
-    where
-        F: FnMut(&str) -> Option<Style>,
-    {
-        Tag::parse(s.fragment(), extra)
+    fn parse_one<'a, 'b, P: CustomTagProvider>(s: LSpan<'b>, custom: &'a mut Option<P>) -> Result<Style, Error<'b>> {
+        Tag::parse(s.fragment(), custom)
             .map(Tag::into_style)
-            .ok_or_else(|| Error::InvalidTag(s.fragment(), s.extra, s.get_column()))
+            .ok_or_else(|| Error::new(ErrorKind::InvalidTag, s))
     }
 
-    pub fn parse<F>(s: Vec<LSpan>, mut extra: F) -> Result<Self, Error>
-    where
-        F: FnMut(&str) -> Option<Style>,
-    {
+    pub fn parse<'a, 'b, P: CustomTagProvider>(
+        s: Vec<LSpan<'b>>, custom: &'a mut Option<P>,
+    ) -> Result<Self, Error<'b>> {
         let mut style = Style::default();
 
-        for patch in s.into_iter().map(|t| Self::parse_one(t, &mut extra)) {
+        for patch in s.into_iter().map(|t| Self::parse_one(t, custom)) {
             style = style.patch(patch?);
         }
 
         Ok(Self(style))
+    }
+
+    pub fn style(&self) -> Style {
+        self.0
     }
 }

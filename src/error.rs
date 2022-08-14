@@ -1,23 +1,36 @@
 use thiserror::Error;
 
-/// Possible errors when parse makeup source text into tui text.
-#[derive(Debug, Clone, Error)]
-pub enum Error<'a> {
-    /// There is invalid syntax in source
-    #[error("invalid syntax when parse {0:?} at {1}:{2}")]
-    InvalidSyntax(&'a str, usize, usize),
+use crate::parser::Error as ParseError;
 
-    /// There is a unknown tag in source
-    #[error("unknown tag {0:?} at {1}:{2}")]
-    InvalidTag(&'a str, usize, usize),
+/// Error with a location info.
+pub trait LocatedError {
+    /// get error happened location in source input.
+    fn location(&self) -> (usize, usize);
 }
 
-impl<'a> Error<'a> {
-    /// Get position of error
-    pub fn position(&self) -> (usize, usize) {
-        match *self {
-            Self::InvalidSyntax(_, x, y) => (x, y),
-            Self::InvalidTag(_, x, y) => (x, y),
+/// Error type for [compile][super::compile] function.
+#[derive(Debug, PartialEq, Eq, Error)]
+pub enum Error<'a, GE> {
+    /// Parsing step failed, usually means there is invalid syntax in source string
+    #[error("parse failed: {0}")]
+    Parse(ParseError<'a>),
+
+    /// Generating step failed, see document of generator type for detail.
+    #[error("generator failed: {0}")]
+    Gen(GE),
+}
+
+impl<'a, GE: LocatedError> LocatedError for Error<'a, GE> {
+    fn location(&self) -> (usize, usize) {
+        match self {
+            Self::Parse(e) => e.location(),
+            Self::Gen(e) => e.location(),
         }
+    }
+}
+
+impl<'a, GE> From<ParseError<'a>> for Error<'a, GE> {
+    fn from(e: ParseError<'a>) -> Self {
+        Self::Parse(e)
     }
 }

@@ -1,9 +1,9 @@
 [package]
 name = "tui-markup"
-version = "0.1.2-alpha"
+version = "0.2.0-alpha"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
-description = "markup langauge for terminal styled text of tui-rs"
+description = "markup langauge for terminal styled text"
 documentation = "https://docs.rs/tui-markup"
 readme = "README.md"
 homepage = "https://github.com/7sDream/tui-markup"
@@ -15,11 +15,23 @@ exclude = ["examples/*.png"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = []
+
 [dependencies]
 nom = "7"
 nom_locate = {version = "4", features = ["runtime-dispatch-simd"] }
 thiserror = "1.0.32"
-tui = "0.18"
+tui = { version = "0.18", optional = true, default-features = false }
 
 [dev-dependencies]
+tui = "0.18"
 crossterm = "0.25"
+
+[[example]]
+name = "help"
+required-features = ["tui"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

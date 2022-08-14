@@ -7,7 +7,7 @@ use crossterm::{
 };
 use tui::{backend::CrosstermBackend, widgets::Paragraph, Terminal};
 
-use tui_markup::parse;
+use tui_markup::{compile, generator::TuiTextGenerator};
 
 static HELP_TEXTS: &str = include_str!("help.txt");
 
@@ -21,7 +21,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     loop {
         terminal.draw(|frame| {
-            frame.render_widget(Paragraph::new(parse(HELP_TEXTS).unwrap()), frame.size());
+            frame.render_widget(
+                Paragraph::new(compile::<TuiTextGenerator>(HELP_TEXTS).unwrap()),
+                frame.size(),
+            );
         })?;
 
         if let Event::Key(key) = crossterm::event::read()? {
@@ -41,6 +44,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 mod test {
     #[test]
     fn test_help_text() {
-        assert!(tui_markup::parse(super::HELP_TEXTS).is_ok());
+        assert!(tui_markup::compile(super::HELP_TEXTS).is_ok());
     }
 }
