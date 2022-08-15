@@ -42,8 +42,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod test {
+    use tui_markup::generator::TuiTextGenerator;
+
     #[test]
     fn test_help_text() {
-        assert!(tui_markup::compile(super::HELP_TEXTS).is_ok());
+        assert!(tui_markup::compile::<TuiTextGenerator>(super::HELP_TEXTS).is_ok());
     }
 }
