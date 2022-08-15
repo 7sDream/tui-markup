@@ -1,4 +1,3 @@
-
 tag
 = [ [ "fg" | "bg" ], ':' ], color
 | [ [ "mod" ], ':' ], modifier

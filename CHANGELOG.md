@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+
+- `parser` module, contains parse function, IR `Item` type and `Error`.
+- `Generator` trait for custom generators.
+- `generator::helper` module for helper functions to write generator.
+- Add `tui` feature for enable builtin generators for tui crate, only `TuiTextGenerator` for now.
+- `LocateError` trait for get location of error in source text.\
+- `compile_with` entry function for use a custom configured generator.
+
+## Changed
+
+- Entry function renamed from `parse` to `compile`, use default instance of a generator type.
+- Root `Error` type changed from `(usize, usize)` to a struct type, for better error reporting.
+
 ## [0.1.1] - 2022-08-14
 
 ### Fixed

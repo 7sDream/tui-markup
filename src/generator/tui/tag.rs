@@ -31,6 +31,8 @@ where
     f.as_mut().and_then(|f| f.provide(s))
 }
 
+// TODO: Move CustomTagProvider to helper
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Tag {
     Fg(Color),

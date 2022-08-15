@@ -1,9 +1,11 @@
 //! Generator generates final output from IR.
 
+pub mod helper;
+
 #[cfg(feature = "tui")]
 pub mod tui;
 
-#[cfg(any(feature = "tui", doc))]
+#[cfg(feature = "tui")]
 pub use self::tui::TuiTextGenerator;
 
 use std::fmt::Display;
