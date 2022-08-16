@@ -110,7 +110,7 @@ use tag::TuiTagConvertor;
 ///
 /// ### Show output
 ///
-/// Use any widget of [tui] crate that supports it's Text type, for example: [`tui::widgets::Paragraph`].
+/// Use any widget of [tui] crate that supports it's [Text] type, for example: [`tui::widgets::Paragraph`].
 ///
 /// [tui-tags.ebnf]: https://github.com/7sDream/master/blob/docs/tui-tag.ebnf
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
