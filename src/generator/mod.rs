@@ -4,7 +4,7 @@ pub mod helper;
 mod tag;
 
 #[cfg(feature = "tui")]
-pub mod tui;
+mod tui;
 #[cfg(feature = "tui")]
 pub use self::tui::TuiTextGenerator;
 

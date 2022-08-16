@@ -15,7 +15,7 @@ use super::{
 };
 use crate::generator::{Tag, TagG};
 use crate::parser::{Item, ItemG};
-use tag::TuiTagParser;
+use tag::TuiTagConvertor;
 
 /// Generator for [tui crate][tui]'s [Text] type.
 ///
@@ -116,29 +116,29 @@ use tag::TuiTagParser;
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
 pub struct TuiTextGenerator<P = NoopCustomTagParser<Style>> {
-    tag_parser: TuiTagParser<P>,
+    convertor: TuiTagConvertor<P>,
 }
 
 impl<P> Default for TuiTextGenerator<P> {
     fn default() -> Self {
         Self {
-            tag_parser: Default::default(),
+            convertor: Default::default(),
         }
     }
 }
 
-impl<P> TuiTextGenerator<P> {
+impl<CP> TuiTextGenerator<CP> {
     /// Create a new generator, with custom tag parser.
-    pub fn new(p: P) -> Self {
+    pub fn new(custom_tag_parser: CP) -> Self {
         TuiTextGenerator {
-            tag_parser: TuiTagParser::new(p),
+            convertor: TuiTagConvertor::new(custom_tag_parser),
         }
     }
 }
 
-impl<'a, P> TuiTextGenerator<P>
+impl<'a, CP> TuiTextGenerator<CP>
 where
-    P: CustomTagParser<Output = Style>,
+    CP: CustomTagParser<Output = Style>,
 {
     fn tag_to_style(tag: TagG<'a, Self>) -> Style {
         match tag {
@@ -149,8 +149,8 @@ where
         }
     }
 
-    fn patch_style(style: Option<Style>, tag: Vec<TagG<'a, Self>>) -> Style {
-        tag.into_iter()
+    fn patch_style(style: Option<Style>, tags: Vec<TagG<'a, Self>>) -> Style {
+        tags.into_iter()
             .map(Self::tag_to_style)
             .fold(style.unwrap_or_default(), Style::patch)
     }
@@ -177,6 +177,7 @@ where
         }
     }
 
+    // TODO: Try use Iterator
     fn items(&mut self, items: Vec<ItemG<'a, Self>>, style: Option<Style>) -> Vec<Span<'a>> {
         items
             .into_iter()
@@ -189,14 +190,14 @@ impl<'a, P> Generator<'a> for TuiTextGenerator<P>
 where
     P: CustomTagParser<Output = Style>,
 {
-    type Convertor = TuiTagParser<P>;
+    type Convertor = TuiTagConvertor<P>;
 
     type Output = Text<'a>;
 
     type Err = GeneratorInfallible;
 
     fn convertor(&mut self) -> &mut Self::Convertor {
-        &mut self.tag_parser
+        &mut self.convertor
     }
 
     fn generate(&mut self, items: Vec<Vec<Item<'a, TagG<'a, Self>>>>) -> Result<Self::Output, Self::Err> {

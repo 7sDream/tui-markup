@@ -43,7 +43,7 @@ macro_rules! test_fail {
     ($elem:expr => $span:literal, $kind:expr) => {
         let mut gen = crate::generator::TuiTextGenerator::default();
         let mut convertor = <crate::generator::TuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
-        let span = <crate::generator::tui::TuiTagParser<_> as crate::generator::TagConvertor>::convert_item(
+        let span = <crate::generator::tui::TuiTagConvertor<_> as crate::generator::TagConvertor>::convert_item(
             &mut convertor,
             $elem,
         )

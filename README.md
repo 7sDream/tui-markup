@@ -6,7 +6,7 @@ This crate provides a markup language to quickly write colorful and styled termi
 
 ## Example
 
-This is the output of `cargo run --example help`:
+This is the output of `cargo run --example help --features tui`:
 
 ![help-text][help-text-screenshot]
 

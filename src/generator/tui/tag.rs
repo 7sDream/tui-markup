@@ -3,11 +3,11 @@ use tui::style::{Color, Modifier, Style};
 use crate::{generator::helper::CustomTagParser, generator::TagConvertor, parser::hex_rgb};
 
 #[derive(Debug)]
-pub struct TuiTagParser<CP> {
+pub struct TuiTagConvertor<CP> {
     custom_parser: Option<CP>,
 }
 
-impl<CP> Default for TuiTagParser<CP> {
+impl<CP> Default for TuiTagConvertor<CP> {
     fn default() -> Self {
         Self {
             custom_parser: Default::default(),
@@ -15,7 +15,7 @@ impl<CP> Default for TuiTagParser<CP> {
     }
 }
 
-impl<CP> TuiTagParser<CP> {
+impl<CP> TuiTagConvertor<CP> {
     pub fn new(cp: CP) -> Self {
         Self {
             custom_parser: Some(cp),
@@ -23,7 +23,7 @@ impl<CP> TuiTagParser<CP> {
     }
 }
 
-impl<'a, CP> TagConvertor<'a> for TuiTagParser<CP>
+impl<'a, CP> TagConvertor<'a> for TuiTagConvertor<CP>
 where
     CP: CustomTagParser<Output = Style>,
 {
