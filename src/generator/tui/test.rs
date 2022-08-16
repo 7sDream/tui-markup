@@ -3,11 +3,9 @@ use tui::{
     text::Span,
 };
 
-use crate::generator::tui::ErrorKind;
-
 macro_rules! pt {
     ($text:literal) => {
-        crate::parser::Item::PlainText($text)
+        crate::parser::Item::PlainText($text.into())
     };
 }
 
@@ -22,26 +20,35 @@ macro_rules! elem {
 
 macro_rules! test_ok {
         ($item:expr => $($result:expr),* $(,)?) => {
+            let mut gen = crate::generator::TuiTextGenerator::default();
+            let convertor =  <crate::generator::TuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
+            let item = <<crate::generator::TuiTextGenerator as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item).unwrap();
             assert_eq!(
-                crate::generator::TuiTextGenerator::<()>::default().item($item, None),
-                Ok(vec![$($result),*]),
+                gen.item(item, None),
+                vec![$($result),*],
             )
         };
         ($custom:expr ; $item:expr => $($result:expr),* $(,)?) => {
+            let mut gen = crate::generator::TuiTextGenerator::new($custom);
+            let convertor =  <crate::generator::TuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut gen);
+            let item = <<crate::generator::TuiTextGenerator<_> as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item).unwrap();
             assert_eq!(
-                crate::generator::TuiTextGenerator::new($custom).item($item, None),
-                Ok(vec![$($result)*]),
+                gen.item(item, None),
+                vec![$($result),*],
             )
         };
     }
 
 macro_rules! test_fail {
     ($elem:expr => $span:literal, $kind:expr) => {
-        let err = crate::generator::TuiTextGenerator::<()>::default()
-            .item($elem, None)
-            .unwrap_err();
-        assert_eq!(*err.span.fragment(), $span);
-        assert_eq!(err.kind(), $kind);
+        let mut gen = crate::generator::TuiTextGenerator::default();
+        let mut convertor = <crate::generator::TuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
+        let span = <crate::generator::tui::TuiTagParser<_> as crate::generator::TagConvertor>::convert_item(
+            &mut convertor,
+            $elem,
+        )
+        .unwrap_err();
+        assert_eq!(*span.fragment(), $span);
     };
 }
 

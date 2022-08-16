@@ -1,20 +1,21 @@
 //! Generator implementations tui crate.
 
-mod error;
 mod tag;
 #[cfg(test)]
 mod test;
-
-pub use error::{Error, ErrorKind};
 
 use tui::{
     style::Style,
     text::{Span, Spans, Text},
 };
 
-use super::{helper::unescape, Generator};
-use crate::parser::{Item, LSpan};
-use tag::{CustomTagProvider, Tags};
+use super::{
+    helper::{unescape, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
+    Generator,
+};
+use crate::generator::{Tag, TagG};
+use crate::parser::{Item, ItemG};
+use tag::TuiTagParser;
 
 /// Generator for [tui crate][tui]'s [Text] type.
 ///
@@ -107,29 +108,54 @@ use tag::{CustomTagProvider, Tags};
 /// );
 /// ```
 ///
-/// [tui]: https://docs.rs/tui/latest/tui/
+/// ### Show output
+///
+/// Use any widget of [tui] crate that supports it's Text type, for example: [`tui::widgets::Paragraph`].
+///
 /// [tui-tags.ebnf]: https://github.com/7sDream/master/blob/docs/tui-tag.ebnf
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
-pub struct TuiTextGenerator<P = ()> {
-    custom_tags: Option<P>,
+pub struct TuiTextGenerator<P = NoopCustomTagParser<Style>> {
+    tag_parser: TuiTagParser<P>,
 }
 
 impl<P> Default for TuiTextGenerator<P> {
     fn default() -> Self {
         Self {
-            custom_tags: Default::default(),
+            tag_parser: Default::default(),
         }
     }
 }
 
-impl<F> TuiTextGenerator<F> {
-    /// Create a new generator, with custom tags.
-    pub fn new(f: F) -> Self {
-        TuiTextGenerator { custom_tags: Some(f) }
+impl<P> TuiTextGenerator<P> {
+    /// Create a new generator, with custom tag parser.
+    pub fn new(p: P) -> Self {
+        TuiTextGenerator {
+            tag_parser: TuiTagParser::new(p),
+        }
+    }
+}
+
+impl<'a, P> TuiTextGenerator<P>
+where
+    P: CustomTagParser<Output = Style>,
+{
+    fn tag_to_style(tag: TagG<'a, Self>) -> Style {
+        match tag {
+            Tag::Fg(color) => Style::default().fg(color),
+            Tag::Bg(color) => Style::default().bg(color),
+            Tag::Modifier(m) => Style::default().add_modifier(m),
+            Tag::Custom(style) => style,
+        }
     }
 
-    fn plain_text<'a, 'b>(&'a self, escaped: &'b str, style: Option<Style>) -> Vec<Span<'b>> {
+    fn patch_style(style: Option<Style>, tag: Vec<TagG<'a, Self>>) -> Style {
+        tag.into_iter()
+            .map(Self::tag_to_style)
+            .fold(style.unwrap_or_default(), Style::patch)
+    }
+
+    fn plain_text(&self, escaped: &'a str, style: Option<Style>) -> Vec<Span<'a>> {
         unescape(escaped)
             .map(|s| match style {
                 Some(style) => Span::styled(s, style),
@@ -137,53 +163,48 @@ impl<F> TuiTextGenerator<F> {
             })
             .collect()
     }
-}
 
-impl<P> TuiTextGenerator<P>
-where
-    P: CustomTagProvider,
-{
-    fn element<'a, 'b>(
-        &'a mut self, tags: Vec<LSpan<'b>>, children: Vec<Item<'b>>, style: Option<Style>,
-    ) -> Result<Vec<Span<'b>>, Error<'b>> {
-        let style = style
-            .unwrap_or_default()
-            .patch(Tags::parse(tags, &mut self.custom_tags)?.style());
-
-        self.items(children, Some(style))
+    fn element(
+        &mut self, tags: Vec<TagG<'a, Self>>, children: Vec<ItemG<'a, Self>>, style: Option<Style>,
+    ) -> Vec<Span<'a>> {
+        self.items(children, Some(Self::patch_style(style, tags)))
     }
 
-    fn item<'a, 'b>(&'a mut self, item: Item<'b>, style: Option<Style>) -> Result<Vec<Span<'b>>, Error<'b>> {
+    fn item(&mut self, item: Item<'a, TagG<'a, Self>>, style: Option<Style>) -> Vec<Span<'a>> {
         match item {
-            Item::PlainText(t) => Ok(self.plain_text(t, style)),
+            Item::PlainText(t) => self.plain_text(t.fragment(), style),
             Item::Element(tags, children) => self.element(tags, children, style),
         }
     }
 
-    fn items<'a, 'b>(&'a mut self, items: Vec<Item<'b>>, style: Option<Style>) -> Result<Vec<Span<'b>>, Error<'b>> {
-        let mut result = vec![];
-
-        for item in items {
-            result.extend(self.item(item, style)?);
-        }
-
-        Ok(result)
+    fn items(&mut self, items: Vec<ItemG<'a, Self>>, style: Option<Style>) -> Vec<Span<'a>> {
+        items
+            .into_iter()
+            .flat_map(|item| self.item(item, style).into_iter())
+            .collect()
     }
 }
 
 impl<'a, P> Generator<'a> for TuiTextGenerator<P>
 where
-    P: CustomTagProvider,
+    P: CustomTagParser<Output = Style>,
 {
+    type Convertor = TuiTagParser<P>;
+
     type Output = Text<'a>;
 
-    type Err = Error<'a>;
+    type Err = GeneratorInfallible;
 
-    fn generate(&mut self, items: Vec<Vec<Item<'a>>>) -> Result<Self::Output, Self::Err> {
-        items
-            .into_iter()
-            .map(|line| self.items(line, None).map(Spans::from))
-            .collect::<Result<Vec<_>, _>>()
-            .map(Text::from)
+    fn convertor(&mut self) -> &mut Self::Convertor {
+        &mut self.tag_parser
+    }
+
+    fn generate(&mut self, items: Vec<Vec<Item<'a, TagG<'a, Self>>>>) -> Result<Self::Output, Self::Err> {
+        Ok(Text::from(
+            items
+                .into_iter()
+                .map(|line| Spans::from(self.items(line, None)))
+                .collect::<Vec<_>>(),
+        ))
     }
 }

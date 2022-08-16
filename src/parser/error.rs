@@ -15,7 +15,7 @@ pub enum ErrorKind {
     ElementNotClose,
 }
 
-/// Error type for parsing step.
+/// Error type for [parse][super::parse].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Error<'a> {
     source: nom::error::ErrorKind,
@@ -76,8 +76,6 @@ impl<'a> nom::error::ParseError<LSpan<'a>> for Error<'a> {
     }
 
     fn append(_input: LSpan<'a>, _kind: nom::error::ErrorKind, other: Self) -> Self {
-        // other.span = input;
-        // other.source = kind;
         other
     }
 }

@@ -1,5 +1,3 @@
-//! Helper functions for create generator.
-
 use std::str::CharIndices;
 
 /// Convert a escaped string in [PlainText][crate::parser::Item::PlainText] into a iterator of unescaped strings.
@@ -46,6 +44,7 @@ impl<'a> Iterator for Unescape<'a> {
     type Item = &'a str;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // PERF: use str search method instead of char by char
         while let Some((idx, c)) = self.chars.next() {
             if !self.last_is_escape && c == '\\' {
                 self.last_is_escape = true;
@@ -64,7 +63,7 @@ impl<'a> Iterator for Unescape<'a> {
 #[cfg(test)]
 mod test {
     macro_rules! test_unescape {
-        ($escaped:literal => $($result:expr),* $(,)?) => {
+        ($escaped:expr => $($result:expr),* $(,)?) => {
            assert_eq!(crate::generator::helper::unescape($escaped).collect::<Vec<_>>(), vec![$($result),+])
         };
     }

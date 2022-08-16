@@ -16,25 +16,26 @@
 //!
 //! For formal syntax specification, see [syntax.ebnf][syntax].
 //!
-//! ## Concept
+//! ## How two use
 //!
-//! A compile process usually consists of at least three state: source, IR, output,
-//! and two transformers: parser, generator.
-//!
-//! The parser convert source text into IR(Intermediate Representation),
-//! and generator generate final output from this it.
-//!
-//! ```none
-//! Source ---Parser---> IR ---Generator---> Output
+//! ```ignore
+//! let output = tui_markup::compile::<GeneratorType>("<geeen hello>").unwrap();
 //! ```
 //!
-//! In this crate, we defined the [syntax] of source, a [parser][parser::parse] and [IR][parser::Item],
-//! but allows you to write generators yourself.
+//! How two print the output vary depending on the the [Generator] you use, See their document for more info.
 //!
-//! We also provided generator for ansi terminal and the popular [tui crate][generator::TuiTextGenerator] for convenient,
-//! you can enable them using features `ansi_term` and `tui`.
+//! ### Builtin generators
+//!
+//! The builtin generators are under feature gates, there is the list:
+//!
+//! feature | environment             | generator type
+//! :------ | :---------------------- | :-------------
+//! `tui`   | the popular [tui] crate | [TuiTextGenerator][generator::tui::TuiTextGenerator]
 //!
 //! The example page above is using the `tui` generator, print in Windows Terminal.
+//!
+//! If you want write your own generator, please see document of [Generator] trait.
+//!
 //!
 //! [syntax]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
@@ -46,15 +47,11 @@ pub mod parser;
 
 pub use error::{Error, LocatedError};
 
-use generator::Generator;
+use generator::{Generator, TagConvertor};
 
 /// Parse markup language source, then generate final output using the default configure of a generator type.
 ///
 /// See document of generator type for examples.
-///
-/// ## Errors
-///
-/// If provided string has invalid markup syntax or the generator emit a error.
 pub fn compile<'a, G>(s: &'a str) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Default,
@@ -67,15 +64,12 @@ where
 /// Parse markup language source, then generate final output using the provided generator.
 ///
 /// See document of generator type for examples.
-///
-/// ## Errors
-///
-/// If provided string has invalid markup syntax or unknown tag.
 pub fn compile_with<'a, G>(s: &'a str, mut gen: G) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Generator<'a>,
     Error<'a, G::Err>: From<G::Err>,
 {
     let ast = parser::parse(s)?;
-    Ok(gen.generate(ast)?)
+    let ir = gen.convertor().convert(ast).map_err(Error::Tag)?;
+    Ok(gen.generate(ir)?)
 }

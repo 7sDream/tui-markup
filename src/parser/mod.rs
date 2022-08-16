@@ -2,14 +2,15 @@
 
 mod error;
 mod item;
+
 #[cfg(test)]
 mod test;
 
 use nom::{
     branch::alt,
-    bytes::complete::{escaped, is_not, tag, take_while1},
+    bytes::complete::{escaped, is_not, tag, take_while1, take_while_m_n},
     character::complete::{char, one_of},
-    combinator::{eof, map, verify},
+    combinator::{eof, map, map_res, verify},
     multi::{many0, many_till, separated_list1},
     sequence::tuple,
     Err as NomErr, IResult,
@@ -17,7 +18,7 @@ use nom::{
 use nom_locate::LocatedSpan;
 
 pub use error::{Error, ErrorKind};
-pub use item::Item;
+pub use item::{Item, ItemC, ItemG};
 
 /// String with location info.
 pub type LSpan<'a> = LocatedSpan<&'a str, usize>;
@@ -73,18 +74,14 @@ fn escapable_char(s: LSpan) -> ParseResult<char> {
     one_of("<>\\")(s).map_err(|e: NomErr<Error>| e.map(|e| e.attach(ErrorKind::UnescapableChar)))
 }
 
-fn plain_text(s: LSpan) -> ParseResult<Item> {
-    map(
-        verify(escaped(plain_text_normal, '\\', escapable_char), |ls| !ls.is_empty()),
-        |ls: LSpan| Item::PlainText(ls.fragment()),
-    )(s)
-    .map_err(|e| {
+fn plain_text(s: LSpan) -> ParseResult {
+    verify(escaped(plain_text_normal, '\\', escapable_char), |ls| !ls.is_empty())(s).map_err(|e| {
         e.map(|mut e| {
             use nom::Slice;
 
             if !s.is_empty()
                 && e.kind().map(|x| x == ErrorKind::UnescapedChar).unwrap_or(true)
-                && s.trim_start_matches(['\\', '<', '>']) == *s.fragment()
+                && !s.starts_with(['\\', '<', '>'])
             {
                 e.span = e.span.slice(e.span.len() - 1..);
             }
@@ -95,7 +92,7 @@ fn plain_text(s: LSpan) -> ParseResult<Item> {
 }
 
 fn item(s: LSpan) -> ParseResult<Item> {
-    alt((element, plain_text))(s)
+    alt((element, map(plain_text, Item::PlainText)))(s)
 }
 
 fn items(s: LSpan) -> ParseResult<Vec<Item>> {
@@ -117,7 +114,27 @@ fn parse_line((line, s): (usize, &str)) -> Result<Vec<Item>, Error> {
     }
 }
 
-/// Parse markup source into IR.
+/// Parse tui markup source into ast.
 pub fn parse(s: &str) -> Result<Vec<Vec<Item>>, Error> {
-    s.lines().enumerate().map(parse_line).collect()
+    s.lines()
+        .enumerate()
+        .map(parse_line)
+        .collect::<Result<Vec<Vec<Item>>, Error>>()
+}
+
+fn hex_color_part(s: &str) -> IResult<&str, u8> {
+    map_res(take_while_m_n(2, 2, |c: char| c.is_ascii_hexdigit()), |x| {
+        u8::from_str_radix(x, 16)
+    })(s)
+}
+
+/// Parse string of 6 hex digit into r, g, b value.
+pub fn hex_rgb(s: &str) -> Option<(u8, u8, u8)> {
+    let (s, (r, g, b)) = tuple((hex_color_part, hex_color_part, hex_color_part))(s).ok()?;
+
+    if !s.is_empty() {
+        return None;
+    }
+
+    Some((r, g, b))
 }

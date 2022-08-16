@@ -22,16 +22,15 @@ escaped char
 
 element = '<', tags, ' ', items, '>';
 
-tag = tag, { ',', tag };
+tags = tag, { ',', tag };
 
-tag = tag char, {tag char};
+(* tag can only contians alphabetic, numberic and '+', '-', ':' characters *)
 
-tag char
-= ? ascii alphabetic character ?
-| ? ascii numberic character ?
-| ':'
-| '-'
-| '+'
+tag
+= [ [ "fg" | "bg" ], ':' ], color
+| [ "mod", ':' ], midifier
+| custom-tag
 ;
 
-(* Please read generator's document for tags they support *)
+
+(* Please read generator's document for color and modifier they supports *)

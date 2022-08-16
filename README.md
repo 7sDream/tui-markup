@@ -1,6 +1,6 @@
 # tui markup
 
-This crate provides a markup language to quickly write colorful and styled terminal text(of [tui] crate) in plain text.
+This crate provides a markup language to quickly write colorful and styled terminal text in plain text.
 
 [Document][doc]|[Changelog][changelog]
 
@@ -40,7 +40,6 @@ The forma syntax spec can be found in [syntax.ebnf], with complete list of avail
 
 BSD-3-Clause-Clear, See [LICENSE].
 
-[tui]: https://docs.rs/tui/latest
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
 [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
