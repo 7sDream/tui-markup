@@ -1,6 +1,6 @@
 use crate::{
     generator::Generator,
-    parser::{Item, ItemC, LSpan},
+    parser::{Item, ItemC},
 };
 
 /// Tag of a [Element][crate::parser::Item::Element] after transform step.
@@ -46,7 +46,19 @@ pub trait TagConvertor<'a> {
     fn parse_custom_tag(&mut self, s: &str) -> Option<Self::Custom>;
 
     /// Parse string to a builtin tag type.
-    fn parse_built_in_tag(&mut self, ty: &str, value: &str) -> Option<Tag<'a, Self>> {
+    fn parse_built_in_tag(&mut self, s: &str) -> Option<Tag<'a, Self>> {
+        let mut ty_value = s.split(':');
+        let mut ty = ty_value.next()?;
+        let value = ty_value.next().unwrap_or_else(|| {
+            let value = ty;
+            ty = "";
+            value
+        });
+
+        if ty_value.next().is_some() {
+            return None;
+        }
+
         Some(match ty {
             "fg" => Tag::Fg(self.parse_color(value)?),
             "bg" => Tag::Bg(self.parse_color(value)?),
@@ -65,50 +77,39 @@ pub trait TagConvertor<'a> {
     }
 
     /// convert the tag string to [Tag] type
-    fn convert_tag(&mut self, s: LSpan<'a>) -> Option<Tag<'a, Self>> {
-        let mut ty_value = s.split(':');
-        let mut ty = ty_value.next()?;
-        let value = ty_value.next().unwrap_or_else(|| {
-            let value = ty;
-            ty = "";
-            value
-        });
-
-        if ty_value.next().is_some() {
-            return Some(Tag::Custom(self.parse_custom_tag(s.fragment())?));
-        }
-
-        self.parse_custom_tag(s.fragment())
+    fn convert_tag(&mut self, s: &'a str) -> Option<Tag<'a, Self>> {
+        self.parse_custom_tag(s)
             .map(Tag::Custom)
-            .or_else(|| self.parse_built_in_tag(ty, value))
+            .or_else(|| self.parse_built_in_tag(s))
     }
 
     /// Convert item with raw tag string to item with [Tag] type.
-    fn convert_item(&mut self, item: Item<'a>) -> Result<ItemC<'a, Self>, LSpan<'a>> {
+    fn convert_item(&mut self, item: Item<'a>) -> ItemC<'a, Self> {
         match item {
-            Item::PlainText(pt) => Ok(Item::PlainText(pt)),
+            Item::PlainText(pt) => Item::PlainText(pt),
             Item::Element(spans, items) => {
                 let mut tags = Vec::with_capacity(spans.len());
 
                 for span in spans {
-                    let tag = self.convert_tag(span).ok_or(span)?;
-                    tags.push(tag);
+                    if let Some(tag) = self.convert_tag(span.fragment()) {
+                        tags.push(tag);
+                    }
                 }
 
-                let subitems = self.convert_line(items)?;
+                let subitems = self.convert_line(items);
 
-                Ok(Item::Element(tags, subitems))
+                Item::Element(tags, subitems)
             }
         }
     }
 
     /// Convert a line of items with raw tag string to items with [Tag] type.
-    fn convert_line(&mut self, items: Vec<Item<'a>>) -> Result<Vec<ItemC<'a, Self>>, LSpan<'a>> {
+    fn convert_line(&mut self, items: Vec<Item<'a>>) -> Vec<ItemC<'a, Self>> {
         items.into_iter().map(|item| self.convert_item(item)).collect()
     }
 
     /// Convert all item with raw tag string of a ast into items with [Tag] type.
-    fn convert(&mut self, ast: Vec<Vec<Item<'a>>>) -> Result<Vec<Vec<ItemC<'a, Self>>>, LSpan<'a>> {
+    fn convert(&mut self, ast: Vec<Vec<Item<'a>>>) -> Vec<Vec<ItemC<'a, Self>>> {
         ast.into_iter().map(|line| self.convert_line(line)).collect()
     }
 }

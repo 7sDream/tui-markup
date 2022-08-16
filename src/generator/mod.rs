@@ -1,17 +1,24 @@
 //! Generator generates final output for showing.
 
 pub mod helper;
+mod span;
 mod tag;
 
 #[cfg(feature = "tui")]
-mod tui;
+pub mod tui;
 #[cfg(feature = "tui")]
 pub use self::tui::TuiTextGenerator;
+
+#[cfg(feature = "ansi")]
+pub mod ansi;
+#[cfg(feature = "ansi")]
+pub use self::ansi::ANSIStringsGenerator;
 
 use std::fmt::Display;
 
 use crate::{error::LocatedError, parser::ItemG};
 
+pub use span::{GenericSpan, GenericStyle};
 pub use tag::{Tag, TagConvertor, TagG};
 
 /// Generator generates final output to show tui markup in some backend.

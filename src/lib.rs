@@ -19,18 +19,23 @@
 //! ## How two use
 //!
 //! ```ignore
-//! let output = tui_markup::compile::<GeneratorType>("<geeen hello>").unwrap();
+//! let output = tui_markup::compile::<GeneratorType>("<green hello>").unwrap();
 //! ```
 //!
-//! How two print the output vary depending on the the [Generator] you use, See their document for more info.
+//! The string wrapped in `<>` is called a element, start with a tag name, like the `green` in above example.
+//!
+//! Usable tags vary depending on the the [Generator] you use, and generator will ignore all tags it does not understand.
+//!
+//! So it's better checkout their document before write your markup text.
 //!
 //! ### Builtin generators
 //!
 //! The builtin generators are under feature gates, there is the list:
 //!
-//! feature | environment             | generator type
-//! :------ | :---------------------- | :-------------
-//! `tui`   | the popular [tui] crate | [TuiTextGenerator][generator::tui::TuiTextGenerator]
+//! feature     | Target                                                              | generator type
+//! :---------- | :------------------------------------------------------------------ | :-------------
+//! `ansi`      | Direct print into stdout when using an asni compatible terminal     | [ANSIStringsGenerator][generator::ANSIStringsGenerator]
+//! `tui`       | Integrated with the popular [tui] crate                             | [TuiTextGenerator][generator::TuiTextGenerator]
 //!
 //! The example screenshot above is using the `tui` generator, print in Windows Terminal.
 //!
@@ -69,6 +74,6 @@ where
     Error<'a, G::Err>: From<G::Err>,
 {
     let ast = parser::parse(s)?;
-    let ir = gen.convertor().convert(ast).map_err(Error::Tag)?;
+    let ir = gen.convertor().convert(ast);
     Ok(gen.generate(ir)?)
 }

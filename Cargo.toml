@@ -17,20 +17,28 @@ exclude = ["examples/*.png"]
 
 [features]
 default = []
+ansi = ["ansi_term"]
 
 [dependencies]
 nom = "7"
-nom_locate = {version = "4", features = ["runtime-dispatch-simd"] }
+nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
 thiserror = "1"
-tui = { version = "0.18", optional = true, default-features = false }
+# generator implementations
+ansi_term = { version = "0.12", optional = true }
+tui = { version = "0.19", optional = true, default-features = false }
 
 [dev-dependencies]
-tui = "0.18"
+tui = "0.19"
 crossterm = "0.25"
+ansi_term = "0.12"
 
 [[example]]
-name = "help"
+name = "tui"
 required-features = ["tui"]
+
+[[example]]
+name = "ansi"
+required-features = ["ansi"]
 
 [package.metadata.docs.rs]
 all-features = true

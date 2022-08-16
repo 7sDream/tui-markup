@@ -42,10 +42,21 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod test {
-    use tui_markup::generator::TuiTextGenerator;
+    use tui::style::{Color, Style};
+    use tui_markup::{compile_with, generator::TuiTextGenerator};
 
     #[test]
     fn test_help_text() {
         assert!(tui_markup::compile::<TuiTextGenerator>(super::HELP_TEXTS).is_ok());
+    }
+
+    #[test]
+    fn test_help_text2() {
+        let gen = TuiTextGenerator::new(|s: &str| match s {
+            "keyboard" => Some(Style::default().fg(Color::Green)),
+            _ => None,
+        });
+
+        assert!(compile_with(super::HELP_TEXTS, gen).is_ok());
     }
 }

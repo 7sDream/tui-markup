@@ -1,21 +1,14 @@
 color
 = "black"
-| "white"
-| light variant colors, [ '-' ]
-| dark variant colors, [ '+' ]
-| custom color
-;
-
-light variant colors
-= "red"
+| "red"
 | "green"
 | "yellow"
 | "blue"
 | "magenta" | "purple"
 | "cyan"
+| "white"
+| custom color
 ;
-
-dark variant colors = "gray";
 
 custom color = 6 * hex digit;
 
@@ -30,8 +23,8 @@ hex digit
 (* italic *)
 (* underline *)
 (* reversed *)
-(* slow blink *)
-(* rapid blink *)
+(* blink *)
+(* blink *)
 (* hide *)
 (* strikethrough *)
 modifier

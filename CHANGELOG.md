@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Tag` type for standard tag variants.
 - `TagConvertor` trait for convert raw tag string into Tag type with custom color and modifier type.
 - `generator::helper` module for helper functions to write generator, including `unescape`, `CustomTagParser`, `GeneratorInfallible` etc.
-- Add `tui` feature for enable builtin generators for tui crate, only `TuiTextGenerator` for now.
+- Add `tui` feature for enable builtin generators for tui crate: `TuiTextGenerator`.
+- Add `ansi` feature for enable built in generator for ansi terminal string: `ANSIStringsGenerator`.
 - `LocateError` trait for get location of error in source text.
 - `compile_with` entry function for use a custom configured generator.
 

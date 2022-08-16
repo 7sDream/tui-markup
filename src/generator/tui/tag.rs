@@ -2,6 +2,8 @@ use tui::style::{Color, Modifier, Style};
 
 use crate::{generator::helper::CustomTagParser, generator::TagConvertor, parser::hex_rgb};
 
+/// Tag convertor for tui crate.
+#[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
 pub struct TuiTagConvertor<CP> {
     custom_parser: Option<CP>,
@@ -16,6 +18,7 @@ impl<CP> Default for TuiTagConvertor<CP> {
 }
 
 impl<CP> TuiTagConvertor<CP> {
+    /// Create a new tag convertor with custom tag parser.
     pub fn new(cp: CP) -> Self {
         Self {
             custom_parser: Some(cp),
@@ -38,7 +41,7 @@ where
             "green" => Color::Green,
             "yellow" => Color::Yellow,
             "blue" => Color::Blue,
-            "magenta" => Color::Magenta,
+            "magenta" | "purple" => Color::Magenta,
             "cyan" => Color::Cyan,
             "gray" => Color::Gray,
             "gray+" => Color::DarkGray,
@@ -46,7 +49,7 @@ where
             "green-" => Color::LightGreen,
             "yellow-" => Color::LightYellow,
             "blue-" => Color::LightBlue,
-            "magenta-" => Color::LightMagenta,
+            "magenta-" | "purple-" => Color::LightMagenta,
             "cyan-" => Color::LightCyan,
             "white" => Color::White,
             s => hex_rgb(s).map(|(r, g, b)| Color::Rgb(r, g, b))?,
@@ -59,10 +62,11 @@ where
             "d" => Modifier::DIM,
             "i" => Modifier::ITALIC,
             "u" => Modifier::UNDERLINED,
-            "s" => Modifier::SLOW_BLINK,
-            "r" => Modifier::RAPID_BLINK,
+            "r" => Modifier::REVERSED,
+            "sb" => Modifier::SLOW_BLINK,
+            "rb" => Modifier::RAPID_BLINK,
             "h" => Modifier::HIDDEN,
-            "x" => Modifier::CROSSED_OUT,
+            "s" => Modifier::CROSSED_OUT,
             _ => return None,
         })
     }
