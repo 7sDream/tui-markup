@@ -12,6 +12,13 @@ This is the output of `cargo run --example help --features tui`:
 
 The source markup text of this article can be found in [examples/help.txt].
 
+Besides the language syntax and parser, this crate defined a standard compilation process for you to
+add this language support for your host application easily.
+
+We provide some builtin implementation for popular crates, See [Builtin generators][doc-builtin-gens].
+
+The example screenshot is using the `tui` generator, print in Windows Terminal.
+
 ## Syntax
 
 Only one syntax `<tag content>` to add style to content.
@@ -43,6 +50,7 @@ BSD-3-Clause-Clear, See [LICENSE].
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
 [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
-[examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
-[syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/syntax.ebnf
-[LICENSE]: https://github.com/7sDream/tui-markup/blob/master/LICENSE
+[doc-builtin-gens]: https://docs.rs/tui-markup/0.2.0-alpha/tui_markup/index.html#builtin-generators
+[examples/help.txt]: <https://github.com/7sDream/tui-markup/blob/master/examples/help.txt>
+[syntax.ebnf]: <https://github.com/7sDream/tui-markup/blob/master/syntax.ebnf>
+[LICENSE]: <https://github.com/7sDream/tui-markup/blob/master/LICENSE>

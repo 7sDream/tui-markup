@@ -32,10 +32,9 @@
 //! :------ | :---------------------- | :-------------
 //! `tui`   | the popular [tui] crate | [TuiTextGenerator][generator::tui::TuiTextGenerator]
 //!
-//! The example page above is using the `tui` generator, print in Windows Terminal.
+//! The example screenshot above is using the `tui` generator, print in Windows Terminal.
 //!
-//! If you want write your own generator, please see document of [Generator] trait.
-//!
+//! If you want write your own generator, please checkout documents of [Generator] trait.
 //!
 //! [syntax]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
