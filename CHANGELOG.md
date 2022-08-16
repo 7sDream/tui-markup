@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
-- Item type now generics for tag.
 - Entry function renamed from `parse` to `compile`, use default instance of a generator type.
 - Root `Error` type changed from `(usize, usize)` to a enum type, for better error reporting.
 
