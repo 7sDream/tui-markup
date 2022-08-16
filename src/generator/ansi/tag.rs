@@ -11,11 +11,11 @@ use crate::{
 /// Tag convertor for ansi term.
 #[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
-pub struct ANSITermTagConvertor<CP = NoopCustomTagParser<Style>> {
-    custom_parser: Option<CP>,
+pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {
+    custom_parser: Option<P>,
 }
 
-impl<CP> Default for ANSITermTagConvertor<CP> {
+impl<P> Default for ANSITermTagConvertor<P> {
     fn default() -> Self {
         Self {
             custom_parser: Default::default(),
@@ -23,18 +23,18 @@ impl<CP> Default for ANSITermTagConvertor<CP> {
     }
 }
 
-impl<CP> ANSITermTagConvertor<CP> {
+impl<P> ANSITermTagConvertor<P> {
     /// Create a new tag convertor with custom tag parser.
-    pub fn new(cp: CP) -> Self {
+    pub fn new(cp: P) -> Self {
         Self {
             custom_parser: Some(cp),
         }
     }
 }
 
-impl<'a, CP> TagConvertor<'a> for ANSITermTagConvertor<CP>
+impl<'a, P> TagConvertor<'a> for ANSITermTagConvertor<P>
 where
-    CP: CustomTagParser<Output = Style>,
+    P: CustomTagParser<Output = Style>,
 {
     type Color = Color;
 
@@ -52,7 +52,9 @@ where
             "purple" | "magenta" => Color::Purple,
             "cyan" => Color::Cyan,
             "white" => Color::White,
-            s => hex_rgb(s).map(|(r, g, b)| Color::RGB(r, g, b))?,
+            s => hex_rgb(s)
+                .map(|(r, g, b)| Color::RGB(r, g, b))
+                .or_else(|| s.parse::<u8>().ok().map(Color::Fixed))?,
         })
     }
 

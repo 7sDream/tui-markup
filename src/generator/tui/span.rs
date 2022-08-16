@@ -3,7 +3,10 @@ use tui::{
     text::Span,
 };
 
-use crate::generator::{GenericSpan, GenericStyle, Tag, TagConvertor};
+use crate::generator::{
+    helper::{FlattenableSpan, FlattenableStyle},
+    Tag, TagConvertor,
+};
 
 impl<'a, C> From<Tag<'a, C>> for Style
 where
@@ -19,13 +22,13 @@ where
     }
 }
 
-impl GenericStyle for Style {
+impl FlattenableStyle for Style {
     fn patch(self, other: Self) -> Self {
         self.patch(other)
     }
 }
 
-impl<'a> GenericSpan<'a, Style> for Span<'a> {
+impl<'a> FlattenableSpan<'a, Style> for Span<'a> {
     fn with_style(s: &'a str, style: Option<Style>) -> Self {
         match style {
             Some(style) => Span::styled(s, style),

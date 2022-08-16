@@ -8,9 +8,9 @@ pub trait LocatedError {
     fn location(&self) -> (usize, usize);
 }
 
-/// Error type for [compile][super::compile] function.
+/// Error for markup source compile pipeline.
 ///
-/// Display this error in `{}` formatter will show a error message with detailed reason.
+/// Display this error in `{}` formatter will show a error message with detailed reason and location.
 /// So usually you don't need check variants.
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum Error<'a, GE> {

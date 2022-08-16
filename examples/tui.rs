@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{env::args, error::Error};
 
 use crossterm::{
     event::{Event, KeyCode},
@@ -7,9 +7,9 @@ use crossterm::{
 };
 use tui::{backend::CrosstermBackend, widgets::Paragraph, Terminal};
 
-use tui_markup::{compile, generator::TuiTextGenerator};
+use tui_markup::generator::TuiTextGenerator;
 
-static HELP_TEXTS: &str = include_str!("help.txt");
+mod common;
 
 fn main() -> Result<(), Box<dyn Error>> {
     crossterm::terminal::enable_raw_mode()?;
@@ -19,12 +19,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
     terminal.hide_cursor()?;
 
+    let text = common::compile_file::<TuiTextGenerator, _>(args().nth(1).unwrap());
+
     loop {
         terminal.draw(|frame| {
-            frame.render_widget(
-                Paragraph::new(compile::<TuiTextGenerator>(HELP_TEXTS).unwrap()),
-                frame.size(),
-            );
+            frame.render_widget(Paragraph::new(text.clone()), frame.size());
         })?;
 
         if let Event::Key(key) = crossterm::event::read()? {
@@ -42,21 +41,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod test {
-    use tui::style::{Color, Style};
-    use tui_markup::{compile_with, generator::TuiTextGenerator};
+    use tui_markup::generator::TuiTextGenerator;
+
+    use crate::common::compile_file;
 
     #[test]
-    fn test_help_text() {
-        assert!(tui_markup::compile::<TuiTextGenerator>(super::HELP_TEXTS).is_ok());
-    }
-
-    #[test]
-    fn test_help_text2() {
-        let gen = TuiTextGenerator::new(|s: &str| match s {
-            "keyboard" => Some(Style::default().fg(Color::Green)),
-            _ => None,
-        });
-
-        assert!(compile_with(super::HELP_TEXTS, gen).is_ok());
+    fn test_texts() {
+        compile_file::<TuiTextGenerator, _>("examples/help.txt");
+        compile_file::<TuiTextGenerator, _>("examples/indexed.txt");
     }
 }

@@ -1,34 +1,38 @@
 use tui::style::{Color, Modifier, Style};
 
-use crate::{generator::helper::CustomTagParser, generator::TagConvertor, parser::hex_rgb};
+use crate::{
+    generator::helper::{CustomTagParser, NoopCustomTagParser},
+    generator::TagConvertor,
+    parser::hex_rgb,
+};
 
 /// Tag convertor for tui crate.
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
-pub struct TuiTagConvertor<CP> {
-    custom_parser: Option<CP>,
+pub struct TuiTagConvertor<P = NoopCustomTagParser<Style>> {
+    custom_tag_parser: Option<P>,
 }
 
-impl<CP> Default for TuiTagConvertor<CP> {
+impl<P> Default for TuiTagConvertor<P> {
     fn default() -> Self {
         Self {
-            custom_parser: Default::default(),
+            custom_tag_parser: Default::default(),
         }
     }
 }
 
-impl<CP> TuiTagConvertor<CP> {
+impl<P> TuiTagConvertor<P> {
     /// Create a new tag convertor with custom tag parser.
-    pub fn new(cp: CP) -> Self {
+    pub fn new(p: P) -> Self {
         Self {
-            custom_parser: Some(cp),
+            custom_tag_parser: Some(p),
         }
     }
 }
 
-impl<'a, CP> TagConvertor<'a> for TuiTagConvertor<CP>
+impl<'a, P> TagConvertor<'a> for TuiTagConvertor<P>
 where
-    CP: CustomTagParser<Output = Style>,
+    P: CustomTagParser<Output = Style>,
 {
     type Color = Color;
     type Modifier = Modifier;
@@ -52,7 +56,9 @@ where
             "magenta-" | "purple-" => Color::LightMagenta,
             "cyan-" => Color::LightCyan,
             "white" => Color::White,
-            s => hex_rgb(s).map(|(r, g, b)| Color::Rgb(r, g, b))?,
+            s => hex_rgb(s)
+                .map(|(r, g, b)| Color::Rgb(r, g, b))
+                .or_else(|| s.parse::<u8>().ok().map(Color::Indexed))?,
         })
     }
 
@@ -72,6 +78,6 @@ where
     }
 
     fn parse_custom_tag(&mut self, s: &str) -> Option<Style> {
-        self.custom_parser.as_mut().and_then(|f| f.parse(s))
+        self.custom_tag_parser.as_mut().and_then(|f| f.parse(s))
     }
 }

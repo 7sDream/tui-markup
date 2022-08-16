@@ -1,4 +1,4 @@
-//! Generator implementations tui crate.
+//! Generator implementations for tui crate.
 
 mod span;
 mod tag;
@@ -129,11 +129,11 @@ impl<P> Default for TuiTextGenerator<P> {
     }
 }
 
-impl<CP> TuiTextGenerator<CP> {
-    /// Create a new generator, with custom tag parser.
-    pub fn new(custom_tag_parser: CP) -> Self {
+impl<P> TuiTextGenerator<P> {
+    /// Create a new generator, with a custom tag parser.
+    pub fn new(p: P) -> Self {
         TuiTextGenerator {
-            convertor: TuiTagConvertor::new(custom_tag_parser),
+            convertor: TuiTagConvertor::new(p),
         }
     }
 }

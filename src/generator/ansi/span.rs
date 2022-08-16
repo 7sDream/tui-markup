@@ -1,67 +1,63 @@
 use ansi_term::{ANSIString, Color, Style};
 
-use crate::generator::{GenericSpan, GenericStyle, Tag, TagConvertor};
+use crate::generator::{
+    helper::{FlattenableSpan, FlattenableStyle},
+    Tag, TagConvertor,
+};
 
-/// Wrapped ansi term style.
-#[derive(Debug, Default, Clone, Copy)]
-pub struct WrappedStyle(pub Style);
-
-impl<'a, C> From<Tag<'a, C>> for WrappedStyle
+impl<'a, C> From<Tag<'a, C>> for Style
 where
     C: TagConvertor<'a, Color = Color, Modifier = Style, Custom = Style>,
 {
     fn from(t: Tag<'a, C>) -> Self {
-        Self(match t {
+        match t {
             Tag::Fg(c) => Style::default().fg(c),
             Tag::Bg(c) => Style::default().on(c),
             Tag::Modifier(style) => style,
             Tag::Custom(style) => style,
-        })
+        }
     }
 }
 
-impl GenericStyle for WrappedStyle {
+impl FlattenableStyle for Style {
     fn patch(mut self, other: Self) -> Self {
-        let style = &mut self.0;
-        let other = other.0;
-
         if let Some(fg) = other.foreground {
-            style.foreground = Some(fg);
+            self.foreground = Some(fg);
         }
         if let Some(bg) = other.background {
-            style.background = Some(bg);
+            self.background = Some(bg);
         }
         if other.is_bold {
-            style.is_bold = true;
+            self.is_bold = true;
         }
         if other.is_dimmed {
-            style.is_dimmed = true;
+            self.is_dimmed = true;
         }
         if other.is_italic {
-            style.is_italic = true;
+            self.is_italic = true;
         }
         if other.is_underline {
-            style.is_underline = true;
+            self.is_underline = true;
         }
         if other.is_reverse {
-            style.is_reverse = true;
+            self.is_reverse = true;
         }
         if other.is_blink {
-            style.is_blink = true;
+            self.is_blink = true;
         }
         if other.is_hidden {
-            style.is_hidden = true;
+            self.is_hidden = true;
         }
         if other.is_strikethrough {
-            style.is_strikethrough = true;
+            self.is_strikethrough = true;
         }
 
         self
     }
 }
 
-impl<'a> GenericSpan<'a, WrappedStyle> for ANSIString<'a> {
-    fn with_style(s: &'a str, style: Option<WrappedStyle>) -> Self {
-        style.unwrap_or_default().0.paint(s)
+impl<'a> FlattenableSpan<'a, Style> for ANSIString<'a> {
+    fn with_style(s: &'a str, style: Option<Style>) -> Self {
+        style.unwrap_or_default().paint(s)
     }
 }

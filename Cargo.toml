@@ -40,6 +40,10 @@ required-features = ["tui"]
 name = "ansi"
 required-features = ["ansi"]
 
+[[example]]
+name = "common"
+crate-type = ["rlib"]
+
 [package.metadata.docs.rs]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]

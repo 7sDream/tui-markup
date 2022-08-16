@@ -7,10 +7,14 @@ color
 | "magenta" | "purple"
 | "cyan"
 | "white"
-| custom color
+| index color
+| rgb color
 ;
 
-custom color = 6 * hex digit;
+(* xterm-256 color chart index *)
+index color = ? number 0 to 255?;
+
+rgb color = 6 * hex digit;
 
 hex digit
 = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'

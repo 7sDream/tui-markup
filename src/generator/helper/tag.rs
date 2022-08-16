@@ -1,8 +1,8 @@
 use std::marker::PhantomData;
 
-/// Custom tag parser trait.
+/// A common trait for user to provide custom tag parser to a tag convertor.
 ///
-/// Closure `FnMut(&str) -> CustomType` and [`NoopCustomTagParser`] impl this trait for convenient.
+/// Closure `FnMut(&str) -> Output` and [`NoopCustomTagParser`] impl this trait for convenient.
 pub trait CustomTagParser {
     /// Custom tag type.
     type Output;
@@ -22,6 +22,10 @@ where
     }
 }
 
+/// A fake custom tag parser which always fail.
+///
+/// ## Why need this
+///
 /// If a tag convertor support custom tag and you also want it to be optional and impl Default trait,
 /// normally you will use a `Option<T: CustomTagParser<Custom>>` in the convertor.
 ///
@@ -29,8 +33,14 @@ where
 /// even if they do not want custom tag.
 ///
 /// With this type, you can add a `T = NoopCustomTagParser<Custom>` in struct to make them happy.
-#[derive(Default, Debug)]
-pub struct NoopCustomTagParser<S>(PhantomData<*const S>);
+#[derive(Debug)]
+pub struct NoopCustomTagParser<S>(PhantomData<fn() -> S>);
+
+impl<S> Default for NoopCustomTagParser<S> {
+    fn default() -> Self {
+        Self(Default::default())
+    }
+}
 
 impl<S> CustomTagParser for NoopCustomTagParser<S> {
     type Output = S;

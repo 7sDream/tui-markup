@@ -1,4 +1,4 @@
-//! Generator for asni terminal.
+//! Generator for asni terminal string.
 
 mod span;
 mod tag;
@@ -10,10 +10,44 @@ use super::{
     Generator,
 };
 
-pub use span::WrappedStyle;
 pub use tag::ANSITermTagConvertor;
 
 /// Generator for ansi terminal strings.
+///
+/// See [ansi-tags.ebnf] for supported tags.
+///
+/// ## Example
+///
+/// ```
+/// use ansi_term::ANSIStrings;
+/// use tui_markup::{compile, generator::ANSIStringsGenerator};
+///
+/// let result = compile::<ANSIStringsGenerator>("I have a <green green text>").unwrap();
+///
+/// println!("{}", ANSIStrings(&result));
+/// ```
+///
+/// ### With custom tags
+///
+/// ```
+/// use ansi_term::{ANSIStrings, Style, Color};
+/// use tui_markup::{compile_with, generator::ANSIStringsGenerator};
+///
+/// let gen = ANSIStringsGenerator::new(|tag: &str| match tag {
+///     "keyboard" => Some(Style::default().fg(Color::Green).on(Color::White).bold()),
+///     _ => None,
+/// });
+///
+/// let result = compile_with("Press <keyboard W> to move up", gen).unwrap();
+///
+/// println!("{}", ANSIStrings(&result));
+/// ```
+///
+/// ## Show output
+///
+/// Like example above, use [ansi_term::ANSIStrings()] to make a temp variable and just print it.
+///
+/// [ansi-tags.ebnf]: https://github.com/7sDream/master/blob/docs/tui-tag.ebnf
 #[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
 pub struct ANSIStringsGenerator<P = NoopCustomTagParser<Style>> {
@@ -53,7 +87,9 @@ where
 
     fn generate(&mut self, markup: Vec<Vec<crate::parser::ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
         Ok(markup.into_iter().map(flatten).fold(vec![], |mut acc, line| {
-            acc.push(Style::default().paint("\n"));
+            if !acc.is_empty() {
+                acc.push(Style::default().paint("\n"));
+            }
             acc.extend(line);
             acc
         }))

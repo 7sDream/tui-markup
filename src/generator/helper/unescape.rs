@@ -1,12 +1,17 @@
-/// Convert a escaped string in [PlainText][crate::parser::Item::PlainText] into a iterator of unescaped strings.
+/// Convert a escaped string into a iterator of unescaped strings.
+///
+/// In implementation, the returned iterator will skip any `\` character
+/// except itself is after a skipped `\`.
 ///
 /// ## Example
 ///
 /// ```
 /// # use tui_markup::generator::helper::unescape;
-///
 /// assert_eq!(unescape("\\>").collect::<Vec<_>>(), vec![">"]);
 /// assert_eq!(unescape("1\\<2").collect::<Vec<_>>(), vec!["1", "<2"]);
+///
+/// // notice the final `\` is not returned
+/// assert_eq!(unescape("A\\\\B\\").collect::<Vec<_>>(), vec!["A", "\\B"]);
 /// ```
 pub fn unescape(escaped: &str) -> Unescape {
     let cursor = if escaped.starts_with('\\') { 1 } else { 0 };

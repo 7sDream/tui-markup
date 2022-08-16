@@ -23,10 +23,16 @@ pub type TagG<'a, G> = Tag<'a, <G as Generator<'a>>::Convertor>;
 
 /// Trait for convert a raw tag string to tag type.
 ///
-/// Each generator has it own tag generator, because different backend(show the final output)
+/// Each generator has it own tag convertor, because different backend(show the final output)
 /// supports different kind of tags.
 ///
-/// So this tag generator should raise a error if there are unsupported tags in source code.
+/// This Trait has three assoc type:
+///
+/// - Color: for foreground or background color
+/// - Modifier: for style modifier(like bold, italic, etc.)
+/// - Custom: for custom tag
+///
+/// The Generator with this convertor `C` will received a series of Item<Tag<C>>, and convert it into final output.
 pub trait TagConvertor<'a> {
     /// Color type for foreground and background typed tag.
     type Color;
@@ -42,7 +48,7 @@ pub trait TagConvertor<'a> {
     fn parse_modifier(&mut self, s: &str) -> Option<Self::Modifier>;
 
     /// Parse string to custom type,
-    /// will be only called when a tag string isn't a valid and acceptable builtin tag.
+    /// will be only called when a tag string isn't a valid builtin tag.
     fn parse_custom_tag(&mut self, s: &str) -> Option<Self::Custom>;
 
     /// Parse string to a builtin tag type.
@@ -84,17 +90,16 @@ pub trait TagConvertor<'a> {
     }
 
     /// Convert item with raw tag string to item with [Tag] type.
+    ///
+    /// It will filtered out all tags that fail to parse.
     fn convert_item(&mut self, item: Item<'a>) -> ItemC<'a, Self> {
         match item {
             Item::PlainText(pt) => Item::PlainText(pt),
             Item::Element(spans, items) => {
-                let mut tags = Vec::with_capacity(spans.len());
-
-                for span in spans {
-                    if let Some(tag) = self.convert_tag(span.fragment()) {
-                        tags.push(tag);
-                    }
-                }
+                let tags = spans
+                    .into_iter()
+                    .flat_map(|span| self.convert_tag(span.fragment()))
+                    .collect();
 
                 let subitems = self.convert_line(items);
 
@@ -104,12 +109,16 @@ pub trait TagConvertor<'a> {
     }
 
     /// Convert a line of items with raw tag string to items with [Tag] type.
+    ///
+    /// It will filtered out all tags that fail to parse.
     fn convert_line(&mut self, items: Vec<Item<'a>>) -> Vec<ItemC<'a, Self>> {
         items.into_iter().map(|item| self.convert_item(item)).collect()
     }
 
     /// Convert all item with raw tag string of a ast into items with [Tag] type.
-    fn convert(&mut self, ast: Vec<Vec<Item<'a>>>) -> Vec<Vec<ItemC<'a, Self>>> {
+    ///
+    /// It will filtered out all tags that fail to parse.
+    fn convert_ast(&mut self, ast: Vec<Vec<Item<'a>>>) -> Vec<Vec<ItemC<'a, Self>>> {
         ast.into_iter().map(|line| self.convert_line(line)).collect()
     }
 }

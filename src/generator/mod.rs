@@ -1,7 +1,6 @@
 //! Generator generates final output for showing.
 
 pub mod helper;
-mod span;
 mod tag;
 
 #[cfg(feature = "tui")]
@@ -14,11 +13,10 @@ pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
 
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 
-use crate::{error::LocatedError, parser::ItemG};
+use crate::{error::LocatedError, parser::ItemG, Error};
 
-pub use span::{GenericSpan, GenericStyle};
 pub use tag::{Tag, TagConvertor, TagG};
 
 /// Generator generates final output to show tui markup in some backend.
@@ -41,13 +39,9 @@ pub use tag::{Tag, TagConvertor, TagG};
 ///
 /// The source, parser, Item, Tag, is already defined, so just write a [Tag Convertor][TagConvertor] and a [Generator], a new backend
 /// will be supported.
-pub trait Generator<'a>
-where
-    Self::Err: LocatedError + Display,
-    Self::Convertor: TagConvertor<'a>,
-{
+pub trait Generator<'a> {
     /// Tag convertor type.
-    type Convertor;
+    type Convertor: TagConvertor<'a>;
 
     /// Output type.
     type Output;
@@ -55,7 +49,7 @@ where
     /// Error type.
     ///
     /// If the generator can't fall, please use [`GeneratorInfallible`][helper::GeneratorInfallible].
-    type Err;
+    type Err: LocatedError + Display + Debug + Into<Error<'a, Self::Err>>;
 
     /// Get the tag convertor.
     fn convertor(&mut self) -> &mut Self::Convertor;
@@ -64,11 +58,7 @@ where
     fn generate(&mut self, markup: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err>;
 }
 
-impl<'a, G: Generator<'a>> Generator<'a> for &mut G
-where
-    G::Err: LocatedError + Display,
-    G::Convertor: TagConvertor<'a>,
-{
+impl<'a, G: Generator<'a>> Generator<'a> for &mut G {
     type Convertor = G::Convertor;
 
     type Output = G::Output;

@@ -42,7 +42,7 @@
 //! If you want write your own generator, please checkout documents of [Generator] trait.
 //!
 //! [syntax]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
-//! [help-text-screenshot]: https://rikka.7sdre.am/files/37778eea-660b-47a6-bfd1-43979b5c703b.png
+//! [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 //! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 
 mod error;
@@ -60,7 +60,6 @@ pub fn compile<'a, G>(s: &'a str) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Default,
     G: Generator<'a>,
-    Error<'a, G::Err>: From<G::Err>,
 {
     compile_with(s, G::default())
 }
@@ -71,9 +70,12 @@ where
 pub fn compile_with<'a, G>(s: &'a str, mut gen: G) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Generator<'a>,
-    Error<'a, G::Err>: From<G::Err>,
+    // Error<'a, G::Err>: From<G::Err>,
 {
     let ast = parser::parse(s)?;
-    let ir = gen.convertor().convert(ast);
-    Ok(gen.generate(ir)?)
+    let ir = gen.convertor().convert_ast(ast);
+    match gen.generate(ir) {
+        Ok(result) => Ok(result),
+        Err(err) => Err(err.into()),
+    }
 }

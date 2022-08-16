@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Entry function renamed from `parse` to `compile`, use default instance of a generator type.
 - Root `Error` type changed from `(usize, usize)` to a enum type, for better error reporting.
+- Bump `tui` version to `0.19`.
 
 ## [0.1.1] - 2022-08-14
 
