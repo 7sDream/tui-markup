@@ -14,7 +14,7 @@ pub use tag::ANSITermTagConvertor;
 
 /// Generator for ansi terminal strings.
 ///
-/// See [ansi-tags.ebnf] for supported tags.
+/// See [docs/ansi-tags.ebnf] for supported tags.
 ///
 /// ## Example
 ///
@@ -47,7 +47,7 @@ pub use tag::ANSITermTagConvertor;
 ///
 /// Like example above, use [ansi_term::ANSIStrings()] to make a temp variable and just print it.
 ///
-/// [ansi-tags.ebnf]: https://github.com/7sDream/master/blob/docs/tui-tag.ebnf
+/// [docs/ansi-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/ansi-tags.ebnf
 #[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
 pub struct ANSIStringsGenerator<P = NoopCustomTagParser<Style>> {

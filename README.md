@@ -54,5 +54,5 @@ BSD-3-Clause-Clear, See [LICENSE].
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 [doc-builtin-gens]: https://docs.rs/tui-markup/0.2.0-alpha/tui_markup/index.html#builtin-generators
 [examples/help.txt]: <https://github.com/7sDream/tui-markup/blob/master/examples/help.txt>
-[docs/syntax.ebnf]: <https://github.com/7sDream/tui-markup/blob/master/syntax.ebnf>
+[docs/syntax.ebnf]: <https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf>
 [LICENSE]: <https://github.com/7sDream/tui-markup/blob/master/LICENSE>

@@ -21,7 +21,7 @@ pub use tag::TuiTagConvertor;
 
 /// Generator for [tui crate][tui]'s [Text] type.
 ///
-/// See [tui-tags.ebnf] for supported tags.
+/// See [docs/tui-tags.ebnf] for supported tags.
 ///
 /// ## Example
 ///
@@ -114,7 +114,7 @@ pub use tag::TuiTagConvertor;
 ///
 /// Use any widget of [tui] crate that supports it's [Text] type, for example: [`tui::widgets::Paragraph`].
 ///
-/// [tui-tags.ebnf]: https://github.com/7sDream/master/blob/docs/tui-tag.ebnf
+/// [docs/tui-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/tui-tags.ebnf
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
 pub struct TuiTextGenerator<P = NoopCustomTagParser<Style>> {

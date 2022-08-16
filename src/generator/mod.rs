@@ -4,11 +4,13 @@ pub mod helper;
 mod tag;
 
 #[cfg(feature = "tui")]
+#[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 pub mod tui;
 #[cfg(feature = "tui")]
 pub use self::tui::TuiTextGenerator;
 
 #[cfg(feature = "ansi")]
+#[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;

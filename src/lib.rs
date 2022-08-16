@@ -14,7 +14,7 @@
 //!
 //! ![][help-text-screenshot]
 //!
-//! For formal syntax specification, see [syntax.ebnf][syntax].
+//! For formal syntax specification, see [docs/syntax.ebnf].
 //!
 //! ## How two use
 //!
@@ -41,7 +41,7 @@
 //!
 //! If you want write your own generator, please checkout documents of [Generator] trait.
 //!
-//! [syntax]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
+//! [docs/syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 //! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 
