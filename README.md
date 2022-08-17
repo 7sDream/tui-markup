@@ -52,7 +52,7 @@ Some examples:
 - `<bg:blue one<green two>>`, is a blue background one followed by a blue background and green foreground two.
 - `<bg:blue,green,b,i text>` is a blue background, green foreground, bold, italic text.
 
-The forma syntax spec can be found in [docs/syntax.ebnf].
+The formal syntax spec can be found in [docs/syntax.ebnf].
 
 Color and modifier supports vary by generator you want to use, see their document for details.
 

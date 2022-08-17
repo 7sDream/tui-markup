@@ -9,8 +9,7 @@
 //! This crate provides a markup language to
 //! quickly write colorful and styled terminal text in plain text.
 //!
-//! I suggest to check [help.txt] in examples folder,
-//! which generated this self-describing syntax help document:
+//! I suggest to check [examples/help.txt], which generated this self-describing syntax help document:
 //!
 //! ![][help-text-screenshot]
 //!
@@ -19,12 +18,14 @@
 //! ## How to use
 //!
 //! ```ignore
-//! let output = tui_markup::compile::<GeneratorType>("<green hello>").unwrap();
+//! let output = tui_markup::compile::<GeneratorType>("<bg:blue,green,b hello>").unwrap();
 //! ```
 //!
-//! The string wrapped in `<>` is called a element, start with a tag name, like the `green` in above example.
+//! The string wrapped in `<>` is called a element, start with a tag list(comma separated),
+//! like the `bg:blue,green,b` in above example.
 //!
-//! Usable tags vary depending on the the [Generator] you use, and generator will ignore all tags it does not understand.
+//! Usable tag and their meaning vary depending on the the [Generator] you use,
+//! and generator will ignore all tags it does not understand.
 //!
 //! So it's better checkout their document before write your markup text.
 //!
@@ -43,7 +44,7 @@
 //!
 //! [docs/syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
-//! [help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
+//! [examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 
 mod error;
 pub mod generator;
@@ -70,7 +71,6 @@ where
 pub fn compile_with<'a, G>(s: &'a str, mut gen: G) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Generator<'a>,
-    // Error<'a, G::Err>: From<G::Err>,
 {
     let ast = parser::parse(s)?;
     let ir = gen.convertor().convert_ast(ast);
