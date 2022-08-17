@@ -7,6 +7,37 @@
 
 This crate provides a markup language to quickly write colorful and styled terminal text in plain text.
 
+## Usage
+
+```rust
+use ansi_term::{ANSIStrings, Color, Style};
+use tui_markup::{compile, compile_with, generator::ANSIStringsGenerator};
+
+// Parse markup into some final result for showing
+let result = compile::<ANSIStringsGenerator>("You got a <yellow Coin>").unwrap();
+// Show it
+println!("{}", ANSIStrings(&result));
+
+// With custom tag
+let gen = ANSIStringsGenerator::new(|tag: &str| match tag {
+    "keyboard" => Some(Style::default().fg(Color::Blue).on(Color::Black).bold()),
+    _ => None,
+});
+let result = compile_with("Press <keyboard Space> to jump", gen).unwrap();
+println!("{}", ANSIStrings(&result));
+```
+
+Result:
+
+![result of example][usage-screenshot]
+
+Notice the result type and how to show it is vary depends on what `Generator` you use.
+
+The `ANSIStringsGenerator` is one of the [built-in generators][doc-builtin-gens] implementation, for directly print result
+in any ASNI compliant terminal.
+
+You can add this markup support for other terminal/library/application easily by create you own generator.
+
 ## Examples
 
 ![help text][help-text-screenshot]
@@ -21,14 +52,7 @@ you can change the last argument to your file to render other article, for examp
 
 ![color chart][indexed-screenshot]
 
-## Generators
-
-Besides the markup syntax and parser, this crate defined a standard compilation process for you to
-add this language support for your terminal/library/application easily.
-
-We provide built-in implementation for ANSI compliant terminals and popular crates, See [Builtin generators][doc-builtin-gens].
-
-All examples above are using `tui` generator, but others like `ansi` will work fine too, just change all `tui` in that command to `ansi` too see it.
+Those two screenshot are using built-in `tui` generator.
 
 ## Markup syntax
 
@@ -51,6 +75,8 @@ Some examples:
 - `<b text>` for a bold text, `<i text>` for a italic/slant text.
 - `<bg:blue one<green two>>`, is a blue background one followed by a blue background and green foreground two.
 - `<bg:blue,green,b,i text>` is a blue background, green foreground, bold, italic text.
+
+And you can define your own tag, like example code above.
 
 The formal syntax spec can be found in [docs/syntax.ebnf].
 
@@ -77,6 +103,7 @@ BSD-3-Clause-Clear, See [LICENSE].
 [crate]: https://crates.io/crates/tui-markup
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
+[usage-screenshot]: https://rikka.7sdre.am/files/79f88353-e689-49f6-a0fc-e8f9e373445f.png
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 [indexed-screenshot]: https://rikka.7sdre.am/files/788ef47c-2a8a-4667-b9b7-8f2b1b78e083.png
 [doc-builtin-gens]: https://docs.rs/tui-markup/latest/tui_markup/index.html#builtin-generators

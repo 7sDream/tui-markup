@@ -41,6 +41,10 @@ name = "ansi"
 required-features = ["ansi"]
 
 [[example]]
+name = "readme"
+required-features = ["ansi"]
+
+[[example]]
 name = "common"
 crate-type = ["rlib"]
 
