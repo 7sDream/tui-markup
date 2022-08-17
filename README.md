@@ -1,8 +1,11 @@
 # tui markup
 
-This crate provides a markup language to quickly write colorful and styled terminal text in plain text.
+[![crates.io][badge-crate-version]][crate]
+[![changelog][badge-changelog]][changelog]
+[![docs.rs][badge-docs-rs]][doc]
+![deps state][badge-deps-state]
 
-[Document][doc]|[Changelog][changelog]
+This crate provides a markup language to quickly write colorful and styled terminal text in plain text.
 
 ## Examples
 
@@ -21,7 +24,7 @@ you can change the last argument to your file to render other article, for examp
 ## Generators
 
 Besides the markup syntax and parser, this crate defined a standard compilation process for you to
-add this language support for your host application easily.
+add this language support for your application/library easily.
 
 We provide some builtin implementation for popular crates, See [Builtin generators][doc-builtin-gens].
 
@@ -39,7 +42,7 @@ Only one syntax `<tag content>` to add style to content.
 - `bg:` for background color.
 - `mod:` for modifiers.
 
-Mode and `:` is optional except `bg`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
+Mode and `:` is optional except for `bg:`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
 
 Some examples:
 
@@ -56,7 +59,7 @@ Color and modifier supports vary by generator you want to use, see their documen
 ## TODO
 
 - [x] Generator for `tui` crate
-- [x] `Generator` abstract trait
+- [x] `Generator` trait
 - [x] Generator for ansi terminal
 - [ ] Generator for Corssterm
 - [ ] Generator for Termion
@@ -65,6 +68,12 @@ Color and modifier supports vary by generator you want to use, see their documen
 
 BSD-3-Clause-Clear, See [LICENSE].
 
+[badge-crate-version]: https://img.shields.io/crates/v/tui-markup?style=for-the-badge
+[badge-changelog]: https://img.shields.io/badge/-CHANGELOG-brightgreen?style=for-the-badge
+[badge-docs-rs]: https://img.shields.io/docsrs/tui-markup?style=for-the-badge
+[badge-deps-state]: https://img.shields.io/librariesio/release/cargo/tui-markup?style=for-the-badge
+
+[crate]: https://crates.io/crates/tui-markup
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
