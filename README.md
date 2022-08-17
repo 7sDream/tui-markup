@@ -14,7 +14,7 @@ The example is shown in Windows Terminal, using the following command:
 
 The source markup text of this article can be found in [examples/help.txt].
 
-you can change the last argument to your file to render other article, for example `examples/indexed` for a full xterm256 color chart:
+you can change the last argument to your file to render other article, for example `examples/indexed.txt` for a full xterm256 color chart:
 
 ![color-chart][indexed-screenshot]
 
