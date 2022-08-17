@@ -9,7 +9,7 @@ This crate provides a markup language to quickly write colorful and styled termi
 
 ## Examples
 
-![help-text][help-text-screenshot]
+![help text][help-text-screenshot]
 
 The example is shown in Windows Terminal, using the following command:
 
@@ -19,30 +19,30 @@ The source markup text of this article can be found in [examples/help.txt].
 
 you can change the last argument to your file to render other article, for example `examples/indexed.txt` for a full xterm256 color chart:
 
-![color-chart][indexed-screenshot]
+![color chart][indexed-screenshot]
 
 ## Generators
 
 Besides the markup syntax and parser, this crate defined a standard compilation process for you to
 add this language support for your terminal/library/application easily.
 
-We provide some builtin implementation for ANSI compliant terminals and popular crates, See [Builtin generators][doc-builtin-gens].
+We provide built-in implementation for ANSI compliant terminals and popular crates, See [Builtin generators][doc-builtin-gens].
 
-All examples above uses `tui` generator, but others like `ansi` will work fine too, just change all `tui` in that command to `ansi` too see it.
+All examples above are using `tui` generator, but others like `ansi` will work fine too, just change all `tui` in that command to `ansi` too see it.
 
 ## Markup syntax
 
-Only one syntax `<tag content>` to add style to content.
+Only one syntax `<taglist content>` to add style to content.
 
-`tag` is a `style` list sep by `,`.
+`taglist` is a `tag` list sep by `,`.
 
-`style` has format of `mode:value`, available `mode` are:
+`tag` has format of `mode:value`, available `mode` are:
 
 - `fg:` for foreground color.
 - `bg:` for background color.
 - `mod:` for modifiers.
 
-Mode and `:` is optional except for `bg:`, so `fg:66ccf` = `66ccff`, and `mod:b` = `b`.
+Mode and `:` is optional except for `bg:`, so `66ccff` = `fg:66ccf` , and `b` = `mod:b`.
 
 Some examples:
 
@@ -80,6 +80,6 @@ BSD-3-Clause-Clear, See [LICENSE].
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 [indexed-screenshot]: https://rikka.7sdre.am/files/788ef47c-2a8a-4667-b9b7-8f2b1b78e083.png
 [doc-builtin-gens]: https://docs.rs/tui-markup/latest/tui_markup/index.html#builtin-generators
-[examples/help.txt]: <https://github.com/7sDream/tui-markup/blob/master/examples/help.txt>
-[docs/syntax.ebnf]: <https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf>
+[examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
+[docs/syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 [LICENSE]: <https://github.com/7sDream/tui-markup/blob/master/LICENSE>
