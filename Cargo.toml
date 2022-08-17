@@ -1,6 +1,6 @@
 [package]
 name = "tui-markup"
-version = "0.2.0"
+version = "0.2.1-alpha"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
 description = "markup langauge for terminal styled text"
@@ -11,7 +11,7 @@ repository = "https://github.com/7sDream/tui-markup"
 license = "BSD-3-Clause-Clear"
 keywords = ["terminal", "tui", "markup", "text", "parser"]
 categories = ["command-line-interface", "parser-implementations", "text-processing"]
-exclude = ["examples/*.png"]
+exclude = ["examples/*.png", "examples/*.py", "docs"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
