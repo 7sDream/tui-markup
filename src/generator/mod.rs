@@ -39,8 +39,20 @@ pub use tag::{Tag, TagConvertor, TagG};
 /// Source --- Parser --> Item --- Tag Convertor --> Item<Tag> --- Generator --> Output --> Show it in some backend
 /// ```
 ///
-/// The source, parser, Item, Tag, is already defined, so just write a [Tag Convertor][TagConvertor] and a [Generator], a new backend
-/// will be supported.
+/// The source, parser, Item, Tag, is already defined, so just write a [Tag Convertor][TagConvertor]
+/// and a [Generator], a new backend will be supported.
+///
+/// ## Generic implementation using flatten
+///
+/// Your tag convertor will parse color/modifiers string to some `Color`/`Modifier` type, and will support custom tag
+/// by a `Style` type, which can be converted from `Color` and `Modifier` too.
+///
+/// In this case, a [Tag] of this convertor can be convert to the `Style` type easily.
+///
+/// If this `Style` can be patched by other, then you can use the [`flatten`][helper::flatten]
+/// help method to do almost all the convert staff from AST to your final result.
+///
+/// Read document of [`flatten`][helper::flatten] to learn more, or just checkout a builtin implementation.
 pub trait Generator<'a> {
     /// Tag convertor type.
     type Convertor: TagConvertor<'a>;
