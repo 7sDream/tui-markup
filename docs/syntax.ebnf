@@ -30,15 +30,15 @@ tag
 | custom-tag
 ;
 
-char for tag =
+tag char =
 | (? alphanumberic character ?)
 | '+' | '-' | ':'
 ;
 
-color = { char for tag - '?' };
+color = { tag char - ':' };
 
-midifier = { char for tag - '?' };
+midifier = { tag char - ':' };
 
 (* Please read generator's document for real color and modifier they supports *)
 
-custom-tag = { char-for-tag };
+custom-tag = { tag char };

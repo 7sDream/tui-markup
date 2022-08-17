@@ -18,10 +18,10 @@ taglist ::= tag ("," tag)*
 
 tag ::= (("fg" | "bg")? ":")? color | (("mod")? ":")? modifier | custom-tag
 
-color ::= (char-for-tag - ':')+
+color ::= (tag-char - ':')+
 
-modifier ::= (char-for-tag - ':')+
+modifier ::= (tag-char - ':')+
 
-char-for-tag ::= ('a' - 'z') | ('A' - 'Z') | '0' - '9' | '-' | '+' | ':'
+tag-char ::= ('a' - 'z') | ('A' - 'Z') | '0' - '9' | '-' | '+' | ':'
 
-custom-tag ::= char-for-tag+
+custom-tag ::= tag-char+
