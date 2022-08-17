@@ -12,7 +12,7 @@ color
 ;
 
 (* xterm-256 color chart index *)
-index color = ? number 0 to 255?;
+index color = ? number 0 to 255 ?;
 
 rgb color = 6 * hex digit;
 
