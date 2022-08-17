@@ -53,6 +53,14 @@ The forma syntax spec can be found in [docs/syntax.ebnf].
 
 Color and modifier supports vary by generator you want to use, see their document for details.
 
+## TODO
+
+- [x] Generator for `tui` crate
+- [x] `Generator` abstract trait
+- [x] Generator for ansi terminal
+- [ ] Generator for Corssterm
+- [ ] Generator for Termion
+
 ## LICENSE
 
 BSD-3-Clause-Clear, See [LICENSE].

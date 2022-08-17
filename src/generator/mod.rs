@@ -15,6 +15,9 @@ pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
 
+// TODO: Crossterm generator
+// TODO: Termion generator
+
 use std::fmt::{Debug, Display};
 
 use crate::{error::LocatedError, parser::ItemG, Error};
