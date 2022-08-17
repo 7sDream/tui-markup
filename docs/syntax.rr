@@ -1,0 +1,27 @@
+items ::= item*
+
+item ::= text | element
+
+text ::= char+
+
+char ::= normal-char | escaped-char
+
+normal-char ::= all-char - ("\" "<" ">")
+
+allchar ::= #x0 - #x10FFFF
+
+escaped-char ::= "\\" | "\<" | "\>"
+
+element ::= "<" taglist " " items ">"
+
+taglist ::= tag ("," tag)*
+
+tag ::= (("fg" | "bg")? ":")? color | (("mod")? ":")? modifier | custom-tag
+
+color ::= (char-for-tag - ':')+
+
+modifier ::= (char-for-tag - ':')+
+
+char-for-tag ::= ('a' - 'z') | ('A' - 'Z') | '0' - '9' | '-' | '+' | ':'
+
+custom-tag ::= char-for-tag+
