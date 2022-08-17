@@ -24,9 +24,9 @@ you can change the last argument to your file to render other article, for examp
 ## Generators
 
 Besides the markup syntax and parser, this crate defined a standard compilation process for you to
-add this language support for your application/library easily.
+add this language support for your terminal/library/application easily.
 
-We provide some builtin implementation for popular crates, See [Builtin generators][doc-builtin-gens].
+We provide some builtin implementation for ANSI compliant terminals and popular crates, See [Builtin generators][doc-builtin-gens].
 
 All examples above uses `tui` generator, but others like `ansi` will work fine too, just change all `tui` in that command to `ansi` too see it.
 
@@ -60,9 +60,10 @@ Color and modifier supports vary by generator you want to use, see their documen
 
 - [x] Generator for `tui` crate
 - [x] `Generator` trait
-- [x] Generator for ansi terminal
-- [ ] Generator for Corssterm
-- [ ] Generator for Termion
+- [x] Generator for ansi compliant terminal
+- [ ] Generator for `corssterm`
+- [ ] Generator for `termion`
+- [ ] Generator for `ncurses`
 
 ## LICENSE
 
