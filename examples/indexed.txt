@@ -1,26 +1,26 @@
-Standard: <bg:0    0 ><bg:1    1 ><bg:2    2 ><bg:3    3 ><bg:4    4 ><bg:5    5 ><bg:6    6 ><bg:7    7 >
- Intense: <bg:8    8 ><bg:9    9 ><bg:10   10 ><bg:11   11 ><bg:12   12 ><bg:13   13 ><bg:14   14 ><bg:15   15 >
+Standard  <bg:0  <white   0> ><bg:1  <white   1> ><bg:2  <white   2> ><bg:3  <white   3> ><bg:4  <white   4> ><bg:5  <white   5> ><bg:6  <white   6> ><bg:7  <white   7> >
+ Intense  <bg:8  <black   8> ><bg:9  <black   9> ><bg:10  <black  10> ><bg:11  <black  11> ><bg:12  <black  12> ><bg:13  <black  13> ><bg:14  <black  14> ><bg:15  <black  15> >
 
-<bg:16   16 ><bg:17   17 ><bg:18   18 ><bg:19   19 ><bg:20   20 ><bg:21   21 >     <bg:34   34 ><bg:35   35 ><bg:36   36 ><bg:37   37 ><bg:38   38 ><bg:39   39 >
-<bg:52   52 ><bg:53   53 ><bg:54   54 ><bg:55   55 ><bg:56   56 ><bg:57   57 >     <bg:70   70 ><bg:71   71 ><bg:72   72 ><bg:73   73 ><bg:74   74 ><bg:75   75 >
-<bg:88   88 ><bg:89   89 ><bg:90   90 ><bg:91   91 ><bg:92   92 ><bg:93   93 >     <bg:106  106 ><bg:107  107 ><bg:108  108 ><bg:109  109 ><bg:110  110 ><bg:111  111 >
-<bg:124  124 ><bg:125  125 ><bg:126  126 ><bg:127  127 ><bg:128  128 ><bg:129  129 >     <bg:142  142 ><bg:143  143 ><bg:144  144 ><bg:145  145 ><bg:146  146 ><bg:147  147 >
-<bg:160  160 ><bg:161  161 ><bg:162  162 ><bg:163  163 ><bg:164  164 ><bg:165  165 >     <bg:178  178 ><bg:179  179 ><bg:180  180 ><bg:181  181 ><bg:182  182 ><bg:183  183 >
-<bg:196  196 ><bg:197  197 ><bg:198  198 ><bg:199  199 ><bg:200  200 ><bg:201  201 >     <bg:214  214 ><bg:215  215 ><bg:216  216 ><bg:217  217 ><bg:218  218 ><bg:219  219 >
+<bg:16  <white  16> ><bg:17  <white  17> ><bg:18  <white  18> ><bg:19  <white  19> ><bg:20  <white  20> ><bg:21  <white  21> >     <bg:34  <black  34> ><bg:35  <black  35> ><bg:36  <black  36> ><bg:37  <black  37> ><bg:38  <black  38> ><bg:39  <black  39> >
+<bg:52  <white  52> ><bg:53  <white  53> ><bg:54  <white  54> ><bg:55  <white  55> ><bg:56  <white  56> ><bg:57  <white  57> >     <bg:70  <black  70> ><bg:71  <black  71> ><bg:72  <black  72> ><bg:73  <black  73> ><bg:74  <black  74> ><bg:75  <black  75> >
+<bg:88  <white  88> ><bg:89  <white  89> ><bg:90  <white  90> ><bg:91  <white  91> ><bg:92  <white  92> ><bg:93  <white  93> >     <bg:106  <black 106> ><bg:107  <black 107> ><bg:108  <black 108> ><bg:109  <black 109> ><bg:110  <black 110> ><bg:111  <black 111> >
+<bg:124  <white 124> ><bg:125  <white 125> ><bg:126  <white 126> ><bg:127  <white 127> ><bg:128  <white 128> ><bg:129  <white 129> >     <bg:142  <black 142> ><bg:143  <black 143> ><bg:144  <black 144> ><bg:145  <black 145> ><bg:146  <black 146> ><bg:147  <black 147> >
+<bg:160  <white 160> ><bg:161  <white 161> ><bg:162  <white 162> ><bg:163  <white 163> ><bg:164  <white 164> ><bg:165  <white 165> >     <bg:178  <black 178> ><bg:179  <black 179> ><bg:180  <black 180> ><bg:181  <black 181> ><bg:182  <black 182> ><bg:183  <black 183> >
+<bg:196  <white 196> ><bg:197  <white 197> ><bg:198  <white 198> ><bg:199  <white 199> ><bg:200  <white 200> ><bg:201  <white 201> >     <bg:214  <black 214> ><bg:215  <black 215> ><bg:216  <black 216> ><bg:217  <black 217> ><bg:218  <black 218> ><bg:219  <black 219> >
 
-<bg:22   22 ><bg:23   23 ><bg:24   24 ><bg:25   25 ><bg:26   26 ><bg:27   27 >     <bg:40   40 ><bg:41   41 ><bg:42   42 ><bg:43   43 ><bg:44   44 ><bg:45   45 >
-<bg:58   58 ><bg:59   59 ><bg:60   60 ><bg:61   61 ><bg:62   62 ><bg:63   63 >     <bg:76   76 ><bg:77   77 ><bg:78   78 ><bg:79   79 ><bg:80   80 ><bg:81   81 >
-<bg:94   94 ><bg:95   95 ><bg:96   96 ><bg:97   97 ><bg:98   98 ><bg:99   99 >     <bg:112  112 ><bg:113  113 ><bg:114  114 ><bg:115  115 ><bg:116  116 ><bg:117  117 >
-<bg:130  130 ><bg:131  131 ><bg:132  132 ><bg:133  133 ><bg:134  134 ><bg:135  135 >     <bg:148  148 ><bg:149  149 ><bg:150  150 ><bg:151  151 ><bg:152  152 ><bg:153  153 >
-<bg:166  166 ><bg:167  167 ><bg:168  168 ><bg:169  169 ><bg:170  170 ><bg:171  171 >     <bg:184  184 ><bg:185  185 ><bg:186  186 ><bg:187  187 ><bg:188  188 ><bg:189  189 >
-<bg:202  202 ><bg:203  203 ><bg:204  204 ><bg:205  205 ><bg:206  206 ><bg:207  207 >     <bg:220  220 ><bg:221  221 ><bg:222  222 ><bg:223  223 ><bg:224  224 ><bg:225  225 >
+<bg:22  <white  22> ><bg:23  <white  23> ><bg:24  <white  24> ><bg:25  <white  25> ><bg:26  <white  26> ><bg:27  <white  27> >     <bg:40  <black  40> ><bg:41  <black  41> ><bg:42  <black  42> ><bg:43  <black  43> ><bg:44  <black  44> ><bg:45  <black  45> >
+<bg:58  <white  58> ><bg:59  <white  59> ><bg:60  <white  60> ><bg:61  <white  61> ><bg:62  <white  62> ><bg:63  <white  63> >     <bg:76  <black  76> ><bg:77  <black  77> ><bg:78  <black  78> ><bg:79  <black  79> ><bg:80  <black  80> ><bg:81  <black  81> >
+<bg:94  <white  94> ><bg:95  <white  95> ><bg:96  <white  96> ><bg:97  <white  97> ><bg:98  <white  98> ><bg:99  <white  99> >     <bg:112  <black 112> ><bg:113  <black 113> ><bg:114  <black 114> ><bg:115  <black 115> ><bg:116  <black 116> ><bg:117  <black 117> >
+<bg:130  <white 130> ><bg:131  <white 131> ><bg:132  <white 132> ><bg:133  <white 133> ><bg:134  <white 134> ><bg:135  <white 135> >     <bg:148  <black 148> ><bg:149  <black 149> ><bg:150  <black 150> ><bg:151  <black 151> ><bg:152  <black 152> ><bg:153  <black 153> >
+<bg:166  <white 166> ><bg:167  <white 167> ><bg:168  <white 168> ><bg:169  <white 169> ><bg:170  <white 170> ><bg:171  <white 171> >     <bg:184  <black 184> ><bg:185  <black 185> ><bg:186  <black 186> ><bg:187  <black 187> ><bg:188  <black 188> ><bg:189  <black 189> >
+<bg:202  <white 202> ><bg:203  <white 203> ><bg:204  <white 204> ><bg:205  <white 205> ><bg:206  <white 206> ><bg:207  <white 207> >     <bg:220  <black 220> ><bg:221  <black 221> ><bg:222  <black 222> ><bg:223  <black 223> ><bg:224  <black 224> ><bg:225  <black 225> >
 
-<bg:28   28 ><bg:29   29 ><bg:30   30 ><bg:31   31 ><bg:32   32 ><bg:33   33 >     <bg:46   46 ><bg:47   47 ><bg:48   48 ><bg:49   49 ><bg:50   50 ><bg:51   51 >
-<bg:64   64 ><bg:65   65 ><bg:66   66 ><bg:67   67 ><bg:68   68 ><bg:69   69 >     <bg:82   82 ><bg:83   83 ><bg:84   84 ><bg:85   85 ><bg:86   86 ><bg:87   87 >
-<bg:100  100 ><bg:101  101 ><bg:102  102 ><bg:103  103 ><bg:104  104 ><bg:105  105 >     <bg:118  118 ><bg:119  119 ><bg:120  120 ><bg:121  121 ><bg:122  122 ><bg:123  123 >
-<bg:136  136 ><bg:137  137 ><bg:138  138 ><bg:139  139 ><bg:140  140 ><bg:141  141 >     <bg:154  154 ><bg:155  155 ><bg:156  156 ><bg:157  157 ><bg:158  158 ><bg:159  159 >
-<bg:172  172 ><bg:173  173 ><bg:174  174 ><bg:175  175 ><bg:176  176 ><bg:177  177 >     <bg:190  190 ><bg:191  191 ><bg:192  192 ><bg:193  193 ><bg:194  194 ><bg:195  195 >
-<bg:208  208 ><bg:209  209 ><bg:210  210 ><bg:211  211 ><bg:212  212 ><bg:213  213 >     <bg:226  226 ><bg:227  227 ><bg:228  228 ><bg:229  229 ><bg:230  230 ><bg:231  231 >
+<bg:28  <white  28> ><bg:29  <white  29> ><bg:30  <white  30> ><bg:31  <white  31> ><bg:32  <white  32> ><bg:33  <white  33> >     <bg:46  <black  46> ><bg:47  <black  47> ><bg:48  <black  48> ><bg:49  <black  49> ><bg:50  <black  50> ><bg:51  <black  51> >
+<bg:64  <white  64> ><bg:65  <white  65> ><bg:66  <white  66> ><bg:67  <white  67> ><bg:68  <white  68> ><bg:69  <white  69> >     <bg:82  <black  82> ><bg:83  <black  83> ><bg:84  <black  84> ><bg:85  <black  85> ><bg:86  <black  86> ><bg:87  <black  87> >
+<bg:100  <white 100> ><bg:101  <white 101> ><bg:102  <white 102> ><bg:103  <white 103> ><bg:104  <white 104> ><bg:105  <white 105> >     <bg:118  <black 118> ><bg:119  <black 119> ><bg:120  <black 120> ><bg:121  <black 121> ><bg:122  <black 122> ><bg:123  <black 123> >
+<bg:136  <white 136> ><bg:137  <white 137> ><bg:138  <white 138> ><bg:139  <white 139> ><bg:140  <white 140> ><bg:141  <white 141> >     <bg:154  <black 154> ><bg:155  <black 155> ><bg:156  <black 156> ><bg:157  <black 157> ><bg:158  <black 158> ><bg:159  <black 159> >
+<bg:172  <white 172> ><bg:173  <white 173> ><bg:174  <white 174> ><bg:175  <white 175> ><bg:176  <white 176> ><bg:177  <white 177> >     <bg:190  <black 190> ><bg:191  <black 191> ><bg:192  <black 192> ><bg:193  <black 193> ><bg:194  <black 194> ><bg:195  <black 195> >
+<bg:208  <white 208> ><bg:209  <white 209> ><bg:210  <white 210> ><bg:211  <white 211> ><bg:212  <white 212> ><bg:213  <white 213> >     <bg:226  <black 226> ><bg:227  <black 227> ><bg:228  <black 228> ><bg:229  <black 229> ><bg:230  <black 230> ><bg:231  <black 231> >
 
-  Grays: <bg:232  232 ><bg:233  233 ><bg:234  234 ><bg:235  235 ><bg:236  236 ><bg:237  237 ><bg:238  238 ><bg:239  239 ><bg:240  240 ><bg:241  241 ><bg:242  242 ><bg:243  243 >
-         <bg:244  244 ><bg:245  245 ><bg:246  246 ><bg:247  247 ><bg:248  248 ><bg:249  249 ><bg:250  250 ><bg:251  251 ><bg:252  252 ><bg:253  253 ><bg:254  254 ><bg:255  255 >
+Gray <bg:232  <white 232> ><bg:233  <white 233> ><bg:234  <white 234> ><bg:235  <white 235> ><bg:236  <white 236> ><bg:237  <white 237> ><bg:238  <white 238> ><bg:239  <white 239> ><bg:240  <white 240> ><bg:241  <white 241> ><bg:242  <white 242> ><bg:243  <white 243> >
+     <bg:244  <black 244> ><bg:245  <black 245> ><bg:246  <black 246> ><bg:247  <black 247> ><bg:248  <black 248> ><bg:249  <black 249> ><bg:250  <black 250> ><bg:251  <black 251> ><bg:252  <black 252> ><bg:253  <black 253> ><bg:254  <black 254> ><bg:255  <black 255> >

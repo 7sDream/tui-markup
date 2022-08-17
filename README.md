@@ -4,22 +4,30 @@ This crate provides a markup language to quickly write colorful and styled termi
 
 [Document][doc]|[Changelog][changelog]
 
-## Example
+## Examples
 
 ![help-text][help-text-screenshot]
 
+The example is shown in Windows Terminal, using the following command:
+
+`cargo run --example tui --features tui -- examples/help.txt`
+
 The source markup text of this article can be found in [examples/help.txt].
+
+you can change the last argument to your file to render other article, for example `examples/indexed` for a full xterm256 color chart:
+
+![color-chart][indexed-screenshot]
+
+## Generators
 
 Besides the language syntax and parser, this crate defined a standard compilation process for you to
 add this language support for your host application easily.
 
 We provide some builtin implementation for popular crates, See [Builtin generators][doc-builtin-gens].
 
-The example screenshot is using the `tui` generator, print in Windows Terminal, using the following command:
+All the examples above uses `tui` generator, but others like `ansi` will work fine too, just change the `tui` in command to `ansi` too see it.
 
-`cargo run --example tui --features tui -- examples/help.txt`:
-
-## Syntax
+## Markup syntax
 
 Only one syntax `<tag content>` to add style to content.
 
@@ -52,6 +60,7 @@ BSD-3-Clause-Clear, See [LICENSE].
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
+[indexed-screenshot]: https://rikka.7sdre.am/files/788ef47c-2a8a-4667-b9b7-8f2b1b78e083.png
 [doc-builtin-gens]: https://docs.rs/tui-markup/0.2.0-alpha/tui_markup/index.html#builtin-generators
 [examples/help.txt]: <https://github.com/7sDream/tui-markup/blob/master/examples/help.txt>
 [docs/syntax.ebnf]: <https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf>
