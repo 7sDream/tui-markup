@@ -16,7 +16,7 @@
 //!
 //! For formal syntax specification, see [docs/syntax.ebnf].
 //!
-//! ## How two use
+//! ## How to use
 //!
 //! ```ignore
 //! let output = tui_markup::compile::<GeneratorType>("<green hello>").unwrap();
