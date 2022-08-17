@@ -3,7 +3,7 @@ use crate::{
     parser::{Item, ItemC},
 };
 
-/// Tag of a [Element][crate::parser::Item::Element] after transform step.
+/// Tag of a [Element][crate::parser::Item::Element] after tag conversion step.
 ///
 /// Fg/Bg/Modifier variant is so-called builtin tag, Custom variant contains custom tag type.
 #[derive(Debug, Clone)]
