@@ -12,7 +12,7 @@ pub trait LocatedError {
 ///
 /// Display this error in `{}` formatter will show a error message with detailed reason and location.
 /// So usually you don't need check variants.
-#[derive(Debug, PartialEq, Eq, Error)]
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum Error<'a, GE> {
     /// Parsing step failed, usually means there is invalid syntax in source string
     #[error("parse failed: {0}")]

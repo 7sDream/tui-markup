@@ -1,5 +1,7 @@
 use std::fmt::{Display, Write};
 
+use thiserror::Error;
+
 use crate::error::LocatedError;
 
 use super::LSpan;
@@ -16,9 +18,9 @@ pub enum ErrorKind {
 }
 
 /// Error type for [parse][super::parse].
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub struct Error<'a> {
-    source: nom::error::ErrorKind,
+    nom_kind: nom::error::ErrorKind,
     pub(crate) span: LSpan<'a>,
     kind: Option<ErrorKind>,
 }
@@ -69,7 +71,7 @@ impl<'a> LocatedError for Error<'a> {
 impl<'a> nom::error::ParseError<LSpan<'a>> for Error<'a> {
     fn from_error_kind(input: LSpan<'a>, kind: nom::error::ErrorKind) -> Self {
         Self {
-            source: kind,
+            nom_kind: kind,
             span: input,
             kind: None,
         }

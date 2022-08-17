@@ -82,4 +82,4 @@ BSD-3-Clause-Clear, See [LICENSE].
 [doc-builtin-gens]: https://docs.rs/tui-markup/latest/tui_markup/index.html#builtin-generators
 [examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
 [docs/syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
-[LICENSE]: <https://github.com/7sDream/tui-markup/blob/master/LICENSE>
+[LICENSE]: https://github.com/7sDream/tui-markup/blob/master/LICENSE

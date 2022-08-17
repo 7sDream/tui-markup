@@ -1,11 +1,13 @@
 use std::fmt::Display;
 
-use crate::{Error, LocatedError};
+use thiserror::Error;
+
+use crate::LocatedError;
 
 /// Error type for infallible generator.
 ///
 /// You should never return this error in generating step if choose this as the Error type of your Generator.
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Error, PartialEq, Eq)]
 pub struct GeneratorInfallible;
 
 impl Display for GeneratorInfallible {
@@ -20,8 +22,8 @@ impl LocatedError for GeneratorInfallible {
     }
 }
 
-impl<'a> From<GeneratorInfallible> for Error<'a, GeneratorInfallible> {
+impl<'a> From<GeneratorInfallible> for crate::Error<'a, GeneratorInfallible> {
     fn from(e: GeneratorInfallible) -> Self {
-        Error::Gen(e)
+        crate::Error::Gen(e)
     }
 }

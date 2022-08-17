@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `ParseError`, `GeneratorInfallible` now implements std `Error` trait.
+- `Error` now implements `Clone` trait if GE is `Clone`.
+
 ## [0.2.0] - 2022-08-17
 
-## Added
+### Added
 
 - `parser` module, contains parse function, `Item` type and `Error`.
 - `Generator` trait for custom generators.
@@ -21,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LocateError` trait for get location of error in source text.
 - `compile_with` entry function for use a custom configured generator.
 
-## Changed
+### Changed
 
 - Entry function renamed from `parse` to `compile`, use default instance of a generator type.
 - Root `Error` type changed from `(usize, usize)` to a enum type, for better error reporting.
@@ -34,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - backslash(`\`) is missing from the parsed result.
 
 ## [0.1.0] - 2022-08-13
+
+### Added
 
 - First release.
 
