@@ -20,12 +20,12 @@ you can change the last argument to your file to render other article, for examp
 
 ## Generators
 
-Besides the language syntax and parser, this crate defined a standard compilation process for you to
+Besides the markup syntax and parser, this crate defined a standard compilation process for you to
 add this language support for your host application easily.
 
 We provide some builtin implementation for popular crates, See [Builtin generators][doc-builtin-gens].
 
-All the examples above uses `tui` generator, but others like `ansi` will work fine too, just change the `tui` in command to `ansi` too see it.
+All examples above uses `tui` generator, but others like `ansi` will work fine too, just change all `tui` in that command to `ansi` too see it.
 
 ## Markup syntax
 
