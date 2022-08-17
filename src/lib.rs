@@ -22,9 +22,9 @@
 //! ```
 //!
 //! The string wrapped in `<>` is called a element, start with a tag list(comma separated),
-//! like the `bg:blue,green,b` in above example.
+//! like the `bg:blue,green,b` in above example, those tags add styles to inner items.
 //!
-//! Usable tag and their meaning vary depending on the the [Generator] you use,
+//! Usable tags are vary depending on the the [Generator] you use,
 //! and generator will ignore all tags it does not understand.
 //!
 //! So it's better checkout their document before write your markup text.
