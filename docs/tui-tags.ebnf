@@ -24,9 +24,9 @@ index color = ? number 0 to 255 ?;
 rgb color = 6 * hex digit; (* in normal r g b order *)
 
 hex digit
-= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-| 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
-| 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+= (? '0' to '9' ?)
+| (? 'a' to 'z' ?)
+| (? 'A' to 'Z' ?)
 ;
 
 (* bold *)

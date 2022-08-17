@@ -24,13 +24,21 @@ element = '<', tags, ' ', items, '>';
 
 tags = tag, { ',', tag };
 
-(* tag can only contians alphabetic, numberic and '+', '-', ':' characters *)
-
 tag
 = [ [ "fg" | "bg" ], ':' ], color
 | [ "mod", ':' ], midifier
 | custom-tag
 ;
 
+char for tag =
+| (? alphanumberic character ?)
+| '+' | '-' | ':'
+;
 
-(* Please read generator's document for color and modifier they supports *)
+color = { char for tag - '?' };
+
+midifier = { char for tag - '?' };
+
+(* Please read generator's document for real color and modifier they supports *)
+
+custom-tag = { char-for-tag };
