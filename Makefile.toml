@@ -2,6 +2,8 @@
 # add --all-targets for run test in examples
 CARGO_MAKE_CARGO_BUILD_TEST_FLAGS = "--all-targets --all-features"
 
+# ===== default flow tasks override =====
+
 [tasks.copy-apidocs]
 # do not need api docs into git repo
 disabled = true
@@ -10,16 +12,18 @@ disabled = true
 # add --all-features
 args = ["doc", "--no-deps", "--all-features"]
 
+# ==== custom tasks =====
+
 [tasks.opendocs]
 description = "Generate rust documentation and open it."
-categories = "Documentation"
+category = "Documentation"
 install_crate = false
 command = "cargo"
 args = ["doc", "--all-features", "--open"]
 
 [tasks.opendocsrs]
 description = "Preview generated document when publish to docs.rs"
-categories = "Documentation"
+category = "Documentation"
 install_crate = false
 env = { RUSTDOCFLAGS = "--cfg docsrs" }
 command = "cargo"
