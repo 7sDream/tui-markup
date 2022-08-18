@@ -22,8 +22,6 @@ ansi = ["ansi_term"]
 [dependencies]
 nom = "7"
 nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
-# TODO: remove thiserror to get rid of proc macro
-thiserror = "1"
 # generator implementations
 ansi_term = { version = "0.12", optional = true }
 tui = { version = "0.19", optional = true, default-features = false }

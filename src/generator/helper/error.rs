@@ -1,29 +1,44 @@
-use std::fmt::Display;
-
-use thiserror::Error;
+use std::{
+    error::Error,
+    fmt::{Debug, Display},
+};
 
 use crate::LocatedError;
 
 /// Error type for infallible generator.
 ///
-/// You should never return this error in generating step if choose this as the Error type of your Generator.
-#[derive(Debug, Copy, Clone, Error, PartialEq, Eq)]
+/// You should never return (even construct) this error if choose this as the Error type of your Generator.
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub struct GeneratorInfallible;
 
-impl Display for GeneratorInfallible {
-    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        panic!("infallible generator emitted a error, please report this bug")
+impl GeneratorInfallible {
+    fn panic() -> ! {
+        panic!("infallible generator emitted a error, please report this as bug")
     }
 }
 
+impl Debug for GeneratorInfallible {
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        GeneratorInfallible::panic()
+    }
+}
+
+impl Display for GeneratorInfallible {
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        GeneratorInfallible::panic()
+    }
+}
+
+impl Error for GeneratorInfallible {}
+
 impl LocatedError for GeneratorInfallible {
     fn location(&self) -> (usize, usize) {
-        panic!("infallible generator emitted a error, please report this bug")
+        GeneratorInfallible::panic()
     }
 }
 
 impl<'a> From<GeneratorInfallible> for crate::Error<'a, GeneratorInfallible> {
-    fn from(e: GeneratorInfallible) -> Self {
-        crate::Error::Gen(e)
+    fn from(_e: GeneratorInfallible) -> Self {
+        GeneratorInfallible::panic()
     }
 }

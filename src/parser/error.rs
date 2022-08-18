@@ -1,10 +1,7 @@
 use std::fmt::{Display, Write};
 
-use thiserror::Error;
-
-use crate::error::LocatedError;
-
 use super::LSpan;
+use crate::error::LocatedError;
 
 /// Kind of parse error.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -18,7 +15,7 @@ pub enum ErrorKind {
 }
 
 /// Error type for [parse][super::parse].
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Error<'a> {
     nom_kind: nom::error::ErrorKind,
     pub(crate) span: LSpan<'a>,
@@ -47,6 +44,8 @@ impl<'a> Display for Error<'a> {
         f.write_fmt(format_args!("near {}:{}", self.span.extra, self.span.get_column()))
     }
 }
+
+impl<'a> std::error::Error for Error<'a> {}
 
 impl<'a> Error<'a> {
     pub(crate) fn attach(mut self, kind: ErrorKind) -> Self {

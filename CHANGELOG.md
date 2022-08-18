@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `ParseError`, `GeneratorInfallible` now implements std `Error` trait.
 - `Error` now implements `Clone` trait if `GE` is `Clone`.
+- Remove the dependency on `thiserror`.
 
 ## [0.2.0] - 2022-08-17
 
