@@ -1,10 +1,13 @@
 [env]
+# add --all-targets for run test in examples
 CARGO_MAKE_CARGO_BUILD_TEST_FLAGS = "--all-targets --all-features"
 
 [tasks.copy-apidocs]
+# do not need api docs into git repo
 disabled = true
 
 [tasks.docs]
+# add --all-features
 args = ["doc", "--no-deps", "--all-features"]
 
 [tasks.opendocs]
