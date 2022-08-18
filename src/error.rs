@@ -14,10 +14,10 @@ pub trait LocatedError {
 /// So usually you don't need check variants.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Error<'a, GE> {
-    /// Parsing step failed, usually means there is invalid syntax in source string
+    /// Parsing stage failed, usually means there is invalid syntax in source string
     Parse(ParseError<'a>),
 
-    /// Generating step failed, see document of generator type for detail.
+    /// Generating stage failed, see document of generator type for detail.
     Gen(GE),
 }
 

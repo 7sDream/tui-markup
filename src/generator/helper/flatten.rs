@@ -68,7 +68,7 @@ where
 ///
 /// ## Why need this
 ///
-/// Each line of markup source will be convert into a `Vec<Item>` after parse and tag convert step.
+/// Each line of markup source will be convert into a `Vec<Item>` after parsing and tag conversion stage.
 ///
 /// But [Item] itself is a tree, so there are many tree to process.
 ///
@@ -80,9 +80,9 @@ where
 ///
 /// - [Tag] of a convertor `C` can be converted into a uniform `Style` struct, by impl the `From<Tag<C>>` trait.
 /// - the `Style` type can impl [`FlattenableStyle`] trait.
-/// - You have a struct `Span` can impl [`FlattenableSpan`] trait.
+/// - You have a struct `Span` can impl [`FlattenableSpan`] trait to store styled text span.
 ///
-/// Then this function can be used to convert `Vec<Item>` into `Vec<Span>`.
+/// Then this function can be used to convert `Vec<ItemC<C>>` into `Vec<Span>`.
 pub fn flatten<'a, C, R, S>(line: Vec<ItemC<'a, C>>) -> Vec<R>
 where
     C: TagConvertor<'a>,

@@ -18,11 +18,11 @@
 //! ## How to use
 //!
 //! ```ignore
-//! let output = tui_markup::compile::<GeneratorType>("<bg:blue,green,b hello>").unwrap();
+//! let output = tui_markup::compile::<Generator>("<bg:blue,green,b hello>").unwrap();
 //! ```
 //!
-//! The string wrapped in `<>` is called a element, start with a tag list(comma separated),
-//! like the `bg:blue,green,b` in above example, those tags add styles to inner items.
+//! The string wrapped in `<>`(like the `bg:blue,green,b` in above example) is called a element,
+//! start with a tag list(comma separated), those tags add styles to inner items.
 //!
 //! Usable tags are vary depending on the the [Generator] you use,
 //! and generator will ignore all tags it does not understand.
@@ -31,7 +31,7 @@
 //!
 //! ### Builtin generators
 //!
-//! The builtin generators are under feature gates, there is the list:
+//! The builtin generators are under feature gates:
 //!
 //! feature     | Target                                                              | generator type
 //! :---------- | :------------------------------------------------------------------ | :-------------

@@ -6,7 +6,7 @@ use crate::{
     parser::hex_rgb,
 };
 
-/// Tag convertor for tui crate.
+/// Tag convertor for [TuiTextGenerator](super::TuiTextGenerator).
 #[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
 #[derive(Debug)]
 pub struct TuiTagConvertor<P = NoopCustomTagParser<Style>> {

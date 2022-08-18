@@ -8,7 +8,7 @@ use crate::{
     parser::hex_rgb,
 };
 
-/// Tag convertor for ansi term.
+/// Tag convertor for [`ANSIStringsGenerator`][super::ANSIStringsGenerator].
 #[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
 pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {

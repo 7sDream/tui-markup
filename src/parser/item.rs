@@ -4,12 +4,12 @@ use crate::generator::{Tag, TagG};
 
 /// AST item.
 ///
-/// In parsing step, each line of source code will be parsed to `Vec<Item>`, so the final result is `Vec<Vec<Item>>`.
+/// In parsing stage, each line of source code will be parsed as a `Vec<Item>`, so the final result is `Vec<Vec<Item>>`.
 ///
-/// In convert step, Each tag will be convert from [`LSpan`] into [Tag] type the generator needed,
-/// by using [TagConvertor][crate::generator::TagConvertor] of that generator.
+/// Tag conversion stage, Each tag will be converted from [`LSpan`] into [Tag] type the generator needed,
+/// by using [TagConvertor][crate::generator::TagConvertor] of the generator.
 ///
-/// In generating step, generator will convert `Vec<Vec<Item<'_, Tag>>>>` to final output.
+/// In generating stage, generator will convert `Vec<Vec<Item<'_, Tag>>>>` to final output.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Item<'a, Tag = LSpan<'a>> {
     /// Plain text(escaped) without any style.

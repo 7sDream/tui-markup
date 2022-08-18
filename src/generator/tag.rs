@@ -3,7 +3,7 @@ use crate::{
     parser::{Item, ItemC},
 };
 
-/// Tag of a [Element][crate::parser::Item::Element] after tag conversion step.
+/// Tag of a [Element][crate::parser::Item::Element] after tag conversion stage.
 ///
 /// Fg/Bg/Modifier variant is so-called builtin tag, Custom variant contains custom tag type.
 #[derive(Debug, Clone)]
@@ -21,7 +21,7 @@ pub enum Tag<'a, C: TagConvertor<'a> + ?Sized> {
 /// Tag type for a generator G.
 pub type TagG<'a, G> = Tag<'a, <G as Generator<'a>>::Convertor>;
 
-/// Trait for convert a raw tag string to tag type.
+/// Trait for convert a raw tag string to [`Tag`] type.
 ///
 /// Each generator has it own tag convertor, because different backend(show the final output)
 /// supports different kind of tags.
@@ -32,7 +32,7 @@ pub type TagG<'a, G> = Tag<'a, <G as Generator<'a>>::Convertor>;
 /// - Modifier: for style modifier(like bold, italic, etc.)
 /// - Custom: for custom tag
 ///
-/// The Generator with this convertor `C` will received a series of Item<Tag<C>>, and convert it into final output.
+/// The Generator with this convertor `C` will received a series of Item<[Tag<C>][Tag]>, and convert it into final output.
 pub trait TagConvertor<'a> {
     /// Color type for foreground and background typed tag.
     type Color;
@@ -47,8 +47,10 @@ pub trait TagConvertor<'a> {
     /// Parse string to modifier type.
     fn parse_modifier(&mut self, s: &str) -> Option<Self::Modifier>;
 
-    /// Parse string to custom type,
-    /// will be only called when a tag string isn't a valid builtin tag.
+    /// Parse string to custom type.
+    ///
+    /// Only if this call fails, a convertor try to parse the raw tag string to a built-in tag.
+    /// So the custom tag always have higher priority.
     fn parse_custom_tag(&mut self, s: &str) -> Option<Self::Custom>;
 
     /// Parse string to a builtin tag type.

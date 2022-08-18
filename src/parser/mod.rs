@@ -1,4 +1,4 @@
-//! Parsing step of compile.
+//! Parsing stage of the compilation process.
 
 mod error;
 mod item;
@@ -20,7 +20,7 @@ use nom_locate::LocatedSpan;
 pub use error::{Error, ErrorKind};
 pub use item::{Item, ItemC, ItemG};
 
-/// String with location info.
+/// Span with location info.
 pub type LSpan<'a> = LocatedSpan<&'a str, usize>;
 
 type ParseResult<'a, O = LSpan<'a>> = IResult<LSpan<'a>, O, Error<'a>>;
