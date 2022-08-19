@@ -124,7 +124,7 @@ pub struct TuiTextGenerator<P = NoopCustomTagParser<Style>> {
 impl<P> Default for TuiTextGenerator<P> {
     fn default() -> Self {
         Self {
-            convertor: Default::default(),
+            convertor: TuiTagConvertor::<P>::default(),
         }
     }
 }

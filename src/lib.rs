@@ -1,6 +1,7 @@
-#![warn(clippy::all)]
+#![warn(clippy::all, clippy::pedantic)]
 #![warn(missing_docs, missing_debug_implementations)]
 #![deny(warnings)]
+#![allow(clippy::module_name_repetitions)]
 #![cfg_attr(not(test), forbid(unsafe_code))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -35,8 +36,8 @@
 //!
 //! feature     | Target                                                              | generator type
 //! :---------- | :------------------------------------------------------------------ | :-------------
-//! `ansi`      | Direct print into stdout when using an asni compatible terminal     | [ANSIStringsGenerator][generator::ANSIStringsGenerator]
-//! `tui`       | Integrated with the popular [tui] crate                             | [TuiTextGenerator][generator::TuiTextGenerator]
+//! `ansi`      | Direct print into stdout when using an asni compatible terminal     | [`ANSIStringsGenerator`][generator::ANSIStringsGenerator]
+//! `tui`       | Integrated with the popular [tui] crate                             | [`TuiTextGenerator`][generator::TuiTextGenerator]
 //!
 //! The example screenshot above is using the `tui` generator, print in Windows Terminal.
 //!
@@ -57,10 +58,13 @@ use generator::{Generator, TagConvertor};
 /// Parse markup language source, then generate final output using the default configure of a generator type.
 ///
 /// See document of generator type for examples.
+///
+/// ## Errors
+///
+/// If input source contains invalid syntax or generator failed.
 pub fn compile<'a, G>(s: &'a str) -> Result<G::Output, Error<'a, G::Err>>
 where
-    G: Default,
-    G: Generator<'a>,
+    G: Generator<'a> + Default,
 {
     compile_with(s, G::default())
 }
@@ -68,6 +72,10 @@ where
 /// Parse markup language source, then generate final output using the provided generator.
 ///
 /// See document of generator type for examples.
+///
+/// ## Errors
+///
+/// If input source contains invalid syntax or generator failed.
 pub fn compile_with<'a, G>(s: &'a str, mut gen: G) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Generator<'a>,

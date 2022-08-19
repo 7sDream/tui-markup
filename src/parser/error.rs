@@ -56,6 +56,7 @@ impl<'a> Error<'a> {
     }
 
     /// Get error kind.
+    #[must_use]
     pub fn kind(&self) -> Option<ErrorKind> {
         self.kind
     }

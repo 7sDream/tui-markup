@@ -7,7 +7,7 @@ use crate::generator::{Tag, TagG};
 /// In parsing stage, each line of source code will be parsed as a `Vec<Item>`, so the final result is `Vec<Vec<Item>>`.
 ///
 /// Tag conversion stage, Each tag will be converted from [`LSpan`] into [Tag] type the generator needed,
-/// by using [TagConvertor][crate::generator::TagConvertor] of the generator.
+/// by using [`TagConvertor`][crate::generator::TagConvertor] of the generator.
 ///
 /// In generating stage, generator will convert `Vec<Vec<Item<'_, Tag>>>>` to final output.
 #[derive(Debug, Clone, PartialEq)]

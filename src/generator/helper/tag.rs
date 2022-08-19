@@ -38,7 +38,7 @@ pub struct NoopCustomTagParser<S>(PhantomData<fn() -> S>);
 
 impl<S> Default for NoopCustomTagParser<S> {
     fn default() -> Self {
-        Self(Default::default())
+        Self(PhantomData)
     }
 }
 

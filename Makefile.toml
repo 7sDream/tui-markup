@@ -1,5 +1,6 @@
 [env]
 # add --all-targets for run test in examples
+CARGO_MAKE_RUN_DEPRECATED_MIGRATION = false
 CARGO_MAKE_CARGO_BUILD_TEST_FLAGS = "--all-targets --all-features"
 
 # ===== default flow tasks override =====
@@ -8,11 +9,21 @@ CARGO_MAKE_CARGO_BUILD_TEST_FLAGS = "--all-targets --all-features"
 # do not need api docs into git repo
 disabled = true
 
+[tasks.post-test]
+run_task = { name = ["doc-test"] }
+
 [tasks.docs]
 # add --all-features
 args = ["doc", "--no-deps", "--all-features"]
 
 # ==== custom tasks =====
+
+[tasks.doc-test]
+description = "Test example codes in document"
+category = "Test"
+install_crate = false
+command = "cargo"
+args = ["test", "--doc", "--all-features"]
 
 [tasks.opendocs]
 description = "Generate rust documentation and open it."

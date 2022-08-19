@@ -15,8 +15,8 @@ pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
 
-// TODO: Crossterm generator
-// TODO: Termion generator
+// TODO: crossterm generator
+// TODO: termion generator
 
 use std::fmt::{Debug, Display};
 
@@ -71,8 +71,12 @@ pub trait Generator<'a> {
     /// Get the tag convertor.
     fn convertor(&mut self) -> &mut Self::Convertor;
 
-    /// Generates final output from ast, which is output result of the Convertor.
-    fn generate(&mut self, markup: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err>;
+    /// Generates final output from IR, which is output result of the Convertor.
+    ///
+    /// ## Errors
+    ///
+    /// When the generator can't process the IR. This should be documented details.
+    fn generate(&mut self, ir: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err>;
 }
 
 impl<'a, G: Generator<'a>> Generator<'a> for &mut G {

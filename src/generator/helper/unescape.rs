@@ -13,6 +13,7 @@
 /// // notice the final `\` is not returned
 /// assert_eq!(unescape("A\\\\B\\").collect::<Vec<_>>(), vec!["A", "\\B"]);
 /// ```
+#[must_use]
 pub fn unescape(escaped: &str) -> Unescape {
     let cursor = if escaped.starts_with('\\') { 1 } else { 0 };
     Unescape { escaped, cursor }
@@ -39,8 +40,7 @@ impl<'a> Iterator for Unescape<'a> {
         } else {
             self.escaped[start..]
                 .find('\\')
-                .map(|i| start + i)
-                .unwrap_or(self.escaped.len())
+                .map_or(self.escaped.len(), |i| start + i)
         };
 
         let result = Some(&self.escaped[self.cursor..end]);

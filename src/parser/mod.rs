@@ -27,7 +27,7 @@ type ParseResult<'a, O = LSpan<'a>> = IResult<LSpan<'a>, O, Error<'a>>;
 
 fn force_failure<E>(err: NomErr<E>) -> NomErr<E> {
     match err {
-        e @ NomErr::Incomplete(_) | e @ NomErr::Failure(_) => e,
+        e @ (NomErr::Incomplete(_) | NomErr::Failure(_)) => e,
         NomErr::Error(e) => NomErr::Failure(e),
     }
 }
@@ -80,7 +80,7 @@ fn plain_text(s: LSpan) -> ParseResult {
             use nom::Slice;
 
             if !s.is_empty()
-                && e.kind().map(|x| x == ErrorKind::UnescapedChar).unwrap_or(true)
+                && e.kind().map_or(true, |x| x == ErrorKind::UnescapedChar)
                 && !s.starts_with(['\\', '<', '>'])
             {
                 e.span = e.span.slice(e.span.len() - 1..);
@@ -115,6 +115,10 @@ fn parse_line((line, s): (usize, &str)) -> Result<Vec<Item>, Error> {
 }
 
 /// Parse tui markup source into ast.
+///
+/// ## Errors
+///
+/// If input source has invalid syntax.
 pub fn parse(s: &str) -> Result<Vec<Vec<Item>>, Error> {
     s.lines()
         .enumerate()
@@ -129,6 +133,7 @@ fn hex_color_part(s: &str) -> IResult<&str, u8> {
 }
 
 /// Parse string of 6 hex digit into r, g, b value.
+#[must_use]
 pub fn hex_rgb(s: &str) -> Option<(u8, u8, u8)> {
     let (s, (r, g, b)) = tuple((hex_color_part, hex_color_part, hex_color_part))(s).ok()?;
 

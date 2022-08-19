@@ -8,6 +8,7 @@ use super::unescape;
 /// Requirements trait for style to used in [`flatten`] function.
 pub trait FlattenableStyle: Default + Clone {
     /// Patch self with other style, so multi style can be flatten into one.
+    #[must_use]
     fn patch(self, other: Self) -> Self;
 }
 
@@ -19,6 +20,7 @@ pub trait FlattenableSpan<'a, S: FlattenableStyle> {
     fn with_style(s: &'a str, style: Option<S>) -> Self;
 }
 
+#[allow(clippy::needless_pass_by_value)] // Style usually is a small type
 fn plain_text<'a, R, S>(escaped: &'a str, style: Option<S>) -> Vec<R>
 where
     R: FlattenableSpan<'a, S>,
@@ -31,8 +33,7 @@ fn element<'a, C, R, S>(tags: Vec<Tag<'a, C>>, children: Vec<ItemC<'a, C>>, styl
 where
     C: TagConvertor<'a>,
     R: FlattenableSpan<'a, S>,
-    S: FlattenableStyle,
-    S: From<Tag<'a, C>>,
+    S: FlattenableStyle + From<Tag<'a, C>>,
 {
     let style = tags.into_iter().map(S::from).fold(style.unwrap_or_default(), S::patch);
     items(children, Some(style))
@@ -42,8 +43,7 @@ fn item<'a, C, R, S>(item: ItemC<'a, C>, style: Option<S>) -> Vec<R>
 where
     C: TagConvertor<'a>,
     R: FlattenableSpan<'a, S>,
-    S: FlattenableStyle,
-    S: From<Tag<'a, C>>,
+    S: FlattenableStyle + From<Tag<'a, C>>,
 {
     match item {
         Item::PlainText(t) => plain_text(t.fragment(), style),
@@ -51,12 +51,12 @@ where
     }
 }
 
+#[allow(clippy::needless_pass_by_value)] // Style usually is a small type
 fn items<'a, C, R, S>(items: Vec<ItemC<'a, C>>, style: Option<S>) -> Vec<R>
 where
     C: TagConvertor<'a>,
     R: FlattenableSpan<'a, S>,
-    S: FlattenableStyle,
-    S: From<Tag<'a, C>>,
+    S: FlattenableStyle + From<Tag<'a, C>>,
 {
     items
         .into_iter()
@@ -87,8 +87,7 @@ pub fn flatten<'a, C, R, S>(line: Vec<ItemC<'a, C>>) -> Vec<R>
 where
     C: TagConvertor<'a>,
     R: FlattenableSpan<'a, S>,
-    S: FlattenableStyle,
-    S: From<Tag<'a, C>>,
+    S: FlattenableStyle + From<Tag<'a, C>>,
 {
     items(line, None)
 }

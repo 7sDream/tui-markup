@@ -17,9 +17,7 @@ pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {
 
 impl<P> Default for ANSITermTagConvertor<P> {
     fn default() -> Self {
-        Self {
-            custom_parser: Default::default(),
-        }
+        Self { custom_parser: None }
     }
 }
 

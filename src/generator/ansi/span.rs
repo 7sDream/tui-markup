@@ -13,8 +13,7 @@ where
         match t {
             Tag::Fg(c) => Style::default().fg(c),
             Tag::Bg(c) => Style::default().on(c),
-            Tag::Modifier(style) => style,
-            Tag::Custom(style) => style,
+            Tag::Modifier(style) | Tag::Custom(style) => style,
         }
     }
 }
