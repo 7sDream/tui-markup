@@ -36,6 +36,8 @@ Notice the result type and how to show it is vary depends on what `Generator` yo
 The `ANSIStringsGenerator` is one of the [built-in generators][doc-builtin-gens] implementation, for directly print result
 in any ASNI compliant terminal.
 
+There is also a macro([`tui-markup-ansi-macro`] crate) to compile markup source into ANSI sequence at compile time, check it if you need.
+
 You can add this markup support for other terminal/library/application easily by create you own generator.
 
 ## Examples
@@ -103,6 +105,9 @@ BSD-3-Clause-Clear, See [LICENSE].
 [crate]: https://crates.io/crates/tui-markup
 [doc]: https://docs.rs/tui-markup/latest
 [changelog]: https://github.com/7sDream/tui-markup/blob/master/CHANGELOG.md
+
+[`tui-markup-ansi-macro`]: https://github.com/7sDream/tui-markup-ansi-macro
+
 [usage-screenshot]: https://rikka.7sdre.am/files/79f88353-e689-49f6-a0fc-e8f9e373445f.png
 [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 [indexed-screenshot]: https://rikka.7sdre.am/files/788ef47c-2a8a-4667-b9b7-8f2b1b78e083.png
