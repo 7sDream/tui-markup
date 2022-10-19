@@ -37,7 +37,7 @@ Current available [built-in generators][doc-builtin-gens]:
 
 - `ansi`: `ANSIStringsGenerator` for directly print result in any ASNI compliant terminal.
 - `tui`: `TuiTextGenerator` for create `Text` struct of `tui` crate to show the result.
-- `crossterm`: `CrosstermCommandsGenerator` for create a series Command of `crossterm` create to print the result.
+- `crossterm`: `CrosstermCommandsGenerator` for create a series of Command of `crossterm` crate to print the result.
 
 There is also a macro([`tui-markup-ansi-macro`] crate) to compile markup source into ANSI sequence at compile time, check it if you need.
 
@@ -89,10 +89,6 @@ Color and modifier supports vary by generator you want to use, see their documen
 
 ## TODO
 
-- [x] Generator for `tui` crate
-- [x] `Generator` trait
-- [x] Generator for ansi compliant terminal
-- [x] Generator for `corssterm`
 - [ ] Generator for `termion`
 - [ ] Generator for `ncurses`
 
