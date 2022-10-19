@@ -33,8 +33,11 @@ Result:
 
 Notice the result type and how to show it is vary depends on what `Generator` you use.
 
-The `ANSIStringsGenerator` is one of the [built-in generators][doc-builtin-gens] implementation, for directly print result
-in any ASNI compliant terminal.
+Current available [built-in generators][doc-builtin-gens]:
+
+- `ansi`: `ANSIStringsGenerator` for directly print result in any ASNI compliant terminal.
+- `tui`: `TuiTextGenerator` for create `Text` struct of `tui` crate to show the result.
+- `crossterm`: `CrosstermCommandsGenerator` for create a series Command of `crossterm` create to print the result.
 
 There is also a macro([`tui-markup-ansi-macro`] crate) to compile markup source into ANSI sequence at compile time, check it if you need.
 
