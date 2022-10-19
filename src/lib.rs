@@ -38,6 +38,7 @@
 //! :---------- | :------------------------------------------------------------------ | :-------------
 //! `ansi`      | Direct print into stdout when using an asni compatible terminal     | [`ANSIStringsGenerator`][generator::ANSIStringsGenerator]
 //! `tui`       | Integrated with the popular [tui] crate                             | [`TuiTextGenerator`][generator::TuiTextGenerator]
+//! `crossterm` | Integrated with [crossterm] crate                                   | [`CrosstermCommandsGenerator`][generator::CrosstermCommandsGenerator]
 //!
 //! The example screenshot above is using the `tui` generator, print in Windows Terminal.
 //!

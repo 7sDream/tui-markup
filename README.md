@@ -89,7 +89,7 @@ Color and modifier supports vary by generator you want to use, see their documen
 - [x] Generator for `tui` crate
 - [x] `Generator` trait
 - [x] Generator for ansi compliant terminal
-- [ ] Generator for `corssterm`
+- [x] Generator for `corssterm`
 - [ ] Generator for `termion`
 - [ ] Generator for `ncurses`
 

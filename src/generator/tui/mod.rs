@@ -11,11 +11,13 @@ use tui::{
     text::{Spans, Text},
 };
 
-use super::{
-    helper::{flatten, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
-    Generator,
+use crate::{
+    generator::{
+        helper::{flatten, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
+        Generator,
+    },
+    parser::ItemG,
 };
-use crate::{generator::TagG, parser::Item};
 
 pub use tag::TuiTagConvertor;
 
@@ -152,7 +154,7 @@ where
         &mut self.convertor
     }
 
-    fn generate(&mut self, items: Vec<Vec<Item<'a, TagG<'a, Self>>>>) -> Result<Self::Output, Self::Err> {
+    fn generate(&mut self, items: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
         Ok(Text::from(
             items
                 .into_iter()

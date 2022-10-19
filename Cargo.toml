@@ -1,6 +1,6 @@
 [package]
 name = "tui-markup"
-version = "0.2.1"
+version = "0.2.2-alpha1"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
 description = "markup langauge for terminal styled text"
@@ -25,6 +25,7 @@ nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
 # generator implementations
 ansi_term = { version = "0.12", optional = true }
 tui = { version = "0.19", optional = true, default-features = false }
+crossterm = { version = "0.25", optional = true, default-features = false }
 
 [dev-dependencies]
 tui = "0.19"
@@ -38,6 +39,10 @@ required-features = ["tui"]
 [[example]]
 name = "ansi"
 required-features = ["ansi"]
+
+[[example]]
+name = "crossterm"
+required-features = ["crossterm"]
 
 [[example]]
 name = "readme"

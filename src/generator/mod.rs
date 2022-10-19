@@ -15,6 +15,12 @@ pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
 
+#[cfg(feature = "crossterm")]
+#[cfg_attr(docsrs, doc(cfg(feature = "crossterm")))]
+pub mod crossterm;
+#[cfg(feature = "crossterm")]
+pub use self::crossterm::CrosstermCommandsGenerator;
+
 // TODO: crossterm generator
 // TODO: termion generator
 
