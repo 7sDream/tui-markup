@@ -1,0 +1,51 @@
+color
+= "black"
+| "white"
+| light variant colors, [ '-' ]
+| dark variant colors, [ '+' ]
+| index color
+| rgb color
+;
+
+light variant colors
+= "red"
+| "green"
+| "yellow"
+| "blue"
+| "magenta" | "purple"
+| "cyan"
+;
+
+dark variant colors = "gray";
+
+(* xterm-256 color chart index *)
+index color = ? number 0 to 255 ?;
+
+rgb color = 6 * hex digit; (* in normal r g b order *)
+
+hex digit
+= (? '0' to '9' ?)
+| (? 'a' to 'z' ?)
+| (? 'A' to 'Z' ?)
+;
+
+(* bold *)
+(* dim *)
+(* italic *)
+(* underline *)
+(* reversed *)
+(* slow blink *)
+(* rapid blink *)
+(* hide *)
+(* strikethrough *)
+modifier
+= 'b' 
+| 'd' 
+| 'i' 
+| 'u' 
+| 'r' 
+| 'sb' 
+| 'rb' 
+| 'h' 
+| 's'
+;

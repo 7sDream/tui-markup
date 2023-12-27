@@ -37,6 +37,7 @@ Current available [built-in generators][doc-builtin-gens]:
 
 - `ansi`: `ANSIStringsGenerator` for directly print result in any ASNI compliant terminal.
 - `tui`: `TuiTextGenerator` for create `Text` struct of `tui` crate to show the result.
+- `ratatui`: `RatatuiTextGenerator` for create `Text` struct of `ratatui` crate to show the result.
 - `crossterm`: `CrosstermCommandsGenerator` for create a series of Command of `crossterm` crate to print the result.
 
 There is also a macro([`tui-markup-ansi-macro`] crate) to compile markup source into ANSI sequence at compile time, check it if you need.

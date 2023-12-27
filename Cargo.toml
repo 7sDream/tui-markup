@@ -25,16 +25,22 @@ nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
 # generator implementations
 ansi_term = { version = "0.12", optional = true }
 tui = { version = "0.19", optional = true, default-features = false }
-crossterm = { version = "0.25", optional = true, default-features = false }
+ratatui = { version = "0.25", optional = true, default-features = false }
+crossterm = { version = "0.27", optional = true, default-features = false }
 
 [dev-dependencies]
 tui = "0.19"
-crossterm = "0.25"
+ratatui = "0.25"
+crossterm = "0.27.0"
 ansi_term = "0.12"
 
 [[example]]
 name = "tui"
 required-features = ["tui"]
+
+[[example]]
+name = "ratatui"
+required-features = ["ratatui", "crossterm"]
 
 [[example]]
 name = "ansi"

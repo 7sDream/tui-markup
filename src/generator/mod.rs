@@ -9,6 +9,12 @@ pub mod tui;
 #[cfg(feature = "tui")]
 pub use self::tui::TuiTextGenerator;
 
+#[cfg(feature = "ratatui")]
+#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
+pub mod ratatui;
+#[cfg(feature = "ratatui")]
+pub use self::ratatui::RatatuiTextGenerator;
+
 #[cfg(feature = "ansi")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 pub mod ansi;
