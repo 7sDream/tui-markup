@@ -33,23 +33,23 @@ pub use tag::RatatuiTagConvertor;
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I have a <green green text>"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I have a "),
 ///         Span::styled("green text", Style::default().fg(Color::Green)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can set <bg:blue background>"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can set "),
 ///         Span::styled("background", Style::default().bg(Color::Blue)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can add <b bold>, <d dim>, <i italic> modifiers"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can add "),
 ///         Span::styled("bold", Style::default().add_modifier(Modifier::BOLD)),
 ///         Span::raw(", "),
@@ -57,37 +57,37 @@ pub use tag::RatatuiTagConvertor;
 ///         Span::raw(", "),
 ///         Span::styled("italic", Style::default().add_modifier(Modifier::ITALIC)),
 ///         Span::raw(" modifiers"),
-///     ])] }),
+///     ])])),
 /// );
 ///
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can <bg:blue combine <green them <b <i all>>>>"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can "),
 ///         Span::styled("combine ", Style::default().bg(Color::Blue)),
 ///         Span::styled("them ", Style::default().bg(Color::Blue).fg(Color::Green)),
 ///         Span::styled("all", Style::default()
 ///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can use <bg:66ccff custom color>"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can use "),
 ///         Span::styled("custom color", Style::default().bg(Color::Rgb(0x66, 0xcc, 0xff))),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can set <bg:blue,green,b,i many style> in one tag"),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can set "),
 ///         Span::styled("many style", Style::default()
 ///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
 ///         Span::raw(" in one tag"),
-///     ])] }),
+///     ])])),
 /// );
 /// ```
 ///
@@ -104,11 +104,11 @@ pub use tag::RatatuiTagConvertor;
 ///
 /// assert_eq!(
 ///     compile_with("Press <keyboard W> to move up", gen),
-///     Ok(Text { lines: vec![Line::from(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("Press "),
 ///         Span::styled("W", Style::default().bg(Color::White).fg(Color::Green).add_modifier(Modifier::BOLD)),
 ///         Span::raw(" to move up"),
-///     ])] }),
+///     ])])),
 /// );
 /// ```
 ///

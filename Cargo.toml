@@ -10,7 +10,11 @@ homepage = "https://github.com/7sDream/tui-markup"
 repository = "https://github.com/7sDream/tui-markup"
 license = "BSD-3-Clause-Clear"
 keywords = ["terminal", "tui", "markup", "text", "parser"]
-categories = ["command-line-interface", "parser-implementations", "text-processing"]
+categories = [
+    "command-line-interface",
+    "parser-implementations",
+    "text-processing",
+]
 exclude = ["examples/*.png", "examples/*.py", "docs"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -24,19 +28,13 @@ nom = "7"
 nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
 # generator implementations
 ansi_term = { version = "0.12", optional = true }
-tui = { version = "0.19", optional = true, default-features = false }
-ratatui = { version = "0.25", optional = true, default-features = false }
+ratatui = { version = "0.26.1", optional = true, default-features = false }
 crossterm = { version = "0.27", optional = true, default-features = false }
 
 [dev-dependencies]
-tui = "0.19"
-ratatui = "0.25"
+ratatui = "0.26.1"
 crossterm = "0.27.0"
 ansi_term = "0.12"
-
-[[example]]
-name = "tui"
-required-features = ["tui"]
 
 [[example]]
 name = "ratatui"

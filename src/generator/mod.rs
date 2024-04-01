@@ -3,12 +3,6 @@
 pub mod helper;
 mod tag;
 
-#[cfg(feature = "tui")]
-#[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
-pub mod tui;
-#[cfg(feature = "tui")]
-pub use self::tui::TuiTextGenerator;
-
 #[cfg(feature = "ratatui")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 pub mod ratatui;
