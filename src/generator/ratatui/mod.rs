@@ -1,4 +1,4 @@
-//! Generator implementations for tui crate.
+//! Generator implementations for ratatui crate.
 
 mod span;
 mod tag;
