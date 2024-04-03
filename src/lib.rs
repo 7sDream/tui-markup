@@ -37,11 +37,10 @@
 //! feature     | Target                                                              | generator type
 //! :---------- | :------------------------------------------------------------------ | :-------------
 //! `ansi`      | Direct print into stdout when using an asni compatible terminal     | [`ANSIStringsGenerator`][generator::ANSIStringsGenerator]
-//! `tui`       | Integrated with the popular [tui] crate                             | [`TuiTextGenerator`][generator::TuiTextGenerator]
-//! `ratatui`   | Integrated with the popular [ratatui] crate                         | [`RatatuiTextGenerator`][generator::RatatuiTextGenerator]
+//! `ratatui`   | Integrated with the [ratatui] crate                                 | [`RatatuiTextGenerator`][generator::RatatuiTextGenerator]
 //! `crossterm` | Integrated with [crossterm] crate                                   | [`CrosstermCommandsGenerator`][generator::CrosstermCommandsGenerator]
 //!
-//! The example screenshot above is using the `tui` generator, print in Windows Terminal.
+//! The example screenshot above is using the `ratatui` generator, print in Windows Terminal.
 //!
 //! If you want write your own generator, please checkout documents of [Generator] trait.
 //!
