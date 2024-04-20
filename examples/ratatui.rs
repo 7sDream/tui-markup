@@ -5,9 +5,9 @@ use crossterm::{
     terminal::{EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
-use tui::{backend::CrosstermBackend, widgets::Paragraph, Terminal};
+use ratatui::{prelude::*, widgets::Paragraph};
 
-use tui_markup::generator::TuiTextGenerator;
+use tui_markup::generator::RatatuiTextGenerator;
 
 mod common;
 
@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
     terminal.hide_cursor()?;
 
-    let text = common::compile_file::<TuiTextGenerator, _>(args().nth(1).unwrap());
+    let text = common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).unwrap());
 
     loop {
         terminal.draw(|frame| {

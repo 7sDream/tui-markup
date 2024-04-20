@@ -1,4 +1,4 @@
-use tui::style::{Color, Modifier, Style};
+use ratatui::style::{Color, Modifier, Style};
 
 use crate::{
     generator::helper::{CustomTagParser, NoopCustomTagParser},
@@ -6,14 +6,14 @@ use crate::{
     parser::hex_rgb,
 };
 
-/// Tag convertor for [`TuiTextGenerator`](super::TuiTextGenerator).
-#[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
+/// Tag convertor for [`RatatuiTextGenerator`](super::RatatuiTextGenerator).
+#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 #[derive(Debug)]
-pub struct TuiTagConvertor<P = NoopCustomTagParser<Style>> {
+pub struct RatatuiTagConvertor<P = NoopCustomTagParser<Style>> {
     custom_tag_parser: Option<P>,
 }
 
-impl<P> Default for TuiTagConvertor<P> {
+impl<P> Default for RatatuiTagConvertor<P> {
     fn default() -> Self {
         Self {
             custom_tag_parser: None,
@@ -21,7 +21,7 @@ impl<P> Default for TuiTagConvertor<P> {
     }
 }
 
-impl<P> TuiTagConvertor<P> {
+impl<P> RatatuiTagConvertor<P> {
     /// Create a new tag convertor with custom tag parser.
     pub fn new(p: P) -> Self {
         Self {
@@ -30,7 +30,7 @@ impl<P> TuiTagConvertor<P> {
     }
 }
 
-impl<'a, P> TagConvertor<'a> for TuiTagConvertor<P>
+impl<'a, P> TagConvertor<'a> for RatatuiTagConvertor<P>
 where
     P: CustomTagParser<Output = Style>,
 {

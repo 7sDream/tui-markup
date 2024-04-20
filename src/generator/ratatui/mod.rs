@@ -1,4 +1,4 @@
-//! Generator implementations for tui crate.
+//! Generator implementations for ratatui crate.
 
 mod span;
 mod tag;
@@ -6,9 +6,9 @@ mod tag;
 #[cfg(test)]
 mod test;
 
-use tui::{
+use ratatui::{
     style::Style,
-    text::{Spans, Text},
+    text::{Line, Text},
 };
 
 use crate::{
@@ -19,37 +19,37 @@ use crate::{
     parser::ItemG,
 };
 
-pub use tag::TuiTagConvertor;
+pub use tag::RatatuiTagConvertor;
 
-/// Generator for [tui crate][tui]'s [Text] type.
+/// Generator for [ratatui crate][ratatui]'s [Text] type.
 ///
-/// See [docs/tui-tags.ebnf] for supported tags.
+/// See [docs/ratatui-tags.ebnf] for supported tags.
 ///
 /// ## Example
 ///
 /// ```
-/// # use tui::{style::{Style, Color, Modifier}, text::{Text, Spans, Span}};
-/// use tui_markup::{compile, generator::TuiTextGenerator};
+/// # use ratatui::prelude::*;
+/// use tui_markup::{compile, generator::RatatuiTextGenerator};
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I have a <green green text>"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I have a <green green text>"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I have a "),
 ///         Span::styled("green text", Style::default().fg(Color::Green)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I can set <bg:blue background>"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I can set <bg:blue background>"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can set "),
 ///         Span::styled("background", Style::default().bg(Color::Blue)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I can add <b bold>, <d dim>, <i italic> modifiers"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I can add <b bold>, <d dim>, <i italic> modifiers"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can add "),
 ///         Span::styled("bold", Style::default().add_modifier(Modifier::BOLD)),
 ///         Span::raw(", "),
@@ -57,94 +57,94 @@ pub use tag::TuiTagConvertor;
 ///         Span::raw(", "),
 ///         Span::styled("italic", Style::default().add_modifier(Modifier::ITALIC)),
 ///         Span::raw(" modifiers"),
-///     ])] }),
+///     ])])),
 /// );
 ///
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I can <bg:blue combine <green them <b <i all>>>>"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I can <bg:blue combine <green them <b <i all>>>>"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can "),
 ///         Span::styled("combine ", Style::default().bg(Color::Blue)),
 ///         Span::styled("them ", Style::default().bg(Color::Blue).fg(Color::Green)),
 ///         Span::styled("all", Style::default()
 ///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I can use <bg:66ccff custom color>"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I can use <bg:66ccff custom color>"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can use "),
 ///         Span::styled("custom color", Style::default().bg(Color::Rgb(0x66, 0xcc, 0xff))),
-///     ])] }),
+///     ])])),
 /// );
 ///
 /// assert_eq!(
-///     compile::<TuiTextGenerator>("I can set <bg:blue,green,b,i many style> in one tag"),
-///     Ok(Text { lines: vec![Spans(vec![
+///     compile::<RatatuiTextGenerator>("I can set <bg:blue,green,b,i many style> in one tag"),
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can set "),
 ///         Span::styled("many style", Style::default()
 ///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
 ///         Span::raw(" in one tag"),
-///     ])] }),
+///     ])])),
 /// );
 /// ```
 ///
 /// ### With custom tags
 ///
 /// ```
-/// # use tui::{style::{Style, Color, Modifier}, text::{Text, Spans, Span}};
-/// use tui_markup::{compile_with, generator::TuiTextGenerator};
+/// # use ratatui::prelude::*;
+/// use tui_markup::{compile_with, generator::RatatuiTextGenerator};
 ///
-/// let gen = TuiTextGenerator::new(|tag: &str| match tag {
+/// let gen =RatatuiTextGenerator::new(|tag: &str| match tag {
 ///     "keyboard" => Some(Style::default().bg(Color::White).fg(Color::Green).add_modifier(Modifier::BOLD)),
 ///     _ => None,
 /// });
 ///
 /// assert_eq!(
 ///     compile_with("Press <keyboard W> to move up", gen),
-///     Ok(Text { lines: vec![Spans(vec![
+///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("Press "),
 ///         Span::styled("W", Style::default().bg(Color::White).fg(Color::Green).add_modifier(Modifier::BOLD)),
 ///         Span::raw(" to move up"),
-///     ])] }),
+///     ])])),
 /// );
 /// ```
 ///
 /// ### Show output
 ///
-/// Use any widget of [tui] crate that supports it's [Text] type, for example: [`tui::widgets::Paragraph`].
+/// Use any widget of [ratatui] crate that supports it's [Text] type, for example: [`ratatui::widgets::Paragraph`].
 ///
-/// [docs/tui-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/tui-tags.ebnf
-#[cfg_attr(docsrs, doc(cfg(feature = "tui")))]
+/// [docs/ratatui-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/ratatui-tags.ebnf
+#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 #[derive(Debug)]
-pub struct TuiTextGenerator<P = NoopCustomTagParser<Style>> {
-    convertor: TuiTagConvertor<P>,
+pub struct RatatuiTextGenerator<P = NoopCustomTagParser<Style>> {
+    convertor: RatatuiTagConvertor<P>,
 }
 
-impl<P> Default for TuiTextGenerator<P> {
+impl<P> Default for RatatuiTextGenerator<P> {
     fn default() -> Self {
         Self {
-            convertor: TuiTagConvertor::<P>::default(),
+            convertor: RatatuiTagConvertor::<P>::default(),
         }
     }
 }
 
-impl<P> TuiTextGenerator<P> {
+impl<P> RatatuiTextGenerator<P> {
     /// Create a new generator, with a custom tag parser.
     pub fn new(p: P) -> Self {
-        TuiTextGenerator {
-            convertor: TuiTagConvertor::new(p),
+        RatatuiTextGenerator {
+            convertor: RatatuiTagConvertor::new(p),
         }
     }
 }
 
-impl<'a, P> Generator<'a> for TuiTextGenerator<P>
+impl<'a, P> Generator<'a> for RatatuiTextGenerator<P>
 where
     P: CustomTagParser<Output = Style>,
 {
-    type Convertor = TuiTagConvertor<P>;
+    type Convertor = RatatuiTagConvertor<P>;
 
     type Output = Text<'a>;
 
@@ -158,7 +158,7 @@ where
         Ok(Text::from(
             items
                 .into_iter()
-                .map(|line| Spans::from(flatten(line)))
+                .map(|line| Line::from(flatten(line)))
                 .collect::<Vec<_>>(),
         ))
     }

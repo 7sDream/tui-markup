@@ -1,4 +1,4 @@
-use tui::{
+use ratatui::{
     style::{Color, Modifier, Style},
     text::Span,
 };
@@ -20,20 +20,20 @@ macro_rules! elem {
 
 macro_rules! test_ok {
     ($item:expr => $($result:expr),* $(,)?) => {
-        let mut gen = crate::generator::TuiTextGenerator::default();
-        let convertor =  <crate::generator::TuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
-        let item = <<crate::generator::TuiTextGenerator as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
+        let mut gen = crate::generator::RatatuiTextGenerator::default();
+        let convertor =  <crate::generator::RatatuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
+        let item = <<crate::generator::RatatuiTextGenerator as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
-            crate::generator::helper::flatten::<_, ::tui::text::Span, _>(vec![item]),
+            crate::generator::helper::flatten::<_, ::ratatui::text::Span, _>(vec![item]),
             vec![$($result),*],
         )
     };
     ($custom:expr ; $item:expr => $($result:expr),* $(,)?) => {
-        let mut gen = crate::generator::TuiTextGenerator::new($custom);
-        let convertor =  <crate::generator::TuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut gen);
-        let item = <<crate::generator::TuiTextGenerator<_> as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
+        let mut gen = crate::generator::RatatuiTextGenerator::new($custom);
+        let convertor =  <crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut gen);
+        let item = <<crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
-            crate::generator::helper::flatten::<_, ::tui::text::Span, _>(vec![item]),
+            crate::generator::helper::flatten::<_, ::ratatui::text::Span, _>(vec![item]),
             vec![$($result),*],
         )
     };

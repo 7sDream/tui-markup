@@ -36,7 +36,7 @@ Notice the result type and how to show it is vary depends on what `Generator` yo
 Current available [built-in generators][doc-builtin-gens]:
 
 - `ansi`: `ANSIStringsGenerator` for directly print result in any ASNI compliant terminal.
-- `tui`: `TuiTextGenerator` for create `Text` struct of `tui` crate to show the result.
+- `ratatui`: `RatatuiTextGenerator` for create `Text` struct of `ratatui` crate to show the result.
 - `crossterm`: `CrosstermCommandsGenerator` for create a series of Command of `crossterm` crate to print the result.
 
 There is also a macro([`tui-markup-ansi-macro`] crate) to compile markup source into ANSI sequence at compile time, check it if you need.
@@ -49,7 +49,7 @@ You can add this markup support for other terminal/library/application easily by
 
 The example is shown in Windows Terminal, using the following command:
 
-`cargo run --example tui --features tui -- examples/help.txt`
+`cargo run --example ratatui --features ratatui,crossterm -- examples/help.txt`
 
 The source markup text of this article can be found in [examples/help.txt].
 
@@ -57,7 +57,7 @@ you can change the last argument to your file to render other article, for examp
 
 ![color chart][indexed-screenshot]
 
-Those two screenshot are using built-in `tui` generator.
+Those two screenshot are using built-in `ratatui` generator.
 
 ## Markup syntax
 
