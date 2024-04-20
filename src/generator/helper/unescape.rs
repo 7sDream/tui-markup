@@ -15,7 +15,7 @@
 /// ```
 #[must_use]
 pub fn unescape(escaped: &str) -> Unescape {
-    let cursor = if escaped.starts_with('\\') { 1 } else { 0 };
+    let cursor = escaped.starts_with('\\').into();
     Unescape { escaped, cursor }
 }
 

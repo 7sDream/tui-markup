@@ -41,13 +41,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 #[cfg(test)]
 mod test {
-    use tui_markup::generator::TuiTextGenerator;
+    use tui_markup::generator::RatatuiTextGenerator;
 
     use crate::common::compile_file;
 
     #[test]
     fn test_texts() {
-        compile_file::<TuiTextGenerator, _>("examples/help.txt");
-        compile_file::<TuiTextGenerator, _>("examples/indexed.txt");
+        compile_file::<RatatuiTextGenerator, _>("examples/help.txt");
+        compile_file::<RatatuiTextGenerator, _>("examples/indexed.txt");
     }
 }

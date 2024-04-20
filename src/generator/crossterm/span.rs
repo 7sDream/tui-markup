@@ -67,4 +67,20 @@ impl<'a> Command for Span<'a> {
             Self::Styled(p) => p.write_ansi(f),
         }
     }
+
+    #[cfg(windows)]
+    fn execute_winapi(&self) -> std::io::Result<()> {
+        match self {
+            Self::NoStyle(p) => p.execute_winapi(),
+            Self::Styled(p) => p.execute_winapi(),
+        }
+    }
+
+    #[cfg(windows)]
+    fn is_ansi_code_supported(&self) -> bool {
+        match self {
+            Self::NoStyle(p) => p.is_ansi_code_supported(),
+            Self::Styled(p) => p.is_ansi_code_supported(),
+        }
+    }
 }

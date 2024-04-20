@@ -1,6 +1,6 @@
 [package]
 name = "tui-markup"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["7sDream <i@7sdre.am>"]
 edition = "2021"
 description = "markup langauge for terminal styled text"
@@ -21,19 +21,26 @@ exclude = ["examples/*.png", "examples/*.py", "docs"]
 
 [features]
 default = []
-ansi = ["ansi_term"]
+ansi = ["dep:ansi_term"]
 
 [dependencies]
+# parser
 nom = "7"
 nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
-# generator implementations
+
+# generator
 ansi_term = { version = "0.12", optional = true }
-ratatui = { version = "0.26.1", optional = true, default-features = false }
-crossterm = { version = "0.27", optional = true, default-features = false }
+ratatui = { version = "0.26", optional = true, default-features = false }
+
+[dependencies.crossterm]
+version = "0.27"
+optional = true
+default-features = false
+features = ["windows"]
 
 [dev-dependencies]
-ratatui = "0.26.1"
-crossterm = "0.27.0"
+ratatui = "0.26"
+crossterm = "0.27"
 ansi_term = "0.12"
 
 [[example]]

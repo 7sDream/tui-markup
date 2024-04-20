@@ -32,7 +32,7 @@ pub type TagG<'a, G> = Tag<'a, <G as Generator<'a>>::Convertor>;
 /// - Modifier: for style modifier(like bold, italic, etc.)
 /// - Custom: for custom tag
 ///
-/// The Generator with this convertor `C` will received a series of Item<[Tag<C>][Tag]>, and convert it into final output.
+/// The Generator with this convertor `C` will received a series of [`Item`]&lt;[`Tag`]&lt;C&gt;&gt;, and convert it into final output.
 pub trait TagConvertor<'a> {
     /// Color type for foreground and background typed tag.
     type Color;
