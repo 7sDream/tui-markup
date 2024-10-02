@@ -19,11 +19,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
     terminal.hide_cursor()?;
 
-    let text = common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).unwrap());
+    let text = common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).expect("Expected a command line argument"));
 
     loop {
         terminal.draw(|frame| {
-            frame.render_widget(Paragraph::new(text.clone()), frame.size());
+            frame.render_widget(Paragraph::new(text.clone()), frame.area());
         })?;
 
         if let Event::Key(key) = crossterm::event::read()? {
