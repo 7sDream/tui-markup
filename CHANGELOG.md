@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `ratatui` update to 0.28. (Thanks [@SkwalExe])
+- `crossterm` update to 0.28.
+
 ## [0.4.0] - 2024-4-21
 
 ### Changed
@@ -71,3 +76,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.0]: https://github.com/7sDream/tui-markup/releases/tag/v0.1.0
 
 [@joshka]: https://github.com/joshka
+[@SkwalExe]: https://github.com/SkwalExe

@@ -33,14 +33,14 @@ ansi_term = { version = "0.12", optional = true }
 ratatui = { version = "0.28", optional = true, default-features = false }
 
 [dependencies.crossterm]
-version = "0.27"
+version = "0.28"
 optional = true
 default-features = false
 features = ["windows"]
 
 [dev-dependencies]
 ratatui = "0.28"
-crossterm = "0.27"
+crossterm = "0.28"
 ansi_term = "0.12"
 
 [[example]]

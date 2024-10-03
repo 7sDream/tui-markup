@@ -38,7 +38,7 @@ pub use tag::{Tag, TagConvertor, TagG};
 ///
 /// - Markup text/Source: the text you write in tui markup language.
 /// - [Parser][crate::parser::parse]: parse markup text into a series of [Item][crate::parser::Item],
-/// which usually be called as AST.
+///   which usually be called as AST.
 /// - [Tag Convertor][TagConvertor]: Convert raw tag string like `green`, `bg:66ccff`, `mod:b` into [Tag].
 /// - [Generator]: generator final output from `Item<Tag>`.
 ///
