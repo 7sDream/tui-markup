@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-10-04
+
 ### Changed
 
 - `ratatui` update to 0.28. (Thanks [@SkwalExe])
 - `crossterm` update to 0.28.
 
-## [0.4.0] - 2024-4-21
+## [0.4.0] - 2024-04-21
 
 ### Changed
 
@@ -24,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `crossterm` feature for enable builtin generators for crossterm crate: `CrosstermCommandsGenerator`.
 
-## [0.2.1] - 2022-8-18
+## [0.2.1] - 2022-08-18
 
 ### Added
 
