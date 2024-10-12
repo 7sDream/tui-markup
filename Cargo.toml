@@ -45,7 +45,7 @@ ansi_term = "0.12"
 
 [[example]]
 name = "ratatui"
-required-features = ["ratatui", "crossterm"]
+required-features = ["ratatui"]
 
 [[example]]
 name = "ansi"

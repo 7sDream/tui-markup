@@ -9,7 +9,6 @@ use crate::{
 };
 
 /// Tag convertor for [`CrosstermCommandsGenerator`](super::CrosstermCommandsGenerator).
-#[cfg_attr(docsrs, doc(cfg(feature = "crossterm")))]
 #[derive(Debug)]
 pub struct CrosstermTagConvertor<P = NoopCustomTagParser<ContentStyle>> {
     custom_tag_parser: Option<P>,

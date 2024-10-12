@@ -116,8 +116,11 @@ pub use tag::RatatuiTagConvertor;
 ///
 /// Use any widget of [ratatui] crate that supports it's [Text] type, for example: [`ratatui::widgets::Paragraph`].
 ///
+/// Note that the Paragraph widget includes a [`wrap`][ratatui::widgets::Paragraph::wrap] option
+/// that defaults to trimming leading whitespace. You need to turn this option off if you require
+/// full control over the output.
+///
 /// [docs/ratatui-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/ratatui-tags.ebnf
-#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 #[derive(Debug)]
 pub struct RatatuiTextGenerator<P = NoopCustomTagParser<Style>> {
     convertor: RatatuiTagConvertor<P>,

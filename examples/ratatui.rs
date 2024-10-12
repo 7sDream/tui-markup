@@ -1,25 +1,17 @@
-use std::{env::args, error::Error};
+use std::{env::args, io};
 
-use crossterm::{
-    event::{Event, KeyCode},
-    terminal::{EnterAlternateScreen, LeaveAlternateScreen},
-    ExecutableCommand,
-};
-use ratatui::{prelude::*, widgets::Paragraph};
+use crossterm::event::{Event, KeyCode};
+use ratatui::widgets::Paragraph;
 
 use tui_markup::generator::RatatuiTextGenerator;
 
 mod common;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    crossterm::terminal::enable_raw_mode()?;
-    let mut stdout = std::io::stdout();
-    stdout.execute(EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
-    terminal.hide_cursor()?;
+fn main() -> io::Result<()> {
+    let mut terminal = ratatui::try_init()?;
 
-    let text = common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).expect("Expected a command line argument"));
+    let text =
+        common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).expect("Expected a command line argument"));
 
     loop {
         terminal.draw(|frame| {
@@ -33,10 +25,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         };
     }
 
-    terminal.backend_mut().execute(LeaveAlternateScreen)?;
-    crossterm::terminal::disable_raw_mode()?;
-    terminal.show_cursor()?;
-    Ok(())
+    ratatui::try_restore()
 }
 
 #[cfg(test)]

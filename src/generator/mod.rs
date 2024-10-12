@@ -4,19 +4,16 @@ pub mod helper;
 mod tag;
 
 #[cfg(feature = "ratatui")]
-#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 pub mod ratatui;
 #[cfg(feature = "ratatui")]
 pub use self::ratatui::RatatuiTextGenerator;
 
 #[cfg(feature = "ansi")]
-#[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
 
 #[cfg(feature = "crossterm")]
-#[cfg_attr(docsrs, doc(cfg(feature = "crossterm")))]
 pub mod crossterm;
 #[cfg(feature = "crossterm")]
 pub use self::crossterm::CrosstermCommandsGenerator;

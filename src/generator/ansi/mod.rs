@@ -48,7 +48,6 @@ pub use tag::ANSITermTagConvertor;
 /// Like example above, use [`ansi_term::ANSIStrings()`] to make a temp variable and just print it.
 ///
 /// [docs/ansi-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/ansi-tags.ebnf
-#[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
 pub struct ANSIStringsGenerator<P = NoopCustomTagParser<Style>> {
     convertor: ANSITermTagConvertor<P>,

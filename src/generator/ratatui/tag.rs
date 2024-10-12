@@ -7,7 +7,6 @@ use crate::{
 };
 
 /// Tag convertor for [`RatatuiTextGenerator`](super::RatatuiTextGenerator).
-#[cfg_attr(docsrs, doc(cfg(feature = "ratatui")))]
 #[derive(Debug)]
 pub struct RatatuiTagConvertor<P = NoopCustomTagParser<Style>> {
     custom_tag_parser: Option<P>,

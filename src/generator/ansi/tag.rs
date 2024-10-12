@@ -9,7 +9,6 @@ use crate::{
 };
 
 /// Tag convertor for [`ANSIStringsGenerator`][super::ANSIStringsGenerator].
-#[cfg_attr(docsrs, doc(cfg(feature = "ansi")))]
 #[derive(Debug)]
 pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {
     custom_parser: Option<P>,

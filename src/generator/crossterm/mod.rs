@@ -41,7 +41,6 @@ pub use tag::CrosstermTagConvertor;
 ///
 /// [docs/tui-tags.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/tui-tags.ebnf
 /// [example/crossterm.rs]: https://github.com/7sDream/tui-markup/blob/master/example/crossterm.rs
-#[cfg_attr(docsrs, doc(cfg(feature = "crossterm")))]
 #[derive(Debug)]
 pub struct CrosstermCommandsGenerator<P = NoopCustomTagParser<ContentStyle>> {
     convertor: CrosstermTagConvertor<P>,
