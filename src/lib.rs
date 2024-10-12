@@ -36,16 +36,11 @@
 //!
 //! The builtin generators are under feature gates:
 //!
-//! feature     | Target
-//! | generator type :---------- |
-//! :------------------------------------------------------------------ |
-//! :------------- `ansi`      | Direct print into stdout when using an asni
-//! compatible terminal     |
-//! [`ANSIStringsGenerator`][generator::ANSIStringsGenerator] `ratatui`   |
-//! Integrated with the [ratatui] crate                                 |
-//! [`RatatuiTextGenerator`][generator::RatatuiTextGenerator] `crossterm` |
-//! Integrated with [crossterm] crate                                   |
-//! [`CrosstermCommandsGenerator`][generator::CrosstermCommandsGenerator]
+//! | feature     | Target                                                          | generator type                                                        |
+//! | :---------- | :-------------------------------------------------------------- | :-------------------------------------------------------------------- |
+//! | `ansi`      | Direct print into stdout when using an asni compatible terminal | [`ANSIStringsGenerator`][generator::ANSIStringsGenerator]             |
+//! | `ratatui`   | Integrated with the [ratatui] crate                             | [`RatatuiTextGenerator`][generator::RatatuiTextGenerator]             |
+//! | `crossterm` | Integrated with [crossterm] crate                               | [`CrosstermCommandsGenerator`][generator::CrosstermCommandsGenerator] |
 //!
 //! The example screenshot above is using the `ratatui` generator, print in
 //! Windows Terminal.
