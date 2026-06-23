@@ -79,10 +79,9 @@ fn test_no_content_element() {
 fn test_foreground_element() {
     test_ok!(
         "<fg:green text>",
-        Item::Element(
-            vec![lspan!("fg:green", 1)],
-            vec![Item::PlainText(lspan!("text", 10))]
-        )
+        Item::Element(vec![lspan!("fg:green", 1)], vec![Item::PlainText(lspan!(
+            "text", 10
+        ))])
     );
 }
 
@@ -90,10 +89,9 @@ fn test_foreground_element() {
 fn test_foreground_element_without_mode() {
     test_ok!(
         "<blue text>",
-        Item::Element(
-            vec![lspan!("blue", 1)],
-            vec![Item::PlainText(lspan!("text", 6))]
-        )
+        Item::Element(vec![lspan!("blue", 1)], vec![Item::PlainText(lspan!(
+            "text", 6
+        ))])
     );
 }
 
@@ -101,10 +99,9 @@ fn test_foreground_element_without_mode() {
 fn test_foreground_element_with_only_colon() {
     test_ok!(
         "<:white text>",
-        Item::Element(
-            vec![lspan!(":white", 1)],
-            vec![Item::PlainText(lspan!("text", 8))]
-        )
+        Item::Element(vec![lspan!(":white", 1)], vec![Item::PlainText(lspan!(
+            "text", 8
+        ))])
     );
 }
 
@@ -112,10 +109,9 @@ fn test_foreground_element_with_only_colon() {
 fn test_background_element() {
     test_ok!(
         "<bg:red text>",
-        Item::Element(
-            vec![lspan!("bg:red", 1)],
-            vec![Item::PlainText(lspan!("text", 8))]
-        )
+        Item::Element(vec![lspan!("bg:red", 1)], vec![Item::PlainText(lspan!(
+            "text", 8
+        ))])
     );
 }
 
@@ -123,10 +119,9 @@ fn test_background_element() {
 fn test_modifier_element() {
     test_ok!(
         "<mod:b text>",
-        Item::Element(
-            vec![lspan!("mod:b", 1)],
-            vec![Item::PlainText(lspan!("text", 7))]
-        )
+        Item::Element(vec![lspan!("mod:b", 1)], vec![Item::PlainText(lspan!(
+            "text", 7
+        ))])
     );
 }
 
@@ -134,10 +129,9 @@ fn test_modifier_element() {
 fn test_modifier_element_without_mode() {
     test_ok!(
         "<i text>",
-        Item::Element(
-            vec![lspan!("i", 1)],
-            vec![Item::PlainText(lspan!("text", 3))]
-        )
+        Item::Element(vec![lspan!("i", 1)], vec![Item::PlainText(lspan!(
+            "text", 3
+        ))])
     );
 }
 
@@ -145,10 +139,9 @@ fn test_modifier_element_without_mode() {
 fn test_modifier_element_with_only_colon() {
     test_ok!(
         "<:d text>",
-        Item::Element(
-            vec![lspan!(":d", 1)],
-            vec![Item::PlainText(lspan!("text", 4))]
-        )
+        Item::Element(vec![lspan!(":d", 1)], vec![Item::PlainText(lspan!(
+            "text", 4
+        ))])
     );
 }
 
@@ -156,16 +149,12 @@ fn test_modifier_element_with_only_colon() {
 fn test_nested_element() {
     test_ok!(
         "<bg:cyan <yellow one> two>",
-        Item::Element(
-            vec![lspan!("bg:cyan", 1)],
-            vec![
-                Item::Element(
-                    vec![lspan!("yellow", 10)],
-                    vec![Item::PlainText(lspan!("one", 17))]
-                ),
-                Item::PlainText(lspan!(" two", 21)),
-            ]
-        )
+        Item::Element(vec![lspan!("bg:cyan", 1)], vec![
+            Item::Element(vec![lspan!("yellow", 10)], vec![Item::PlainText(lspan!(
+                "one", 17
+            ))]),
+            Item::PlainText(lspan!(" two", 21)),
+        ])
     );
 }
 
@@ -189,9 +178,8 @@ fn test_multi_style_element() {
 fn test_custom_color() {
     test_ok!(
         "<bg:ff8000,66ccff text>",
-        Item::Element(
-            vec![lspan!("bg:ff8000", 1), lspan!("66ccff", 11)],
-            vec![Item::PlainText(lspan!("text", 18))]
-        )
+        Item::Element(vec![lspan!("bg:ff8000", 1), lspan!("66ccff", 11)], vec![
+            Item::PlainText(lspan!("text", 18))
+        ])
     );
 }

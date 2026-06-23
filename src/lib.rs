@@ -79,13 +79,13 @@ where
 /// ## Errors
 ///
 /// If input source contains invalid syntax or generator failed.
-pub fn compile_with<'a, G>(s: &'a str, mut gen: G) -> Result<G::Output, Error<'a, G::Err>>
+pub fn compile_with<'a, G>(s: &'a str, mut generator: G) -> Result<G::Output, Error<'a, G::Err>>
 where
     G: Generator<'a>,
 {
     let ast = parser::parse(s)?;
-    let ir = gen.convertor().convert_ast(ast);
-    match gen.generate(ir) {
+    let ir = generator.convertor().convert_ast(ast);
+    match generator.generate(ir) {
         Ok(result) => Ok(result),
         Err(err) => Err(err.into()),
     }

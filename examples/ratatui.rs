@@ -18,10 +18,10 @@ fn main() -> io::Result<()> {
             frame.render_widget(Paragraph::new(text.clone()), frame.area());
         })?;
 
-        if let Event::Key(key) = crossterm::event::read()? {
-            if let KeyCode::Char('q') = key.code {
-                break;
-            }
+        if let Event::Key(key) = crossterm::event::read()?
+            && let KeyCode::Char('q') = key.code
+        {
+            break;
         };
     }
 

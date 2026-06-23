@@ -2,8 +2,8 @@
 name = "tui-markup"
 version = "0.5.1-dev"
 authors = ["7sDream <i@7sdre.am>"]
-edition = "2021"
-description = "markup langauge for terminal styled text"
+edition = "2024"
+description = "markup language for terminal styled text"
 documentation = "https://docs.rs/tui-markup"
 readme = "README.md"
 homepage = "https://github.com/7sDream/tui-markup"

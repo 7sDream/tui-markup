@@ -70,7 +70,8 @@ fn plain_text_normal(s: LSpan<'_>) -> ParseResult<'_> {
 }
 
 fn escapable_char(s: LSpan<'_>) -> ParseResult<'_, char> {
-    one_of("<>\\")(s).map_err(|e: NomErr<Error<'_>>| e.map(|e| e.attach(ErrorKind::UnescapableChar)))
+    one_of("<>\\")(s)
+        .map_err(|e: NomErr<Error<'_>>| e.map(|e| e.attach(ErrorKind::UnescapableChar)))
 }
 
 fn plain_text(s: LSpan<'_>) -> ParseResult<'_> {

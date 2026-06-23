@@ -8,10 +8,10 @@ fn main() {
     println!("{}", ANSIStrings(&result));
 
     // With custom tag
-    let gen = ANSIStringsGenerator::new(|tag: &str| match tag {
+    let generator = ANSIStringsGenerator::new(|tag: &str| match tag {
         "keyboard" => Some(Style::default().fg(Color::Blue).on(Color::Black).bold()),
         _ => None,
     });
-    let result = compile_with("Press <keyboard Space> to jump", gen).unwrap();
+    let result = compile_with("Press <keyboard Space> to jump", generator).unwrap();
     println!("{}", ANSIStrings(&result));
 }

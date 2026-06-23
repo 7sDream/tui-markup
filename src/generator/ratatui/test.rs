@@ -20,8 +20,8 @@ macro_rules! elem {
 
 macro_rules! test_ok {
     ($item:expr => $($result:expr),* $(,)?) => {
-        let mut gen = crate::generator::RatatuiTextGenerator::default();
-        let convertor =  <crate::generator::RatatuiTextGenerator as crate::generator::Generator>::convertor(&mut gen);
+        let mut generator = crate::generator::RatatuiTextGenerator::default();
+        let convertor =  <crate::generator::RatatuiTextGenerator as crate::generator::Generator>::convertor(&mut generator);
         let item = <<crate::generator::RatatuiTextGenerator as crate::generator::Generator<'_>>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
             crate::generator::helper::flatten::<_, ::ratatui::text::Span<'_>, _>(vec![item]),
@@ -29,8 +29,8 @@ macro_rules! test_ok {
         )
     };
     ($custom:expr ; $item:expr => $($result:expr),* $(,)?) => {
-        let mut gen = crate::generator::RatatuiTextGenerator::new($custom);
-        let convertor =  <crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut gen);
+        let mut generator = crate::generator::RatatuiTextGenerator::new($custom);
+        let convertor =  <crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut generator);
         let item = <<crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator<'_>>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
             crate::generator::helper::flatten::<_, ::ratatui::text::Span<'_>, _>(vec![item]),
