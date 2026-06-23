@@ -14,7 +14,7 @@
 /// assert_eq!(unescape("A\\\\B\\").collect::<Vec<_>>(), vec!["A", "\\B"]);
 /// ```
 #[must_use]
-pub fn unescape(escaped: &str) -> Unescape {
+pub fn unescape(escaped: &str) -> Unescape<'_> {
     let cursor = escaped.starts_with('\\').into();
     Unescape { escaped, cursor }
 }
@@ -54,7 +54,7 @@ impl<'a> Iterator for Unescape<'a> {
 mod test {
     macro_rules! test_unescape {
         ($escaped:expr => $($result:expr),* $(,)?) => {
-           assert_eq!(crate::generator::helper::unescape($escaped).collect::<Vec<_>>(), vec![$($result),+])
+           assert_eq!(crate::generator::helper::unescape($escaped).collect::<Vec<_>>(), vec![$($result),*])
         };
     }
 

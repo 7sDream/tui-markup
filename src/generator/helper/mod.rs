@@ -6,6 +6,6 @@ mod tag;
 mod unescape;
 
 pub use error::GeneratorInfallible;
-pub use flatten::{flatten, FlattenableSpan, FlattenableStyle};
+pub use flatten::{FlattenableSpan, FlattenableStyle, flatten};
 pub use tag::{CustomTagParser, NoopCustomTagParser};
-pub use unescape::{unescape, Unescape};
+pub use unescape::{Unescape, unescape};

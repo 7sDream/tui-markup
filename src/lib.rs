@@ -1,7 +1,4 @@
-#![warn(clippy::all, clippy::pedantic)]
-#![warn(missing_docs, missing_debug_implementations)]
-#![deny(warnings)]
-#![allow(clippy::module_name_repetitions)]
+#![deny(rust_2018_idioms)]
 #![cfg_attr(not(test), forbid(unsafe_code))]
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 

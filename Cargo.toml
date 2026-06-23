@@ -31,7 +31,7 @@ nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
 # generator
 ansi_term = { version = "0.12", optional = true }
 ratatui = { version = "0.29", optional = true, default-features = false }
-crossterm = { version = "0.28", optional = true, default_features = false, features = [
+crossterm = { version = "0.28", optional = true, default-features = false, features = [
     "windows",
 ] }
 

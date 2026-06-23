@@ -1,11 +1,11 @@
 use crossterm::{
-    style::{Attributes, Color, ContentStyle, Print, PrintStyledContent, Stylize},
     Command,
+    style::{Attributes, Color, ContentStyle, Print, PrintStyledContent, Stylize},
 };
 
 use crate::generator::{
-    helper::{FlattenableSpan, FlattenableStyle},
     Tag, TagConvertor,
+    helper::{FlattenableSpan, FlattenableStyle},
 };
 
 impl<'a, C> From<Tag<'a, C>> for ContentStyle

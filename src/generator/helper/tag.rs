@@ -26,8 +26,8 @@ where
 ///
 /// ## Why need this
 ///
-/// If a tag convertor support custom tag and you also want it to be optional and impl Default trait,
-/// normally you will use a `Option<T: CustomTagParser<Custom>>` in the convertor.
+/// If a tag convertor support custom tag and you also want it to be optional and impl Default
+/// trait, normally you will use a `Option<T: CustomTagParser<Custom>>` in the convertor.
 ///
 /// But the user still need to provide some type of that T(which the usually can't)
 /// even if they do not want custom tag.

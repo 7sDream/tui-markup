@@ -4,28 +4,30 @@ mod span;
 mod tag;
 
 use crossterm::style::{ContentStyle, Print};
+pub use span::Span;
+pub use tag::CrosstermTagConvertor;
 
 use crate::{
     generator::{
-        helper::{flatten, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
         Generator,
+        helper::{CustomTagParser, GeneratorInfallible, NoopCustomTagParser, flatten},
     },
     parser::ItemG,
 };
 
-pub use span::Span;
-pub use tag::CrosstermTagConvertor;
-
-/// Generator for [crossterm crate][crossterm], generated result is a series of it's [Command][crossterm::Command]s.
+/// Generator for [crossterm crate][crossterm], generated result is a series of it's
+/// [Command][crossterm::Command]s.
 ///
 /// See [docs/tui-tags.ebnf] for supported tags.
 ///
 /// ### Show output
 ///
-/// Execute/Queue all the commands in the buffer where you want to print the result. For example, in stdout:
+/// Execute/Queue all the commands in the buffer where you want to print the result. For example, in
+/// stdout:
 ///
 /// ```
 /// use std::io::Write;
+///
 /// use crossterm::QueueableCommand;
 /// use tui_markup::{compile, generator::CrosstermCommandsGenerator};
 ///
@@ -68,22 +70,23 @@ where
     P: CustomTagParser<Output = ContentStyle>,
 {
     type Convertor = CrosstermTagConvertor<P>;
-
-    type Output = Vec<Span<'a>>;
-
     type Err = GeneratorInfallible;
+    type Output = Vec<Span<'a>>;
 
     fn convertor(&mut self) -> &mut Self::Convertor {
         &mut self.convertor
     }
 
     fn generate(&mut self, items: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
-        Ok(items.into_iter().map(flatten).fold(vec![], |mut acc, line| {
-            if !acc.is_empty() {
-                acc.push(Span::NoStyle(Print("\n")));
-            }
-            acc.extend(line);
-            acc
-        }))
+        Ok(items
+            .into_iter()
+            .map(flatten)
+            .fold(vec![], |mut acc, line| {
+                if !acc.is_empty() {
+                    acc.push(Span::NoStyle(Print("\n")));
+                }
+                acc.extend(line);
+                acc
+            }))
     }
 }

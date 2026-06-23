@@ -32,13 +32,15 @@ pub type TagG<'a, G> = Tag<'a, <G as Generator<'a>>::Convertor>;
 /// - Modifier: for style modifier(like bold, italic, etc.)
 /// - Custom: for custom tag
 ///
-/// The Generator with this convertor `C` will received a series of [`Item`]&lt;[`Tag`]&lt;C&gt;&gt;, and convert it into final output.
+/// The Generator with this convertor `C` will received a series of
+/// [`Item`]&lt;[`Tag`]&lt;C&gt;&gt;, and convert it into final output.
 pub trait TagConvertor<'a> {
     /// Color type for foreground and background typed tag.
     type Color;
     /// Modifier type for modifier typed tag.
     type Modifier;
-    /// Custom tag type. Usually is the final type represent a style, can be converted from Color and Modifier.
+    /// Custom tag type. Usually is the final type represent a style, can be converted from Color
+    /// and Modifier.
     type Custom;
 
     /// Parse string to color type.
@@ -114,13 +116,18 @@ pub trait TagConvertor<'a> {
     ///
     /// It will filtered out all tags that fail to parse.
     fn convert_line(&mut self, items: Vec<Item<'a>>) -> Vec<ItemC<'a, Self>> {
-        items.into_iter().map(|item| self.convert_item(item)).collect()
+        items
+            .into_iter()
+            .map(|item| self.convert_item(item))
+            .collect()
     }
 
     /// Convert all item with raw tag string of a ast into items with [Tag] type.
     ///
     /// It will filtered out all tags that fail to parse.
     fn convert_ast(&mut self, ast: Vec<Vec<Item<'a>>>) -> Vec<Vec<ItemC<'a, Self>>> {
-        ast.into_iter().map(|line| self.convert_line(line)).collect()
+        ast.into_iter()
+            .map(|line| self.convert_line(line))
+            .collect()
     }
 }

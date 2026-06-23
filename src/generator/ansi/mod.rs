@@ -4,13 +4,12 @@ mod span;
 mod tag;
 
 use ansi_term::{ANSIString, Style};
+pub use tag::ANSITermTagConvertor;
 
 use super::{
-    helper::{flatten, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
     Generator,
+    helper::{CustomTagParser, GeneratorInfallible, NoopCustomTagParser, flatten},
 };
-
-pub use tag::ANSITermTagConvertor;
 
 /// Generator for ansi terminal strings.
 ///
@@ -30,7 +29,7 @@ pub use tag::ANSITermTagConvertor;
 /// ### With custom tags
 ///
 /// ```
-/// use ansi_term::{ANSIStrings, Style, Color};
+/// use ansi_term::{ANSIStrings, Color, Style};
 /// use tui_markup::{compile_with, generator::ANSIStringsGenerator};
 ///
 /// let gen = ANSIStringsGenerator::new(|tag: &str| match tag {
@@ -75,22 +74,25 @@ where
     P: CustomTagParser<Output = Style>,
 {
     type Convertor = ANSITermTagConvertor<P>;
-
-    type Output = Vec<ANSIString<'a>>;
-
     type Err = GeneratorInfallible;
+    type Output = Vec<ANSIString<'a>>;
 
     fn convertor(&mut self) -> &mut Self::Convertor {
         &mut self.convertor
     }
 
-    fn generate(&mut self, markup: Vec<Vec<crate::parser::ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
-        Ok(markup.into_iter().map(flatten).fold(vec![], |mut acc, line| {
-            if !acc.is_empty() {
-                acc.push(Style::default().paint("\n"));
-            }
-            acc.extend(line);
-            acc
-        }))
+    fn generate(
+        &mut self, markup: Vec<Vec<crate::parser::ItemG<'a, Self>>>,
+    ) -> Result<Self::Output, Self::Err> {
+        Ok(markup
+            .into_iter()
+            .map(flatten)
+            .fold(vec![], |mut acc, line| {
+                if !acc.is_empty() {
+                    acc.push(Style::default().paint("\n"));
+                }
+                acc.extend(line);
+                acc
+            }))
     }
 }

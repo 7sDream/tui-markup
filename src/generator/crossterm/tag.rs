@@ -2,8 +2,8 @@ use crossterm::style::{Attribute, Attributes, Color, ContentStyle};
 
 use crate::{
     generator::{
-        helper::{CustomTagParser, NoopCustomTagParser},
         TagConvertor,
+        helper::{CustomTagParser, NoopCustomTagParser},
     },
     parser::hex_rgb,
 };
@@ -36,10 +36,8 @@ where
     P: CustomTagParser<Output = ContentStyle>,
 {
     type Color = Color;
-
-    type Modifier = Attributes;
-
     type Custom = ContentStyle;
+    type Modifier = Attributes;
 
     fn parse_color(&mut self, s: &str) -> Option<Self::Color> {
         Some(match s {

@@ -2,7 +2,6 @@ use std::{env::args, io};
 
 use crossterm::event::{Event, KeyCode};
 use ratatui::widgets::Paragraph;
-
 use tui_markup::generator::RatatuiTextGenerator;
 
 mod common;
@@ -10,8 +9,9 @@ mod common;
 fn main() -> io::Result<()> {
     let mut terminal = ratatui::try_init()?;
 
-    let text =
-        common::compile_file::<RatatuiTextGenerator, _>(args().nth(1).expect("Expected a command line argument"));
+    let text = common::compile_file::<RatatuiTextGenerator, _>(
+        args().nth(1).expect("Expected a command line argument"),
+    );
 
     loop {
         terminal.draw(|frame| {

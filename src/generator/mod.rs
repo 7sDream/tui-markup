@@ -1,5 +1,9 @@
 //! Generator generates final output for showing.
 
+use std::fmt::{Debug, Display};
+
+use crate::{Error, error::LocatedError, parser::ItemG};
+
 pub mod helper;
 mod tag;
 
@@ -15,17 +19,11 @@ pub use self::ansi::ANSIStringsGenerator;
 
 #[cfg(feature = "crossterm")]
 pub mod crossterm;
+// TODO: termion generator
+pub use tag::{Tag, TagConvertor, TagG};
+
 #[cfg(feature = "crossterm")]
 pub use self::crossterm::CrosstermCommandsGenerator;
-
-// TODO: crossterm generator
-// TODO: termion generator
-
-use std::fmt::{Debug, Display};
-
-use crate::{error::LocatedError, parser::ItemG, Error};
-
-pub use tag::{Tag, TagConvertor, TagG};
 
 /// Generator generates final output to show tui markup in some backend.
 ///
@@ -34,9 +32,10 @@ pub use tag::{Tag, TagConvertor, TagG};
 /// Some concepts:
 ///
 /// - Markup text/Source: the text you write in tui markup language.
-/// - [Parser][crate::parser::parse]: parse markup text into a series of [Item][crate::parser::Item],
-///   which usually be called as AST.
-/// - [Tag Convertor][TagConvertor]: Convert raw tag string like `green`, `bg:66ccff`, `mod:b` into [Tag].
+/// - [Parser][crate::parser::parse]: parse markup text into a series of
+///   [Item][crate::parser::Item], which usually be called as AST.
+/// - [Tag Convertor][TagConvertor]: Convert raw tag string like `green`, `bg:66ccff`, `mod:b` into
+///   [Tag].
 /// - [Generator]: generator final output from `Item<Tag>`.
 ///
 /// So the whole pipeline is:
@@ -50,15 +49,16 @@ pub use tag::{Tag, TagConvertor, TagG};
 ///
 /// ## Generic implementation using flatten
 ///
-/// Your tag convertor will parse color/modifiers string to some `Color`/`Modifier` type, and will support custom tag
-/// by a `Style` type, which can be converted from `Color` and `Modifier` too.
+/// Your tag convertor will parse color/modifiers string to some `Color`/`Modifier` type, and will
+/// support custom tag by a `Style` type, which can be converted from `Color` and `Modifier` too.
 ///
 /// In this case, a [Tag] of this convertor can be convert to the `Style` type easily.
 ///
 /// If this `Style` can be patched by other, then you can use the [`flatten`][helper::flatten]
 /// help method to do almost all the convert staff from AST to your final result.
 ///
-/// Read document of [`flatten`][helper::flatten] to learn more, or just checkout a builtin implementation.
+/// Read document of [`flatten`][helper::flatten] to learn more, or just checkout a builtin
+/// implementation.
 pub trait Generator<'a> {
     /// Tag convertor type.
     type Convertor: TagConvertor<'a>;
@@ -68,7 +68,8 @@ pub trait Generator<'a> {
 
     /// Error type.
     ///
-    /// If the generator can't fall, please use [`GeneratorInfallible`][helper::GeneratorInfallible].
+    /// If the generator can't fall, please use
+    /// [`GeneratorInfallible`][helper::GeneratorInfallible].
     type Err: LocatedError + Display + Debug + Into<Error<'a, Self::Err>>;
 
     /// Get the tag convertor.
@@ -84,10 +85,8 @@ pub trait Generator<'a> {
 
 impl<'a, G: Generator<'a>> Generator<'a> for &mut G {
     type Convertor = G::Convertor;
-
-    type Output = G::Output;
-
     type Err = G::Err;
+    type Output = G::Output;
 
     fn convertor(&mut self) -> &mut Self::Convertor {
         <G as Generator<'a>>::convertor(self)

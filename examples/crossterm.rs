@@ -3,7 +3,6 @@ mod common;
 use std::io::Write;
 
 use crossterm::QueueableCommand;
-
 use tui_markup::generator::CrosstermCommandsGenerator;
 
 fn main() {

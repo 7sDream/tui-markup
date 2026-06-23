@@ -1,7 +1,6 @@
 use std::fmt::{Display, Write};
 
-use super::LSpan;
-use crate::error::LocatedError;
+use crate::{error::LocatedError, parser::LSpan};
 
 /// Kind of parse error.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -22,7 +21,7 @@ pub struct Error<'a> {
     kind: Option<ErrorKind>,
 }
 
-impl<'a> Display for Error<'a> {
+impl Display for Error<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self.kind {
             Some(kind) => match kind {
@@ -41,13 +40,17 @@ impl<'a> Display for Error<'a> {
             f.write_char(' ')?;
         }
 
-        f.write_fmt(format_args!("near {}:{}", self.span.extra, self.span.get_column()))
+        f.write_fmt(format_args!(
+            "near {}:{}",
+            self.span.extra,
+            self.span.get_column()
+        ))
     }
 }
 
-impl<'a> std::error::Error for Error<'a> {}
+impl std::error::Error for Error<'_> {}
 
-impl<'a> Error<'a> {
+impl Error<'_> {
     pub(crate) fn attach(mut self, kind: ErrorKind) -> Self {
         if self.kind.is_none() {
             self.kind = Some(kind);
@@ -62,7 +65,7 @@ impl<'a> Error<'a> {
     }
 }
 
-impl<'a> LocatedError for Error<'a> {
+impl LocatedError for Error<'_> {
     fn location(&self) -> (usize, usize) {
         (self.span.extra, self.span.get_column())
     }

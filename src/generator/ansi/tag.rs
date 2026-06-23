@@ -2,8 +2,8 @@ use ansi_term::{Color, Style};
 
 use crate::{
     generator::{
-        helper::{CustomTagParser, NoopCustomTagParser},
         TagConvertor,
+        helper::{CustomTagParser, NoopCustomTagParser},
     },
     parser::hex_rgb,
 };
@@ -16,7 +16,9 @@ pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {
 
 impl<P> Default for ANSITermTagConvertor<P> {
     fn default() -> Self {
-        Self { custom_parser: None }
+        Self {
+            custom_parser: None,
+        }
     }
 }
 
@@ -34,10 +36,8 @@ where
     P: CustomTagParser<Output = Style>,
 {
     type Color = Color;
-
-    type Modifier = Style;
-
     type Custom = Style;
+    type Modifier = Style;
 
     fn parse_color(&mut self, s: &str) -> Option<Self::Color> {
         Some(match s {

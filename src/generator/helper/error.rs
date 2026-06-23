@@ -7,7 +7,8 @@ use crate::LocatedError;
 
 /// Error type for infallible generator.
 ///
-/// You should never return (even construct) this error if choose this as the Error type of your Generator.
+/// You should never return (even construct) this error if choose this as the Error type of your
+/// Generator.
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct GeneratorInfallible;
 
@@ -37,7 +38,7 @@ impl LocatedError for GeneratorInfallible {
     }
 }
 
-impl<'a> From<GeneratorInfallible> for crate::Error<'a, GeneratorInfallible> {
+impl From<GeneratorInfallible> for crate::Error<'_, GeneratorInfallible> {
     fn from(_e: GeneratorInfallible) -> Self {
         GeneratorInfallible::panic()
     }

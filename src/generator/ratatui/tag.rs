@@ -1,8 +1,10 @@
 use ratatui::style::{Color, Modifier, Style};
 
 use crate::{
-    generator::helper::{CustomTagParser, NoopCustomTagParser},
-    generator::TagConvertor,
+    generator::{
+        TagConvertor,
+        helper::{CustomTagParser, NoopCustomTagParser},
+    },
     parser::hex_rgb,
 };
 
@@ -34,8 +36,8 @@ where
     P: CustomTagParser<Output = Style>,
 {
     type Color = Color;
-    type Modifier = Modifier;
     type Custom = Style;
+    type Modifier = Modifier;
 
     fn parse_color(&mut self, s: &str) -> Option<Color> {
         Some(match s {

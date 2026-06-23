@@ -1,9 +1,7 @@
 use crate::{
-    generator::{Tag, TagConvertor},
+    generator::{Tag, TagConvertor, helper::unescape},
     parser::{Item, ItemC},
 };
-
-use super::unescape;
 
 /// Requirements trait for style to used in [`flatten`] function.
 pub trait FlattenableStyle: Default + Clone {
@@ -20,22 +18,28 @@ pub trait FlattenableSpan<'a, S: FlattenableStyle> {
     fn with_style(s: &'a str, style: Option<S>) -> Self;
 }
 
-#[allow(clippy::needless_pass_by_value)] // Style usually is a small type
 fn plain_text<'a, R, S>(escaped: &'a str, style: Option<S>) -> Vec<R>
 where
     R: FlattenableSpan<'a, S>,
     S: FlattenableStyle,
 {
-    unescape(escaped).map(|s| R::with_style(s, style.clone())).collect()
+    unescape(escaped)
+        .map(|s| R::with_style(s, style.clone()))
+        .collect()
 }
 
-fn element<'a, C, R, S>(tags: Vec<Tag<'a, C>>, children: Vec<ItemC<'a, C>>, style: Option<S>) -> Vec<R>
+fn element<'a, C, R, S>(
+    tags: Vec<Tag<'a, C>>, children: Vec<ItemC<'a, C>>, style: Option<S>,
+) -> Vec<R>
 where
     C: TagConvertor<'a>,
     R: FlattenableSpan<'a, S>,
     S: FlattenableStyle + From<Tag<'a, C>>,
 {
-    let style = tags.into_iter().map(S::from).fold(style.unwrap_or_default(), S::patch);
+    let style = tags
+        .into_iter()
+        .map(S::from)
+        .fold(style.unwrap_or_default(), S::patch);
     items(children, Some(style))
 }
 
@@ -51,7 +55,6 @@ where
     }
 }
 
-#[allow(clippy::needless_pass_by_value)] // Style usually is a small type
 fn items<'a, C, R, S>(items: Vec<ItemC<'a, C>>, style: Option<S>) -> Vec<R>
 where
     C: TagConvertor<'a>,
@@ -68,7 +71,8 @@ where
 ///
 /// ## Why need this
 ///
-/// Each line of markup source will be convert into a `Vec<Item>` after parsing and tag conversion stage.
+/// Each line of markup source will be convert into a `Vec<Item>` after parsing and tag conversion
+/// stage.
 ///
 /// But [Item] itself is a tree, so there are many tree to process.
 ///
@@ -78,9 +82,10 @@ where
 ///
 /// If these requirements are met:
 ///
-/// - [Tag] of a convertor `C` can be converted into a uniform `Style` struct, by impl the `From<Tag<C>>` trait.
-/// - the `Style` type can impl [`FlattenableStyle`] trait.
-/// - You have a struct `Span` can impl [`FlattenableSpan`] trait to store styled text span.
+/// - [Tag] of a convertor `C` can be converted into a uniform `Style` struct, by impl the
+///   `From<Tag<C>>` trait.
+/// - the `Style` type implements [`FlattenableStyle`] trait.
+/// - You have a struct `Span` implements [`FlattenableSpan`] trait to store styled text span.
 ///
 /// Then this function can be used to convert `Vec<ItemC<C>>` into `Vec<Span>`.
 pub fn flatten<'a, C, R, S>(line: Vec<ItemC<'a, C>>) -> Vec<R>

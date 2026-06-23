@@ -10,8 +10,8 @@ pub trait LocatedError {
 
 /// Error for markup source compile pipeline.
 ///
-/// Display this error in `{}` formatter will show a error message with detailed reason and location.
-/// So usually you don't need check variants.
+/// Display this error in `{}` formatter will show a error message with detailed reason and
+/// location. So usually you don't need check variants.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Error<'a, GE> {
     /// Parsing stage failed, usually means there is invalid syntax in source string
@@ -21,15 +21,15 @@ pub enum Error<'a, GE> {
     Gen(GE),
 }
 
-impl<'a, GE> Display for Error<'a, GE>
+impl<GE> Display for Error<'_, GE>
 where
     GE: Display,
 {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::Parse(pe) => {
                 f.write_str("parse failed: ")?;
-                <ParseError as Display>::fmt(pe, f)?;
+                <ParseError<'_> as Display>::fmt(pe, f)?;
             }
             Error::Gen(ge) => {
                 f.write_str("generate failed: ")?;
@@ -40,9 +40,9 @@ where
     }
 }
 
-impl<'a, GE> std::error::Error for Error<'a, GE> where Self: Debug + Display {}
+impl<GE> std::error::Error for Error<'_, GE> where Self: Debug + Display {}
 
-impl<'a, GE: LocatedError> LocatedError for Error<'a, GE> {
+impl<GE: LocatedError> LocatedError for Error<'_, GE> {
     fn location(&self) -> (usize, usize) {
         match self {
             Self::Parse(e) => e.location(),
@@ -66,7 +66,7 @@ mod test {
         fn is_error<E: std::error::Error>() {}
 
         is_error::<GeneratorInfallible>();
-        is_error::<crate::parser::Error>();
+        is_error::<crate::parser::Error<'_>>();
         is_error::<super::Error<'static, GeneratorInfallible>>();
     }
 }

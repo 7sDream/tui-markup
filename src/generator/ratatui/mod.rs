@@ -2,7 +2,6 @@
 
 mod span;
 mod tag;
-
 #[cfg(test)]
 mod test;
 
@@ -10,16 +9,15 @@ use ratatui::{
     style::Style,
     text::{Line, Text},
 };
+pub use tag::RatatuiTagConvertor;
 
 use crate::{
     generator::{
-        helper::{flatten, CustomTagParser, GeneratorInfallible, NoopCustomTagParser},
         Generator,
+        helper::{CustomTagParser, GeneratorInfallible, NoopCustomTagParser, flatten},
     },
     parser::ItemG,
 };
-
-pub use tag::RatatuiTagConvertor;
 
 /// Generator for [ratatui crate][ratatui]'s [Text] type.
 ///
@@ -60,15 +58,19 @@ pub use tag::RatatuiTagConvertor;
 ///     ])])),
 /// );
 ///
-///
 /// assert_eq!(
 ///     compile::<RatatuiTextGenerator>("I can <bg:blue combine <green them <b <i all>>>>"),
 ///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can "),
 ///         Span::styled("combine ", Style::default().bg(Color::Blue)),
 ///         Span::styled("them ", Style::default().bg(Color::Blue).fg(Color::Green)),
-///         Span::styled("all", Style::default()
-///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
+///         Span::styled(
+///             "all",
+///             Style::default()
+///                 .bg(Color::Blue)
+///                 .fg(Color::Green)
+///                 .add_modifier(Modifier::BOLD | Modifier::ITALIC)
+///         ),
 ///     ])])),
 /// );
 ///
@@ -76,7 +78,10 @@ pub use tag::RatatuiTagConvertor;
 ///     compile::<RatatuiTextGenerator>("I can use <bg:66ccff custom color>"),
 ///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can use "),
-///         Span::styled("custom color", Style::default().bg(Color::Rgb(0x66, 0xcc, 0xff))),
+///         Span::styled(
+///             "custom color",
+///             Style::default().bg(Color::Rgb(0x66, 0xcc, 0xff))
+///         ),
 ///     ])])),
 /// );
 ///
@@ -84,8 +89,13 @@ pub use tag::RatatuiTagConvertor;
 ///     compile::<RatatuiTextGenerator>("I can set <bg:blue,green,b,i many style> in one tag"),
 ///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("I can set "),
-///         Span::styled("many style", Style::default()
-///             .bg(Color::Blue).fg(Color::Green).add_modifier(Modifier::BOLD | Modifier::ITALIC)),
+///         Span::styled(
+///             "many style",
+///             Style::default()
+///                 .bg(Color::Blue)
+///                 .fg(Color::Green)
+///                 .add_modifier(Modifier::BOLD | Modifier::ITALIC)
+///         ),
 ///         Span::raw(" in one tag"),
 ///     ])])),
 /// );
@@ -97,8 +107,13 @@ pub use tag::RatatuiTagConvertor;
 /// # use ratatui::prelude::*;
 /// use tui_markup::{compile_with, generator::RatatuiTextGenerator};
 ///
-/// let gen =RatatuiTextGenerator::new(|tag: &str| match tag {
-///     "keyboard" => Some(Style::default().bg(Color::White).fg(Color::Green).add_modifier(Modifier::BOLD)),
+/// let gen = RatatuiTextGenerator::new(|tag: &str| match tag {
+///     "keyboard" => Some(
+///         Style::default()
+///             .bg(Color::White)
+///             .fg(Color::Green)
+///             .add_modifier(Modifier::BOLD),
+///     ),
 ///     _ => None,
 /// });
 ///
@@ -106,7 +121,13 @@ pub use tag::RatatuiTagConvertor;
 ///     compile_with("Press <keyboard W> to move up", gen),
 ///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("Press "),
-///         Span::styled("W", Style::default().bg(Color::White).fg(Color::Green).add_modifier(Modifier::BOLD)),
+///         Span::styled(
+///             "W",
+///             Style::default()
+///                 .bg(Color::White)
+///                 .fg(Color::Green)
+///                 .add_modifier(Modifier::BOLD)
+///         ),
 ///         Span::raw(" to move up"),
 ///     ])])),
 /// );
@@ -114,7 +135,8 @@ pub use tag::RatatuiTagConvertor;
 ///
 /// ### Show output
 ///
-/// Use any widget of [ratatui] crate that supports it's [Text] type, for example: [`ratatui::widgets::Paragraph`].
+/// Use any widget of [ratatui] crate that supports it's [Text] type, for example:
+/// [`ratatui::widgets::Paragraph`].
 ///
 /// Note that the Paragraph widget includes a [`wrap`][ratatui::widgets::Paragraph::wrap] option
 /// that defaults to trimming leading whitespace. You need to turn this option off if you require
@@ -148,10 +170,8 @@ where
     P: CustomTagParser<Output = Style>,
 {
     type Convertor = RatatuiTagConvertor<P>;
-
-    type Output = Text<'a>;
-
     type Err = GeneratorInfallible;
+    type Output = Text<'a>;
 
     fn convertor(&mut self) -> &mut Self::Convertor {
         &mut self.convertor

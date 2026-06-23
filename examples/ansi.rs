@@ -13,8 +13,9 @@ fn main() {
 
 #[cfg(test)]
 mod test {
-    use super::common::compile_file;
     use tui_markup::generator::ANSIStringsGenerator;
+
+    use super::common::compile_file;
 
     #[test]
     fn test_help_text() {

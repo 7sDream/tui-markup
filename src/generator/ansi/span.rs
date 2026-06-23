@@ -1,8 +1,8 @@
 use ansi_term::{ANSIString, Color, Style};
 
 use crate::generator::{
-    helper::{FlattenableSpan, FlattenableStyle},
     Tag, TagConvertor,
+    helper::{FlattenableSpan, FlattenableStyle},
 };
 
 impl<'a, C> From<Tag<'a, C>> for Style
