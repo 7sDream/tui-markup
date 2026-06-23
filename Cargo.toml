@@ -25,19 +25,19 @@ ansi = ["dep:ansi_term"]
 
 [dependencies]
 # parser
-nom = "7"
-nom_locate = { version = "4", features = ["runtime-dispatch-simd"] }
+nom = "8"
+nom_locate = { version = "5", features = ["runtime-dispatch-simd"] }
 
 # generator
 ansi_term = { version = "0.12", optional = true }
-ratatui = { version = "0.29", optional = true, default-features = false }
-crossterm = { version = "0.28", optional = true, default-features = false, features = [
+ratatui = { version = "0.30", optional = true, default-features = false }
+crossterm = { version = "0.29", optional = true, default-features = false, features = [
     "windows",
 ] }
 
 [dev-dependencies]
-ratatui = "0.29"
-crossterm = "0.28"
+ratatui = "0.30"
+crossterm = "0.29"
 ansi_term = "0.12"
 
 [[example]]

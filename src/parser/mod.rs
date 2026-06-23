@@ -3,13 +3,13 @@
 pub use error::{Error, ErrorKind};
 pub use item::{Item, ItemC, ItemG};
 use nom::{
-    Err as NomErr, IResult,
+    Err as NomErr, IResult, Parser,
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take_while_m_n, take_while1},
     character::complete::{char, one_of},
     combinator::{eof, map, map_res, verify},
+
     multi::{many_till, many0, separated_list1},
-    sequence::tuple,
 };
 use nom_locate::LocatedSpan;
 
@@ -32,26 +32,26 @@ fn force_failure<E>(err: NomErr<E>) -> NomErr<E> {
 }
 
 fn one_tag(s: LSpan<'_>) -> ParseResult<'_> {
-    take_while1(|c: char| c.is_alphanumeric() || c == ':' || c == '+' || c == '-')(s)
+    take_while1(|c: char| c.is_alphanumeric() || c == ':' || c == '+' || c == '-').parse(s)
 }
 
 fn tag_list(s: LSpan<'_>) -> ParseResult<'_, Vec<LSpan<'_>>> {
-    separated_list1(char(','), one_tag)(s)
+    separated_list1(char(','), one_tag).parse(s)
 }
 
 fn element_inner_space(s: LSpan<'_>) -> ParseResult<'_, char> {
-    char(' ')(s)
+    char(' ').parse(s)
 }
 
 fn element_end(s: LSpan<'_>) -> ParseResult<'_> {
-    tag(">")(s).map_err(|e: NomErr<Error<'_>>| e.map(|e| e.attach(ErrorKind::ElementNotClose)))
+    tag(">").parse(s).map_err(|e: NomErr<Error<'_>>| e.map(|e| e.attach(ErrorKind::ElementNotClose)))
 }
 
 fn element(s: LSpan<'_>) -> ParseResult<'_, Item<'_>> {
     let input = s;
 
-    let (s, (_, tags, _)) = tuple((char('<'), tag_list, element_inner_space))(s)?;
-    let (s, (parts, _)) = tuple((items, element_end))(s)
+    let (s, (_, tags, _)) = (char('<'), tag_list, element_inner_space).parse(s)?;
+    let (s, (parts, _)) = (items, element_end).parse(s)
         .map_err(|e: NomErr<Error<'_>>| {
             e.map(|mut e| {
                 if e.kind() == Some(ErrorKind::ElementNotClose) {
@@ -66,27 +66,27 @@ fn element(s: LSpan<'_>) -> ParseResult<'_, Item<'_>> {
 }
 
 fn plain_text_normal(s: LSpan<'_>) -> ParseResult<'_> {
-    is_not("<>\\")(s)
+    is_not("<>\\").parse(s)
 }
 
 fn escapable_char(s: LSpan<'_>) -> ParseResult<'_, char> {
-    one_of("<>\\")(s)
+    one_of("<>\\").parse(s)
         .map_err(|e: NomErr<Error<'_>>| e.map(|e| e.attach(ErrorKind::UnescapableChar)))
 }
 
 fn plain_text(s: LSpan<'_>) -> ParseResult<'_> {
     verify(escaped(plain_text_normal, '\\', escapable_char), |ls| {
         !ls.is_empty()
-    })(s)
+    }).parse(s)
     .map_err(|e| {
         e.map(|mut e| {
-            use nom::Slice;
+            use nom::Input;
 
             if !s.is_empty()
                 && e.kind().is_none_or(|x| x == ErrorKind::UnescapedChar)
                 && !s.starts_with(['\\', '<', '>'])
             {
-                e.span = e.span.slice(e.span.len() - 1..);
+                e.span = e.span.take_from(e.span.len() - 1);
             }
 
             e.attach(ErrorKind::UnescapedChar)
@@ -95,15 +95,15 @@ fn plain_text(s: LSpan<'_>) -> ParseResult<'_> {
 }
 
 fn item(s: LSpan<'_>) -> ParseResult<'_, Item<'_>> {
-    alt((element, map(plain_text, Item::PlainText)))(s)
+    alt((element, map(plain_text, Item::PlainText))).parse(s)
 }
 
 fn items(s: LSpan<'_>) -> ParseResult<'_, Vec<Item<'_>>> {
-    many0(item)(s)
+    many0(item).parse(s)
 }
 
 fn output(s: LSpan<'_>) -> ParseResult<'_, Vec<Item<'_>>> {
-    let (s, result) = many_till(item, eof)(s)?;
+    let (s, result) = many_till(item, eof).parse(s)?;
     Ok((s, result.0))
 }
 
@@ -134,13 +134,13 @@ pub fn parse(s: &str) -> Result<Vec<Vec<Item<'_>>>, Error<'_>> {
 fn hex_color_part(s: &str) -> IResult<&str, u8> {
     map_res(take_while_m_n(2, 2, |c: char| c.is_ascii_hexdigit()), |x| {
         u8::from_str_radix(x, 16)
-    })(s)
+    }).parse(s)
 }
 
 /// Parse string of 6 hex digit into r, g, b value.
 #[must_use]
 pub fn hex_rgb(s: &str) -> Option<(u8, u8, u8)> {
-    let (s, (r, g, b)) = tuple((hex_color_part, hex_color_part, hex_color_part))(s).ok()?;
+    let (s, (r, g, b)) = (hex_color_part, hex_color_part, hex_color_part).parse(s).ok()?;
 
     if !s.is_empty() {
         return None;
