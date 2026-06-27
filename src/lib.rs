@@ -1,7 +1,5 @@
-#![deny(rust_2018_idioms)]
-#![cfg_attr(not(test), forbid(unsafe_code))]
-#![cfg_attr(docsrs, feature(doc_auto_cfg))]
-
+#![forbid(unsafe_code)]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 //! # tui markup
 //!
 //! This crate provides a markup language to
@@ -48,6 +46,7 @@
 //! [docs/syntax.ebnf]: https://github.com/7sDream/tui-markup/blob/master/docs/syntax.ebnf
 //! [help-text-screenshot]: https://rikka.7sdre.am/files/ee68d36d-b1e7-4575-bb13-e37ba7ead044.png
 //! [examples/help.txt]: https://github.com/7sDream/tui-markup/blob/master/examples/help.txt
+//! [ratatui]: https://docs.rs/ratatui/latest/ratatui/
 
 mod error;
 pub mod generator;

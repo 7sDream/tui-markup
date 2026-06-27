@@ -19,7 +19,7 @@ use crate::{
     parser::ItemG,
 };
 
-/// Generator for [ratatui crate][ratatui]'s [Text] type.
+/// Generator for `ratatui` crate's [Text] type.
 ///
 /// See [docs/ratatui-tags.ebnf] for supported tags.
 ///
@@ -135,10 +135,10 @@ use crate::{
 ///
 /// ### Show output
 ///
-/// Use any widget of [ratatui] crate that supports it's [Text] type, for example:
-/// [`ratatui::widgets::Paragraph`].
+/// Use any widget of the `ratatui` crate that supports it's [Text] type, for example:
+/// `ratatui::widgets::Paragraph`.
 ///
-/// Note that the Paragraph widget includes a [`wrap`][ratatui::widgets::Paragraph::wrap] option
+/// Note that the Paragraph widget includes a `ratatui::widgets::Paragraph::wrap` option
 /// that defaults to trimming leading whitespace. You need to turn this option off if you require
 /// full control over the output.
 ///
