@@ -1,4 +1,4 @@
-use ratatui::{
+use ratatui_core::{
     style::{Color, Modifier, Style},
     text::Span,
 };
@@ -24,7 +24,7 @@ macro_rules! test_ok {
         let convertor =  <crate::generator::RatatuiTextGenerator as crate::generator::Generator>::convertor(&mut generator);
         let item = <<crate::generator::RatatuiTextGenerator as crate::generator::Generator<'_>>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
-            crate::generator::helper::flatten::<_, ::ratatui::text::Span<'_>, _>(vec![item]),
+            crate::generator::helper::flatten::<_, ::ratatui_core::text::Span<'_>, _>(vec![item]),
             vec![$($result),*],
         )
     };
@@ -33,7 +33,7 @@ macro_rules! test_ok {
         let convertor =  <crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator>::convertor(&mut generator);
         let item = <<crate::generator::RatatuiTextGenerator<_> as crate::generator::Generator<'_>>::Convertor as crate::generator::TagConvertor>::convert_item(convertor, $item);
         assert_eq!(
-            crate::generator::helper::flatten::<_, ::ratatui::text::Span<'_>, _>(vec![item]),
+            crate::generator::helper::flatten::<_, ::ratatui_core::text::Span<'_>, _>(vec![item]),
             vec![$($result),*],
         )
     };

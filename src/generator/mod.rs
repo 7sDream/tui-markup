@@ -7,15 +7,15 @@ use crate::{Error, error::LocatedError, parser::ItemG};
 pub mod helper;
 mod tag;
 
-#[cfg(feature = "ratatui")]
-pub mod ratatui;
-#[cfg(feature = "ratatui")]
-pub use self::ratatui::RatatuiTextGenerator;
-
 #[cfg(feature = "ansi")]
 pub mod ansi;
 #[cfg(feature = "ansi")]
 pub use self::ansi::ANSIStringsGenerator;
+
+#[cfg(feature = "ratatui")]
+pub mod ratatui;
+#[cfg(feature = "ratatui")]
+pub use self::ratatui::RatatuiTextGenerator;
 
 #[cfg(feature = "crossterm")]
 pub mod crossterm;
@@ -80,7 +80,7 @@ pub trait Generator<'a> {
     /// ## Errors
     ///
     /// When the generator can't process the IR. This should be documented details.
-    fn generate(&mut self, ir: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err>;
+    fn generate(&mut self, markup: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err>;
 }
 
 impl<'a, G: Generator<'a>> Generator<'a> for &mut G {
@@ -92,7 +92,7 @@ impl<'a, G: Generator<'a>> Generator<'a> for &mut G {
         <G as Generator<'a>>::convertor(self)
     }
 
-    fn generate(&mut self, ir: Vec<Vec<ItemG<'a, G>>>) -> Result<Self::Output, Self::Err> {
-        <G as Generator<'a>>::generate(self, ir)
+    fn generate(&mut self, markup: Vec<Vec<ItemG<'a, G>>>) -> Result<Self::Output, Self::Err> {
+        <G as Generator<'a>>::generate(self, markup)
     }
 }

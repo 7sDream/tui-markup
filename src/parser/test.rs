@@ -126,13 +126,10 @@ fn test_modifier_element_with_only_colon() {
 fn test_nested_element() {
     test_ok!(
         "<bg:cyan <yellow one> two>",
-        Item::Element(
-            vec!["bg:cyan"],
-            vec![
-                Item::Element(vec!["yellow"], vec![Item::PlainText("one")]),
-                Item::PlainText(" two"),
-            ]
-        )
+        Item::Element(vec!["bg:cyan"], vec![
+            Item::Element(vec!["yellow"], vec![Item::PlainText("one")]),
+            Item::PlainText(" two"),
+        ])
     );
 }
 
@@ -140,10 +137,9 @@ fn test_nested_element() {
 fn test_multi_style_element() {
     test_ok!(
         "<bg:magenta,gray,mod:u,x text>",
-        Item::Element(
-            vec!["bg:magenta", "gray", "mod:u", "x",],
-            vec![Item::PlainText("text"),]
-        )
+        Item::Element(vec!["bg:magenta", "gray", "mod:u", "x",], vec![
+            Item::PlainText("text"),
+        ])
     );
 }
 

@@ -1,4 +1,4 @@
-use ratatui::{
+use ratatui_core::{
     style::{Color, Modifier, Style},
     text::Span,
 };

@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Migrated parser from `nom` / `nom-locate` to `winnow`.
+- **BREAKING:** The `ansi` feature change to use `anstyle` instead of `ansi_term` as it's unmaintained. So `ANSIStringsGenerator` now output `StyledText`, which can be displayed(print) directly.
+- The `ratatui` feature change to use `ratatui-core` instead of the whole `ratatui` crate.
+- `crossterm` updated to 0.29.
 
 ## [0.5.0] - 2024-10-04
 

@@ -1,16 +1,17 @@
-use std::{env::args, io};
-
 use crossterm::event::{Event, KeyCode};
-use ratatui::widgets::Paragraph;
+use ratatui::{Terminal, backend::Backend, widgets::Paragraph};
 use tui_markup::generator::RatatuiTextGenerator;
 
 mod common;
 
-fn main() -> io::Result<()> {
-    let mut terminal = ratatui::try_init()?;
-
+fn display<B: Backend>(terminal: &mut Terminal<B>) -> std::io::Result<()>
+where
+    std::io::Error: From<B::Error>,
+{
     let text = common::compile_file::<RatatuiTextGenerator, _>(
-        args().nth(1).expect("Expected a command line argument"),
+        std::env::args()
+            .nth(1)
+            .expect("Expected a command line argument"),
     );
 
     loop {
@@ -25,7 +26,11 @@ fn main() -> io::Result<()> {
         };
     }
 
-    ratatui::try_restore()
+    Ok(())
+}
+
+fn main() -> std::io::Result<()> {
+    ratatui::run(display)
 }
 
 #[cfg(test)]

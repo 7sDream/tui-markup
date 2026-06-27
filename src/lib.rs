@@ -55,7 +55,6 @@ pub mod parser;
 
 pub use error::{Error, LocatedError};
 pub use generator::Generator;
-
 use generator::TagConvertor;
 
 /// Parse markup language source, then generate final output using the default

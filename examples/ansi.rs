@@ -1,6 +1,5 @@
 use std::env::args;
 
-use ansi_term::ANSIStrings;
 use tui_markup::generator::ANSIStringsGenerator;
 
 mod common;
@@ -8,7 +7,7 @@ mod common;
 fn main() {
     let s = common::compile_file::<ANSIStringsGenerator, _>(args().nth(1).unwrap());
 
-    println!("{}", ANSIStrings(&s))
+    println!("{}", s)
 }
 
 #[cfg(test)]

@@ -1,4 +1,4 @@
-use ansi_term::{Color, Style};
+use anstyle::{Ansi256Color, AnsiColor, Color, RgbColor, Style};
 
 use crate::{
     generator::{
@@ -9,12 +9,15 @@ use crate::{
 };
 
 /// Tag convertor for [`ANSIStringsGenerator`][super::ANSIStringsGenerator].
+///
+/// The generic type parameter `P` is a [`CustomTagParser`] that produces [`Style`] values
+/// for custom tags.
 #[derive(Debug)]
-pub struct ANSITermTagConvertor<P = NoopCustomTagParser<Style>> {
+pub struct ANSITagConvertor<P = NoopCustomTagParser<Style>> {
     custom_parser: Option<P>,
 }
 
-impl<P> Default for ANSITermTagConvertor<P> {
+impl<P> Default for ANSITagConvertor<P> {
     fn default() -> Self {
         Self {
             custom_parser: None,
@@ -22,7 +25,7 @@ impl<P> Default for ANSITermTagConvertor<P> {
     }
 }
 
-impl<P> ANSITermTagConvertor<P> {
+impl<P> ANSITagConvertor<P> {
     /// Create a new tag convertor with custom tag parser.
     pub fn new(cp: P) -> Self {
         Self {
@@ -31,7 +34,7 @@ impl<P> ANSITermTagConvertor<P> {
     }
 }
 
-impl<'a, P> TagConvertor<'a> for ANSITermTagConvertor<P>
+impl<'a, P> TagConvertor<'a> for ANSITagConvertor<P>
 where
     P: CustomTagParser<Output = Style>,
 {
@@ -41,30 +44,30 @@ where
 
     fn parse_color(&mut self, s: &str) -> Option<Self::Color> {
         Some(match s {
-            "black" => Color::Black,
-            "red" => Color::Red,
-            "green" => Color::Green,
-            "yellow" => Color::Yellow,
-            "blue" => Color::Blue,
-            "purple" | "magenta" => Color::Purple,
-            "cyan" => Color::Cyan,
-            "white" => Color::White,
+            "black" => AnsiColor::Black.into(),
+            "red" => AnsiColor::Red.into(),
+            "green" => AnsiColor::Green.into(),
+            "yellow" => AnsiColor::Yellow.into(),
+            "blue" => AnsiColor::Blue.into(),
+            "purple" | "magenta" => AnsiColor::Magenta.into(),
+            "cyan" => AnsiColor::Cyan.into(),
+            "white" => AnsiColor::White.into(),
             s => hex_rgb(s)
-                .map(|(r, g, b)| Color::RGB(r, g, b))
-                .or_else(|| s.parse::<u8>().ok().map(Color::Fixed))?,
+                .map(|(r, g, b)| RgbColor(r, g, b).into())
+                .or_else(|| s.parse::<u8>().ok().map(|n| Ansi256Color(n).into()))?,
         })
     }
 
     fn parse_modifier(&mut self, s: &str) -> Option<Self::Modifier> {
         Some(match s {
-            "b" => Style::default().bold(),
-            "d" => Style::default().dimmed(),
-            "i" => Style::default().italic(),
-            "u" => Style::default().underline(),
-            "r" => Style::default().reverse(),
-            "sb" | "rb" => Style::default().blink(),
-            "h" => Style::default().hidden(),
-            "s" => Style::default().strikethrough(),
+            "b" => Style::new().bold(),
+            "d" => Style::new().dimmed(),
+            "i" => Style::new().italic(),
+            "u" => Style::new().underline(),
+            "r" => Style::new().invert(),
+            "sb" | "rb" => Style::new().blink(),
+            "h" => Style::new().hidden(),
+            "s" => Style::new().strikethrough(),
             _ => return None,
         })
     }

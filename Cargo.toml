@@ -21,23 +21,42 @@ exclude = ["examples/*.png", "examples/*.py", "docs"]
 
 [features]
 default = []
-ansi = ["dep:ansi_term"]
+ansi = ["dep:anstyle"]
+ratatui = ["dep:ratatui-core"]
+crossterm = ["dep:crossterm"]
 
-[dependencies]
 # parser
-winnow = { version = "1", default-features = false, features = ["std", "ascii"] }
+[dependencies.winnow]
+version = "1"
+default-features = false
+features = ["std", "ascii"]
 
 # generator
-ansi_term = { version = "0.12", optional = true }
-ratatui = { version = "0.30", optional = true, default-features = false }
-crossterm = { version = "0.29", optional = true, default-features = false, features = [
-    "windows",
-] }
+[dependencies.anstyle]
+version = "1"
+optional = true
+default-features = false
 
-[dev-dependencies]
-ratatui = "0.30"
-crossterm = "0.29"
-ansi_term = "0.12"
+[dependencies.ratatui-core]
+version = "0.1"
+optional = true
+default-features = false
+
+[dependencies.crossterm]
+version = "0.29"
+optional = true
+default-features = false
+features = ["windows"]
+
+[dev-dependencies.ratatui]
+version = "0.30"
+default-features = false
+features = ["crossterm"]
+
+[dev-dependencies.crossterm]
+version = "0.29"
+default-features = false
+features = ["events", "windows"]
 
 [[example]]
 name = "ratatui"

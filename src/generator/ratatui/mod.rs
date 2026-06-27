@@ -5,7 +5,7 @@ mod tag;
 #[cfg(test)]
 mod test;
 
-use ratatui::{
+use ratatui_core::{
     style::Style,
     text::{Line, Text},
 };
@@ -107,7 +107,7 @@ use crate::{
 /// # use ratatui::prelude::*;
 /// use tui_markup::{compile_with, generator::RatatuiTextGenerator};
 ///
-/// let gen = RatatuiTextGenerator::new(|tag: &str| match tag {
+/// let g = RatatuiTextGenerator::new(|tag: &str| match tag {
 ///     "keyboard" => Some(
 ///         Style::default()
 ///             .bg(Color::White)
@@ -118,7 +118,7 @@ use crate::{
 /// });
 ///
 /// assert_eq!(
-///     compile_with("Press <keyboard W> to move up", gen),
+///     compile_with("Press <keyboard W> to move up", g),
 ///     Ok(Text::from(vec![Line::from(vec![
 ///         Span::raw("Press "),
 ///         Span::styled(
@@ -177,9 +177,9 @@ where
         &mut self.convertor
     }
 
-    fn generate(&mut self, items: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
+    fn generate(&mut self, markup: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
         Ok(Text::from(
-            items
+            markup
                 .into_iter()
                 .map(|line| Line::from(flatten(line)))
                 .collect::<Vec<_>>(),

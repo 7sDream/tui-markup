@@ -77,16 +77,14 @@ where
         &mut self.convertor
     }
 
-    fn generate(&mut self, items: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
-        Ok(items
-            .into_iter()
-            .map(flatten)
-            .fold(vec![], |mut acc, line| {
-                if !acc.is_empty() {
-                    acc.push(Span::NoStyle(Print("\n")));
-                }
-                acc.extend(line);
-                acc
-            }))
+    fn generate(&mut self, markup: Vec<Vec<ItemG<'a, Self>>>) -> Result<Self::Output, Self::Err> {
+        let mut spans = Vec::with_capacity(markup.len());
+        for (i, line) in markup.into_iter().enumerate() {
+            if i > 0 {
+                spans.push(Span::NoStyle(Print("\n")));
+            }
+            spans.extend(flatten(line));
+        }
+        Ok(spans)
     }
 }

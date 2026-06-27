@@ -84,7 +84,7 @@ impl<'a> Error<'a> {
 
 impl LocatedError for Error<'_> {
     fn location(&self) -> (usize, usize) {
-        let mut start = self.input.clone();
+        let mut start = self.input;
         start.reset_to_start();
         (self.line + 1, self.input.offset_from(&start) + 1)
     }

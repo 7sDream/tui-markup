@@ -10,21 +10,26 @@ This crate provides a markup language to quickly write colorful and styled termi
 ## Usage
 
 ```rust
-use ansi_term::{ANSIStrings, Color, Style};
+use anstyle::{Style, AnsiColor};
 use tui_markup::{compile, compile_with, generator::ANSIStringsGenerator};
 
 // Parse markup into some final result for showing
 let result = compile::<ANSIStringsGenerator>("You got a <yellow Coin>").unwrap();
 // Show it
-println!("{}", ANSIStrings(&result));
+println!("{}", result);
 
 // With custom tag
-let gen = ANSIStringsGenerator::new(|tag: &str| match tag {
-    "keyboard" => Some(Style::default().fg(Color::Blue).on(Color::Black).bold()),
+let generator = ANSIStringsGenerator::new(|tag: &str| match tag {
+    "keyboard" => Some(
+        Style::new()
+            .fg_color(Some(AnsiColor::Blue.into()))
+            .bg_color(Some(AnsiColor::Black.into()))
+            .bold(),
+    ),
     _ => None,
 });
-let result = compile_with("Press <keyboard Space> to jump", gen).unwrap();
-println!("{}", ANSIStrings(&result));
+let result = compile_with("Press <keyboard Space> to jump", generator).unwrap();
+println!("{}", result);
 ```
 
 Result:
@@ -35,7 +40,7 @@ Notice the result type and how to show it is vary depends on what `Generator` yo
 
 Current available [built-in generators][doc-builtin-gens]:
 
-- `ansi`: `ANSIStringsGenerator` for directly print result in any ASNI compliant terminal.
+- `ansi`: `ANSIStringsGenerator` for directly print result in any ANSI compliant terminal.
 - `ratatui`: `RatatuiTextGenerator` for create `Text` struct of `ratatui` crate to show the result.
 - `crossterm`: `CrosstermCommandsGenerator` for create a series of Command of `crossterm` crate to print the result.
 
