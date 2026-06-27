@@ -27,16 +27,9 @@ where
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Parse(pe) => {
-                f.write_str("parse failed: ")?;
-                <ParseError<'_> as Display>::fmt(pe, f)?;
-            }
-            Error::Gen(ge) => {
-                f.write_str("generate failed: ")?;
-                <GE as Display>::fmt(ge, f)?;
-            }
+            Error::Parse(pe) => f.write_fmt(format_args!("parse failed: {}", pe)),
+            Error::Gen(ge) => f.write_fmt(format_args!("generate failed: {}", ge)),
         }
-        Ok(())
     }
 }
 

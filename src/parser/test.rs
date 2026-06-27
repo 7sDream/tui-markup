@@ -2,13 +2,13 @@ use super::{ErrorKind, Item};
 
 macro_rules! test_ok {
     ($s:expr $(, $item:expr)*) => {
-        assert_eq!(crate::parser::parse_line((0, $s)), Ok(vec![$($item,)*]));
+        assert_eq!(crate::parser::parse_line(0, $s), Ok(vec![$($item,)*]));
     };
 }
 
 macro_rules! test_fail {
     ($s:expr, $column:expr, $kind:expr) => {
-        let e = crate::parser::parse_line((0, $s)).unwrap_err();
+        let e = crate::parser::parse_line(0, $s).unwrap_err();
         println!("parse failed error: {:?}", e);
         println!("parse failed message: {}", e);
         assert_eq!(crate::error::LocatedError::location(&e), (1, $column));
@@ -16,20 +16,11 @@ macro_rules! test_fail {
     };
 }
 
-macro_rules! lspan {
-    ($s:expr, $offset:expr) => {
-        unsafe { crate::parser::LSpan::new_from_raw_offset($offset, 1, $s, 1) }
-    };
-    ($s:expr) => {
-        unsafe { crate::parser::LSpan::new_from_raw_offset(0, 1, $s, 1) }
-    };
-}
-
 #[test]
 fn test_escaped_char() {
-    test_ok!("\\<", Item::PlainText(lspan!("\\<")));
-    test_ok!("\\>", Item::PlainText(lspan!("\\>")));
-    test_ok!("\\\\", Item::PlainText(lspan!("\\\\")));
+    test_ok!("\\<", Item::PlainText("\\<"));
+    test_ok!("\\>", Item::PlainText("\\>"));
+    test_ok!("\\\\", Item::PlainText("\\\\"));
 }
 
 #[test]
@@ -72,16 +63,14 @@ fn test_empty_input() {
 
 #[test]
 fn test_no_content_element() {
-    test_ok!("<green >", Item::Element(vec![lspan!("green", 1)], vec![]));
+    test_ok!("<green >", Item::Element(vec!["green"], vec![]));
 }
 
 #[test]
 fn test_foreground_element() {
     test_ok!(
         "<fg:green text>",
-        Item::Element(vec![lspan!("fg:green", 1)], vec![Item::PlainText(lspan!(
-            "text", 10
-        ))])
+        Item::Element(vec!["fg:green"], vec![Item::PlainText("text")])
     );
 }
 
@@ -89,9 +78,7 @@ fn test_foreground_element() {
 fn test_foreground_element_without_mode() {
     test_ok!(
         "<blue text>",
-        Item::Element(vec![lspan!("blue", 1)], vec![Item::PlainText(lspan!(
-            "text", 6
-        ))])
+        Item::Element(vec!["blue"], vec![Item::PlainText("text")])
     );
 }
 
@@ -99,9 +86,7 @@ fn test_foreground_element_without_mode() {
 fn test_foreground_element_with_only_colon() {
     test_ok!(
         "<:white text>",
-        Item::Element(vec![lspan!(":white", 1)], vec![Item::PlainText(lspan!(
-            "text", 8
-        ))])
+        Item::Element(vec![":white"], vec![Item::PlainText("text")])
     );
 }
 
@@ -109,9 +94,7 @@ fn test_foreground_element_with_only_colon() {
 fn test_background_element() {
     test_ok!(
         "<bg:red text>",
-        Item::Element(vec![lspan!("bg:red", 1)], vec![Item::PlainText(lspan!(
-            "text", 8
-        ))])
+        Item::Element(vec!["bg:red"], vec![Item::PlainText("text")])
     );
 }
 
@@ -119,9 +102,7 @@ fn test_background_element() {
 fn test_modifier_element() {
     test_ok!(
         "<mod:b text>",
-        Item::Element(vec![lspan!("mod:b", 1)], vec![Item::PlainText(lspan!(
-            "text", 7
-        ))])
+        Item::Element(vec!["mod:b"], vec![Item::PlainText("text")])
     );
 }
 
@@ -129,9 +110,7 @@ fn test_modifier_element() {
 fn test_modifier_element_without_mode() {
     test_ok!(
         "<i text>",
-        Item::Element(vec![lspan!("i", 1)], vec![Item::PlainText(lspan!(
-            "text", 3
-        ))])
+        Item::Element(vec!["i"], vec![Item::PlainText("text")])
     );
 }
 
@@ -139,9 +118,7 @@ fn test_modifier_element_without_mode() {
 fn test_modifier_element_with_only_colon() {
     test_ok!(
         "<:d text>",
-        Item::Element(vec![lspan!(":d", 1)], vec![Item::PlainText(lspan!(
-            "text", 4
-        ))])
+        Item::Element(vec![":d"], vec![Item::PlainText("text")])
     );
 }
 
@@ -149,12 +126,13 @@ fn test_modifier_element_with_only_colon() {
 fn test_nested_element() {
     test_ok!(
         "<bg:cyan <yellow one> two>",
-        Item::Element(vec![lspan!("bg:cyan", 1)], vec![
-            Item::Element(vec![lspan!("yellow", 10)], vec![Item::PlainText(lspan!(
-                "one", 17
-            ))]),
-            Item::PlainText(lspan!(" two", 21)),
-        ])
+        Item::Element(
+            vec!["bg:cyan"],
+            vec![
+                Item::Element(vec!["yellow"], vec![Item::PlainText("one")]),
+                Item::PlainText(" two"),
+            ]
+        )
     );
 }
 
@@ -163,13 +141,8 @@ fn test_multi_style_element() {
     test_ok!(
         "<bg:magenta,gray,mod:u,x text>",
         Item::Element(
-            vec![
-                lspan!("bg:magenta", 1),
-                lspan!("gray", 12),
-                lspan!("mod:u", 17),
-                lspan!("x", 23)
-            ],
-            vec![Item::PlainText(lspan!("text", 25)),]
+            vec!["bg:magenta", "gray", "mod:u", "x",],
+            vec![Item::PlainText("text"),]
         )
     );
 }
@@ -178,8 +151,6 @@ fn test_multi_style_element() {
 fn test_custom_color() {
     test_ok!(
         "<bg:ff8000,66ccff text>",
-        Item::Element(vec![lspan!("bg:ff8000", 1), lspan!("66ccff", 11)], vec![
-            Item::PlainText(lspan!("text", 18))
-        ])
+        Item::Element(vec!["bg:ff8000", "66ccff"], vec![Item::PlainText("text")])
     );
 }

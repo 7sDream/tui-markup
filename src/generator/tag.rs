@@ -102,7 +102,7 @@ pub trait TagConvertor<'a> {
             Item::Element(spans, items) => {
                 let tags = spans
                     .into_iter()
-                    .filter_map(|span| self.convert_tag(span.fragment()))
+                    .filter_map(|span| self.convert_tag(span))
                     .collect();
 
                 let subitems = self.convert_line(items);

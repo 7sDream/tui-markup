@@ -5,13 +5,13 @@ use ratatui::{
 
 macro_rules! pt {
     ($text:literal) => {
-        crate::parser::Item::PlainText($text.into())
+        crate::parser::Item::PlainText($text)
     };
 }
 
 macro_rules! elem {
     (@tags, $($s:literal),+) => {{
-        vec![$(crate::parser::LSpan::new_extra($s, 1)),+]
+        vec![$($s,)+]
     }};
     ($($tags:tt),* ; $($items:expr),* $(,)?) => {
         crate::parser::Item::Element(elem!(@tags, $($tags),*), vec![$($items),*])

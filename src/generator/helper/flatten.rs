@@ -50,7 +50,7 @@ where
     S: FlattenableStyle + From<Tag<'a, C>>,
 {
     match item {
-        Item::PlainText(t) => plain_text(t.fragment(), style),
+        Item::PlainText(t) => plain_text(t, style),
         Item::Element(tags, children) => element(tags, children, style),
     }
 }

@@ -1,3 +1,6 @@
+# System/OS staff
+/**/.DS_Store
+
 # IDE staff
 /.idea
 /.vscode
@@ -6,5 +9,8 @@
 /target
 /Cargo.lock
 
-# macOS staff
-/**/.DS_Store
+# AI agent staff
+/.pi
+/.claude
+/.gemini
+/AGENTS.md
